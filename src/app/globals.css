@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F3F2F6;
+  --foreground: #484848;
 }
 
 @theme inline {
@@ -10,6 +10,12 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Brand colors based on Figma */
+  --color-brand-primary: #FAAB18;
+  --color-brand-bg: #F3F2F6;
+  --color-brand-text: #484848;
+  --color-brand-subtext: #707070;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +25,26 @@
   }
 }
 
+@layer utilities {
+  /* Smooth Accordion Height Animation for the Sidebar */
+  .accordion-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .accordion-wrapper[data-state="open"] {
+    grid-template-rows: 1fr;
+  }
+
+  .accordion-inner {
+    overflow: hidden;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  @apply antialiased;
 }

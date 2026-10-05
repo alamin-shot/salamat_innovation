@@ -38,3 +38,11 @@
   - Manages instant search filtering (`search` state). Overrides accordion state to open all matching sections when a user types.
 - **`SidebarSection`**: Renders the section title and the white, rounded card wrapper. Uses `data-state` to trigger the `grid-template-rows` CSS animation.
 - **`SidebarLink`**: Pure presentational leaf component. Handles active route styling and injects SVG icons.
+
+## 7. Auth Flow UI Components
+- **`LoginPage`**: Routes to `/admin` on success. Interacts with `authService.login`.
+- **`SignupPage`**: Captures name/email/pass. Routes to `/otp`.
+- **`ForgotPasswordPage`**: Captures email to request OTP. Routes to `/otp`.
+- **`OtpPage`**: Validates 6-digit code. Routes to `/reset-password`.
+- **`ResetPasswordPage`**: Client-side validation for password match. Routes back to `/login`.
+- All forms use `react-hook-form` + `zod` and integrate with the global `ToastContext`.

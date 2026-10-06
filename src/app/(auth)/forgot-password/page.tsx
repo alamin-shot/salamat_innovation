@@ -1,40 +1,13 @@
 "use client";
-
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-import { forgotPasswordSchema, type ForgotPasswordFormData } from "@/validations/auth.schema";
-import { authService } from "@/services/auth.service";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/components/shared/form/Form";
 
 export default function ForgotPasswordPage() {
-    const router = useRouter();
-    const { showToast } = useToast();
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const form = useForm<ForgotPasswordFormData>({
-        resolver: zodResolver(forgotPasswordSchema),
-        defaultValues: { email: "" },
-    });
-
-    const onSubmit = async (data: ForgotPasswordFormData) => {
-        setIsLoading(true);
-        try {
-            await authService.requestOtp(data.email);
-            showToast("OTP sent to your email!", "success");
-            router.push("/otp");
-        } catch (error) {
-            showToast("Failed to send OTP", "error");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { form, isLoading, onSubmit } = useForgotPassword();
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-brand-bg p-4">

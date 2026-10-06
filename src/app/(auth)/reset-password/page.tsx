@@ -1,35 +1,12 @@
 "use client";
-
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-
-import { resetPasswordSchema, type ResetPasswordFormData } from "@/validations/auth.schema";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { useResetPassword } from "@/hooks/auth/useResetPassword";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/components/shared/form/Form";
 
 export default function ResetPasswordPage() {
-    const router = useRouter();
-    const { showToast } = useToast();
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const form = useForm<ResetPasswordFormData>({
-        resolver: zodResolver(resetPasswordSchema),
-        defaultValues: { password: "", confirmPassword: "" },
-    });
-
-    const onSubmit = async (data: ResetPasswordFormData) => {
-        setIsLoading(true);
-        // Simulating the password reset API call
-        setTimeout(() => {
-            setIsLoading(false);
-            showToast("Password reset successfully! Please login.", "success");
-            router.push("/login");
-        }, 1000);
-    };
+    const { form, isLoading, onSubmit } = useResetPassword();
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-brand-bg p-4">
@@ -41,22 +18,12 @@ export default function ResetPasswordPage() {
                     <div className="space-y-4">
                         <div>
                             <label className="text-sm font-medium text-brand-text">New Password</label>
-                            <Input
-                                type="password"
-                                placeholder="••••••••"
-                                {...form.register("password")}
-                                disabled={isLoading}
-                            />
+                            <Input type="password" placeholder="••••••••" {...form.register("password")} disabled={isLoading} />
                             <FormMessage name="password" />
                         </div>
                         <div>
                             <label className="text-sm font-medium text-brand-text">Confirm Password</label>
-                            <Input
-                                type="password"
-                                placeholder="••••••••"
-                                {...form.register("confirmPassword")}
-                                disabled={isLoading}
-                            />
+                            <Input type="password" placeholder="••••••••" {...form.register("confirmPassword")} disabled={isLoading} />
                             <FormMessage name="confirmPassword" />
                         </div>
                     </div>

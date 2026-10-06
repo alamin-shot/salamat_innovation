@@ -20,8 +20,8 @@
 ## 4. Component Hierarchy (Sidebar)
 - `AdminSidebar` -> Reads `NAVIGATION_DATA`
   - Includes `input` for instant text search
-  - Maps to `SidebarAccordion` (animates via CSS `grid-template-rows`)
-    - Maps to `SidebarLink`
+  - Maps to `SidebarSection` (Static headers)
+    - Renders white rounded cards containing `SidebarLink` lists. (Accordion/dropdown logic removed per CEO directive).
 
 ## 5. Auth Flow (Mocked)
 1. User enters credentials (admin@email.com / Admin1234@!)
@@ -32,12 +32,11 @@
 
 
 ## 6. Layout & Sidebar Architecture
-- **`AdminLayout`**: Master responsive wrapper (`min-w-[320px] max-w-[1920px]`). Centers content on ultra-wide screens and flexes child routes.
+- **`AdminLayout`**: Master responsive wrapper (`min-w-[320px] max-w-[1920px]`).
 - **`AdminSidebar`**: Client-side state manager for navigation.
-  - Controls active accordion (`openSection`).
-  - Manages instant search filtering (`search` state). Overrides accordion state to open all matching sections when a user types.
-- **`SidebarSection`**: Renders the section title and the white, rounded card wrapper. Uses `data-state` to trigger the `grid-template-rows` CSS animation.
-- **`SidebarLink`**: Pure presentational leaf component. Handles active route styling and injects SVG icons.
+  - Manages instant search filtering (`search` state).
+- **`SidebarSection`**: Renders the static category title and the white, rounded card wrapper.
+- **`SidebarLink`**: Pure presentational leaf component. Handles active route styling.
 
 ## 7. Auth Flow UI Components
 - **`LoginPage`**: Routes to `/admin` on success. Interacts with `authService.login`.

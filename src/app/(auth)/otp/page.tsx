@@ -1,41 +1,12 @@
 "use client";
-
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-
-import { otpSchema, type OtpFormData } from "@/validations/auth.schema";
-import { authService } from "@/services/auth.service";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { useOtp } from "@/hooks/auth/useOtp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/components/shared/form/Form";
 
 export default function OtpPage() {
-    const router = useRouter();
-    const { showToast } = useToast();
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const form = useForm<OtpFormData>({
-        resolver: zodResolver(otpSchema),
-        defaultValues: { otp: "" },
-    });
-
-    const onSubmit = async (data: OtpFormData) => {
-        setIsLoading(true);
-        try {
-            // Mock valid OTP is "123456" as set in our auth.service.ts
-            await authService.verifyOtp(data.otp);
-            showToast("OTP verified successfully!", "success");
-            // Proceed to reset password (or dashboard if from signup)
-            router.push("/reset-password");
-        } catch (error: any) {
-            showToast(error.message || "Invalid OTP code", "error");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { form, isLoading, onSubmit } = useOtp();
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-brand-bg p-4">

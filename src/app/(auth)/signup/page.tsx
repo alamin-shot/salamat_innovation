@@ -1,36 +1,13 @@
 "use client";
-
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-import { signupSchema, type SignupFormData } from "@/validations/auth.schema";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { useSignup } from "@/hooks/auth/useSignup";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/components/shared/form/Form";
 
 export default function SignupPage() {
-    const router = useRouter();
-    const { showToast } = useToast();
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const form = useForm<SignupFormData>({
-        resolver: zodResolver(signupSchema),
-        defaultValues: { name: "", email: "", password: "" },
-    });
-
-    const onSubmit = async (data: SignupFormData) => {
-        setIsLoading(true);
-        // Simulating a successful signup API call
-        setTimeout(() => {
-            setIsLoading(false);
-            showToast("Account created! Please verify your email.", "success");
-            router.push("/otp");
-        }, 1000);
-    };
+    const { form, isLoading, onSubmit } = useSignup();
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-brand-bg p-4">

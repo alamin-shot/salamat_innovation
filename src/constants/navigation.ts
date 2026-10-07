@@ -4,10 +4,17 @@ export type NavSection = { title: string; items: NavItem[] };
 // Helper function to auto-generate links and keep the file strictly under 100 lines
 const nav = (title: string, items: string[]): NavSection => ({
   title,
-  items: items.map((item) => ({
-    title: item,
-    href: `/admin/coming-soon?p=${item.toLowerCase().replace(/\s+/g, "-")}`,
-  })),
+  items: items.map((item) => {
+
+    if (item === "Products") {
+      return { title: item, href: "/admin/products" };
+    }
+
+    return {
+      title: item,
+      href: `/admin/coming-soon?p=${item.toLowerCase().replace(/\s+/g, "-")}`,
+    };
+  }),
 });
 
 export const NAVIGATION_DATA: NavSection[] = [

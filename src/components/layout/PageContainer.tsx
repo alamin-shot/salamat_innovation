@@ -39,7 +39,7 @@ export function PageContainer({ title, breadcrumbs, action, children }: PageCont
                 </div>
 
                 {action && (
-                    <div className="flex shrink-0 items-center gap-3">
+                    <div className="flex w-full md:w-auto items-center gap-3">
                         {action}
                     </div>
                 )}

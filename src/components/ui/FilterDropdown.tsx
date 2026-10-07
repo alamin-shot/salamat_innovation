@@ -16,7 +16,7 @@ export function FilterDropdown({ label, options, selectedValue, onSelect }: Filt
 
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger className="flex cursor-pointer select-none items-center gap-1.5 rounded-lg border border-brand-subtext/20 bg-white px-3 py-1.5 text-sm font-medium text-brand-text transition-colors hover:bg-brand-bg/80 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 data-[state=open]:bg-brand-bg/80">
+            <DropdownMenu.Trigger className="flex cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-lg border border-brand-subtext/20 bg-white px-4 py-2.5 text-sm font-medium text-brand-text transition-colors hover:bg-brand-bg/80 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 data-[state=open]:bg-brand-bg/80">
                 {selectedLabel ? (
                     <span className="text-brand-primary font-semibold">{selectedLabel}</span>
                 ) : (

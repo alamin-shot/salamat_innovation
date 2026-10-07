@@ -18,7 +18,7 @@ export function FilterBar({
     children
 }: FilterBarProps) {
     return (
-        <div className="flex flex-col gap-3 border-b border-brand-subtext/20 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
 
             {/* Search Input Area */}
             <div className="relative w-full sm:max-w-xs">
@@ -33,9 +33,9 @@ export function FilterBar({
 
             {/* Dynamic Filter Pills Area */}
             <div className="flex w-full items-center gap-2 overflow-x-auto pb-1 sm:w-auto sm:pb-0 custom-scrollbar">
-                <div className="flex items-center gap-1.5 border-r border-brand-subtext/20 pr-3 text-sm font-medium text-brand-subtext">
+                <div className="flex items-center gap-1.5 border-r border-brand-subtext/20 pr-3 text-sm font-medium text-brand-subtext hidden sm:inline-flex">
                     <Filter className="h-4 w-4" />
-                    <span>Filters</span>
+                    <span className="">Filters</span>
                     {activeFilterCount > 0 && (
                         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary/10 text-xs font-bold text-brand-primary">
                             {activeFilterCount}

@@ -64,7 +64,7 @@ export function ProductsClientManager() {
                 title={getDrawerTitle()}
                 isOpen={!!activeDrawer}
                 onClose={closeDrawer}
-                width={persistedDrawer === "add-product" || persistedDrawer === "edit" ? "w-full max-w-[1000px]" : "w-[600px]"}
+                width={persistedDrawer === "add-product" || persistedDrawer === "edit" ? "w-full max-w-[1000px]" : "w-full max-w-[600px]"}
             >
                 {renderDrawerContent()}
             </Drawer>

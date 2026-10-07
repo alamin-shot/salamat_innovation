@@ -13,7 +13,7 @@ export default function ProductsPage() {
                 <Link
                     href="?drawer=add-product"
                     scroll={false}
-                    className="flex items-center gap-2 rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-brand-primary/90 hover:shadow-md"
+                    className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-brand-primary/90 hover:shadow-md"
                 >
                     <Plus className="h-4 w-4" /> Add Product
                 </Link>

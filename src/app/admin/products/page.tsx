@@ -19,7 +19,9 @@ export default function ProductsPage() {
                 </Link>
             }
         >
-            <ProductsClientManager />
+            <React.Suspense fallback={null}>
+                <ProductsClientManager />
+            </React.Suspense>
         </PageContainer>
     );
 }

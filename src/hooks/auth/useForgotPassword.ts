@@ -4,11 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { forgotPasswordSchema, type ForgotPasswordFormData } from "@/validations/auth.schema";
 import { authService } from "@/services/auth.service";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { toast } from "sonner";
 
 export function useForgotPassword() {
     const router = useRouter();
-    const { showToast } = useToast();
+
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<ForgotPasswordFormData>({
@@ -20,10 +20,10 @@ export function useForgotPassword() {
         setIsLoading(true);
         try {
             await authService.requestOtp(data.email);
-            showToast("OTP sent to your email!", "success");
+            toast.success("OTP sent to your email!");
             router.push("/otp");
         } catch (error) {
-            showToast("Failed to send OTP", "error");
+            toast.error("Failed to send OTP");
         } finally {
             setIsLoading(false);
         }

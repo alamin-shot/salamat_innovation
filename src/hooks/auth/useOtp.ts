@@ -4,11 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { otpSchema, type OtpFormData } from "@/validations/auth.schema";
 import { authService } from "@/services/auth.service";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { toast } from "sonner";
 
 export function useOtp() {
     const router = useRouter();
-    const { showToast } = useToast();
+
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<OtpFormData>({
@@ -20,10 +20,10 @@ export function useOtp() {
         setIsLoading(true);
         try {
             await authService.verifyOtp(data.otp);
-            showToast("OTP verified successfully!", "success");
+            toast.success("OTP verified successfully!");
             router.push("/reset-password");
         } catch (error: any) {
-            showToast(error.message || "Invalid OTP code", "error");
+            toast.error(error.message || "Invalid OTP code");
         } finally {
             setIsLoading(false);
         }

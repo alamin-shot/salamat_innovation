@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 import { loginSchema, type LoginFormData } from "@/validations/auth.schema";
 import { authService } from "@/services/auth.service";
 import { setCredentials } from "@/store/slices/auth.slice";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { toast } from "sonner";
 
 export function useLogin() {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { showToast } = useToast();
+
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<LoginFormData>({
@@ -25,10 +25,10 @@ export function useLogin() {
         try {
             const result = await authService.login(data);
             dispatch(setCredentials(result));
-            showToast("Login successful!", "success");
+            toast.success("Login successful!");
             router.push("/admin");
         } catch (error: any) {
-            showToast(error.message || "Invalid credentials", "error");
+            toast.error(error.message || "Invalid credentials");
         } finally {
             setIsLoading(false);
         }

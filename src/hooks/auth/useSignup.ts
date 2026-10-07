@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { signupSchema, type SignupFormData } from "@/validations/auth.schema";
-import { useToast } from "@/components/shared/toast/ToastContext";
+import { toast } from "sonner";
 
 export function useSignup() {
     const router = useRouter();
-    const { showToast } = useToast();
+
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<SignupFormData>({
@@ -19,7 +19,7 @@ export function useSignup() {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            showToast("Account created! Please verify your email.", "success");
+            toast.success("Account created! Please verify your email.");
             router.push("/otp");
         }, 1000);
     };

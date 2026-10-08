@@ -2,7 +2,11 @@
 import * as React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown, Check } from "lucide-react";
-import { FilterOption } from "@/types/filter";
+
+interface FilterOption {
+    label: string;
+    value: string;
+}
 
 interface FilterDropdownProps {
     label: string;
@@ -12,37 +16,45 @@ interface FilterDropdownProps {
 }
 
 export function FilterDropdown({ label, options, selectedValue, onSelect }: FilterDropdownProps) {
-    const selectedLabel = options.find(o => o.value === selectedValue)?.label;
+    const selectedOption = options.find((o) => o.value === selectedValue);
 
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger className="flex cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-lg border border-brand-subtext/20 bg-white px-4 py-2.5 text-sm font-medium text-brand-text transition-colors hover:bg-brand-bg/80 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 data-[state=open]:bg-brand-bg/80">
-                {selectedLabel ? (
-                    <span className="text-brand-primary font-semibold">{selectedLabel}</span>
-                ) : (
-                    label
-                )}
-                <ChevronDown className="h-3.5 w-3.5 text-brand-subtext transition-transform data-[state=open]:rotate-180" />
+            <DropdownMenu.Trigger className="flex items-center justify-between gap-2 rounded-lg border border-brand-subtext/30 bg-white px-3 py-1.5 text-xs font-medium text-brand-text shadow-sm transition-colors hover:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20">
+                <span className="text-brand-subtext">{label}:</span>
+                <span className="font-semibold text-brand-text">
+                    {selectedOption ? selectedOption.label : "All"}
+                </span>
+                <ChevronDown className="h-3.5 w-3.5 text-brand-subtext" />
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
                     align="start"
-                    sideOffset={8}
-                    collisionPadding={16}
-                    className="z-[100] w-48 rounded-lg border border-brand-subtext/20 bg-white p-1 shadow-xl animate-in fade-in zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:zoom-out-95"
+                    sideOffset={4}
+                    className="z-[100] w-44 rounded-xl border border-brand-subtext/20 bg-white p-1.5 shadow-xl max-h-[240px] overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95"
                 >
-                    {options.map((option) => (
-                        <DropdownMenu.Item
-                            key={option.value}
-                            onClick={() => onSelect(option.value)}
-                            className={`flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm outline-none transition-colors hover:bg-brand-bg ${selectedValue === option.value ? "bg-brand-primary/10 text-brand-primary font-medium" : "text-brand-text"
-                                }`}
-                        >
-                            {option.label}
-                            {selectedValue === option.value && <Check className="h-4 w-4" />}
-                        </DropdownMenu.Item>
-                    ))}
+                    <DropdownMenu.Item
+                        onClick={() => onSelect("")}
+                        className="flex cursor-pointer items-center justify-between rounded-lg px-2.5 py-2 text-xs font-medium text-brand-subtext outline-none transition-colors hover:bg-brand-bg hover:text-brand-text"
+                    >
+                        <span>All {label}s</span>
+                        {!selectedValue && <Check className="h-3.5 w-3.5 text-brand-primary" />}
+                    </DropdownMenu.Item>
+
+                    {options.map((opt) => {
+                        const isSelected = selectedValue === opt.value;
+                        return (
+                            <DropdownMenu.Item
+                                key={opt.value}
+                                onClick={() => onSelect(opt.value)}
+                                className="flex cursor-pointer items-center justify-between rounded-lg px-2.5 py-2 text-xs font-medium text-brand-text outline-none transition-colors hover:bg-brand-primary/10 hover:text-brand-primary"
+                            >
+                                <span className={isSelected ? "font-bold text-brand-primary" : ""}>{opt.label}</span>
+                                {isSelected && <Check className="h-3.5 w-3.5 text-brand-primary" />}
+                            </DropdownMenu.Item>
+                        );
+                    })}
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
         </DropdownMenu.Root>

@@ -3,10 +3,11 @@ import * as React from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Drawer } from "@/components/ui/Drawer";
 import { ProductTable } from "@/components/features/products/ProductTable";
-import { ProductForm } from "@/components/features/products/ProductForm";
+import { ProductMasterForm } from "@/components/features/products/ProductMasterForm";
 import { SpecificationsForm } from "@/components/features/products/SpecificationsForm";
 import { CareForm } from "@/components/features/products/CareForm";
 import { VariantsManager } from "@/components/features/products/VariantsManager";
+import { ProductPreviewContent } from "@/components/features/products/ProductPreviewContent"; // <-- ADDED IMPORT
 
 export function ProductsClientManager() {
     const router = useRouter();
@@ -16,7 +17,6 @@ export function ProductsClientManager() {
     const activeDrawer = searchParams.get("drawer");
     const activeId = searchParams.get("id");
 
-    // Memory Cache for smooth slide-out animation
     const [persistedDrawer, setPersistedDrawer] = React.useState(activeDrawer);
     const [persistedId, setPersistedId] = React.useState(activeId);
 
@@ -38,6 +38,7 @@ export function ProductsClientManager() {
         switch (persistedDrawer) {
             case "add-product": return "Add New Product";
             case "edit": return "Edit Product";
+            case "preview": return "Live Storefront Preview"; // <-- ADDED TITLE
             case "specs": return "Product Specifications";
             case "variants": return "Manage Variants";
             case "care": return "Product Care Instructions";
@@ -47,10 +48,18 @@ export function ProductsClientManager() {
 
     const renderDrawerContent = () => {
         switch (persistedDrawer) {
-            case "add-product": return <ProductForm />;
-            case "edit": return <ProductForm />;
+            case "add-product":
+            case "edit":
+                return (
+                    <ProductMasterForm
+                        productId={persistedId}
+                        onCancel={closeDrawer}
+                        onSave={() => closeDrawer()}
+                    />
+                );
+            case "preview": return <ProductPreviewContent productId={persistedId} />; // <-- RENDER PREVIEW
             case "specs": return <SpecificationsForm productId={persistedId} />;
-            case "variants": return <VariantsManager />;
+            case "variants": return <VariantsManager productId={persistedId} />;
             case "care": return <CareForm productId={persistedId} />;
             default: return null;
         }

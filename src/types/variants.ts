@@ -13,3 +13,7 @@ export interface ProductVariant {
     discountFixed: number | string;
     inStock: boolean;
 }
+
+export interface VariantsManagerProps {
+    productId?: string | null;
+}

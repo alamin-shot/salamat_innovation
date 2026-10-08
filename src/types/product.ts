@@ -8,5 +8,7 @@ export interface Product {
     brand: string;
     status: ProductStatus;
     ecommerce: boolean;
+    tags?: string[];
+    warrantyActive?: boolean;
     createdAt: string;
 }

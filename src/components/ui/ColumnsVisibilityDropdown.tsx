@@ -36,9 +36,8 @@ export function ColumnsVisibilityDropdown({
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
                     align="end"
-                    sideOffset={8}
-                    collisionPadding={16}
-                    className="z-[100] w-56 rounded-xl border border-brand-subtext/20 bg-white p-2 shadow-xl animate-in fade-in zoom-in-95"
+                    sideOffset={6}
+                    className="z-[120] w-56 rounded-xl border border-brand-subtext/20 bg-white p-2 shadow-2xl max-h-[280px] overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95"
                 >
                     <div className="mb-2 flex items-center justify-between px-2 pt-1">
                         <span className="text-xs font-bold uppercase tracking-wider text-brand-subtext">
@@ -71,8 +70,8 @@ export function ColumnsVisibilityDropdown({
                                     </span>
                                     <div
                                         className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${isVisible
-                                                ? "border-brand-primary bg-brand-primary text-white"
-                                                : "border-brand-subtext/30 bg-transparent"
+                                            ? "border-brand-primary bg-brand-primary text-white"
+                                            : "border-brand-subtext/30 bg-transparent"
                                             }`}
                                     >
                                         {isVisible && <Check className="h-3 w-3 stroke-[3]" />}

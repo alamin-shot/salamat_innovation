@@ -16,7 +16,7 @@ export function AdminSidebar({ isOpen }: AdminSidebarProps) {
     const { search, setSearch, filteredNav } = useSidebarSearch();
 
     return (
-        <aside className={`fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] shrink-0 flex-col border-r border-brand-subtext/20 bg-brand-bg transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] lg:static lg:translate-x-0 ${isOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:shadow-none"}`}>
+        <aside className={`fixed inset-y-0 left-0 z-50 flex h-screen w-full lg:w-[280px] shrink-0 flex-col border-r border-brand-subtext/20 bg-brand-bg transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] lg:static lg:translate-x-0 ${isOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:shadow-none"}`}>
 
             <div className="p-4">
                 <div className="group relative mb-6 overflow-hidden rounded-xl bg-gradient-to-r from-brand-primary via-yellow-200 to-brand-primary p-[2px] shadow-sm animate-gradient-pan transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-brand-primary/30">

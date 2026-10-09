@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { ProductsClientManager } from "@/components/features/products/ProductsClientManager";
+import { Loader } from "@/components/shared/loader/Loader";
+
 
 export default function ProductsPage() {
     return (
@@ -19,7 +21,11 @@ export default function ProductsPage() {
                 </Link>
             }
         >
-            <React.Suspense fallback={null}>
+            <React.Suspense fallback={
+                <div>
+                    <Loader />
+                </div>
+            }>
                 <ProductsClientManager />
             </React.Suspense>
         </PageContainer>

@@ -7,8 +7,7 @@ interface ProductPreviewContentProps {
 }
 
 export function ProductPreviewContent({ productId }: ProductPreviewContentProps) {
-    // In a real implementation, you would fetch product data using the productId.
-    // Here we provide a rich preview representation.
+
     return (
         <div className="flex flex-col gap-6 p-6">
             {/* Visual Header Banner */}

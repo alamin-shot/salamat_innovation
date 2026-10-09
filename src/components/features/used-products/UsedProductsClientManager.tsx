@@ -5,6 +5,7 @@ import { Drawer } from "@/components/ui/Drawer";
 import { UsedProductTable } from "@/components/features/used-products/UsedProductTable";
 import { UsedProductMasterForm } from "@/components/features/used-products/UsedProductMasterForm";
 import { ProductPreviewContent } from "@/components/features/products/ProductPreviewContent";
+import { UsedProductPreviewContent } from "./UsedProductPreviewContent";
 
 export function UsedProductsClientManager() {
     const router = useRouter();
@@ -78,7 +79,7 @@ export function UsedProductsClientManager() {
                 {persistedDrawer === "add-used" || persistedDrawer === "edit-used" ? (
                     <UsedProductMasterForm productId={persistedId} onCancel={closeDrawer} onSave={closeDrawer} />
                 ) : persistedDrawer === "preview" ? (
-                    <ProductPreviewContent productId={persistedId} />
+                    <UsedProductPreviewContent productId={persistedId} />
                 ) : null}
             </Drawer>
         </>

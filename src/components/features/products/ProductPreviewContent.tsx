@@ -1,6 +1,5 @@
 "use client";
-import * as React from "react";
-import { CheckCircle2, ShieldCheck, Tag, Globe, Package } from "lucide-react";
+import { ShieldCheck, Tag, Globe, Package } from "lucide-react";
 
 interface ProductPreviewContentProps {
     productId: string | null;

@@ -15,6 +15,9 @@ const nav = (title: string, items: string[]): NavSection => ({
     if (item === "Categories") {
       return { title: item, href: "/admin/categories" };
     }
+    if (item === "Brands") {
+      return { title: item, href: "/admin/brands" };
+    }
 
     return {
       title: item,

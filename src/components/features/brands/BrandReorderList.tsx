@@ -10,18 +10,18 @@ interface BrandReorderListProps {
 }
 
 const INITIAL_REORDER_BRANDS = [
-    { id: "brand-1", name: "Apple", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Apple" },
-    { id: "brand-2", name: "Google", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Google" },
-    { id: "brand-3", name: "SAMSUNG", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Samsung" },
-    { id: "brand-4", name: "Xiaomi", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Xiaomi" },
-    { id: "brand-5", name: "Nothing", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Nothing" },
-    { id: "brand-6", name: "CMF", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=CMF" },
-    { id: "brand-7", name: "MOTOROLA", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Moto" },
-    { id: "brand-8", name: "Honor", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Honor" },
-    { id: "brand-9", name: "IQOO", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=IQOO" },
-    { id: "brand-10", name: "ONEPLUS", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=1%2B" },
-    { id: "brand-11", name: "Realme", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=Realme" },
-    { id: "brand-12", name: "OPPO", logo: "https://placehold.co/100x100/e2e8f0/64748b?text=OPPO" },
+    { id: "brand-1", name: "Apple", logo: "/phone.png" },
+    { id: "brand-2", name: "Google", logo: "/phone.png" },
+    { id: "brand-3", name: "SAMSUNG", logo: "/phone.png" },
+    { id: "brand-4", name: "Xiaomi", logo: "/phone.png" },
+    { id: "brand-5", name: "Nothing", logo: "/phone.png" },
+    { id: "brand-6", name: "CMF", logo: "/phone.png" },
+    { id: "brand-7", name: "MOTOROLA", logo: "/phone.png" },
+    { id: "brand-8", name: "Honor", logo: "/phone.png" },
+    { id: "brand-9", name: "IQOO", logo: "/phone.png" },
+    { id: "brand-10", name: "ONEPLUS", logo: "/phone.png" },
+    { id: "brand-11", name: "Realme", logo: "/phone.png" },
+    { id: "brand-12", name: "OPPO", logo: "/phone.png" },
 ];
 
 export function BrandReorderList({ onBack }: BrandReorderListProps) {
@@ -73,8 +73,8 @@ export function BrandReorderList({ onBack }: BrandReorderListProps) {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     className={`flex items-center gap-4 rounded-xl border p-3.5 transition-colors select-none ${snapshot.isDragging
-                                                            ? "border-emerald-500 bg-white shadow-xl ring-2 ring-emerald-500/20"
-                                                            : "border-brand-subtext/20 bg-white hover:border-emerald-300 shadow-sm"
+                                                        ? "border-emerald-500 bg-white shadow-xl ring-2 ring-emerald-500/20"
+                                                        : "border-brand-subtext/20 bg-white hover:border-emerald-300 shadow-sm"
                                                         }`}
                                                 >
                                                     <div

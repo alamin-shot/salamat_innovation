@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Drawer } from "@/components/ui/Drawer";
 import { ProductTable } from "@/components/features/products/ProductTable";
 import { ProductMasterForm } from "@/components/features/products/ProductMasterForm";
@@ -8,40 +7,13 @@ import { SpecificationsForm } from "@/components/features/products/Specification
 import { CareForm } from "@/components/features/products/CareForm";
 import { VariantsManager } from "@/components/features/products/VariantsManager";
 import { ProductPreviewContent } from "@/components/features/products/ProductPreviewContent";
+import { useCommandParams } from "@/hooks/useCommandParams";
 
 export function ProductsClientManager() {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    const activeDrawer = searchParams.get("drawer");
-    const activeId = searchParams.get("id");
-
-    const [persistedDrawer, setPersistedDrawer] = React.useState(activeDrawer);
-    const [persistedId, setPersistedId] = React.useState(activeId);
-
-    // Sync from URL
-    React.useEffect(() => {
-        if (activeDrawer) {
-            setPersistedDrawer(activeDrawer);
-            setPersistedId(activeId);
-        }
-    }, [activeDrawer, activeId]);
-
-    // Listen for Route/Navigation changes and instantly hide the drawer
-    React.useEffect(() => {
-        setPersistedDrawer(null);
-    }, [pathname]);
-
-    const closeDrawer = () => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete("drawer");
-        params.delete("id");
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    };
+    const { activeDrawer, activeId, closeView } = useCommandParams();
 
     const getDrawerTitle = () => {
-        switch (persistedDrawer) {
+        switch (activeDrawer) {
             case "add-product": return "Add New Product";
             case "edit": return "Edit Product";
             case "preview": return "Live Storefront Preview";
@@ -53,20 +25,20 @@ export function ProductsClientManager() {
     };
 
     const renderDrawerContent = () => {
-        switch (persistedDrawer) {
+        switch (activeDrawer) {
             case "add-product":
             case "edit":
                 return (
                     <ProductMasterForm
-                        productId={persistedId}
-                        onCancel={closeDrawer}
-                        onSave={() => closeDrawer()}
+                        productId={activeId}
+                        onCancel={closeView}
+                        onSave={closeView}
                     />
                 );
-            case "preview": return <ProductPreviewContent productId={persistedId} />;
-            case "specs": return <SpecificationsForm productId={persistedId} />;
-            case "variants": return <VariantsManager productId={persistedId} />;
-            case "care": return <CareForm productId={persistedId} />;
+            case "preview": return <ProductPreviewContent productId={activeId} />;
+            case "specs": return <SpecificationsForm productId={activeId} />;
+            case "variants": return <VariantsManager productId={activeId} />;
+            case "care": return <CareForm productId={activeId} />;
             default: return null;
         }
     };
@@ -78,9 +50,9 @@ export function ProductsClientManager() {
             <Drawer
                 title={getDrawerTitle()}
                 isOpen={!!activeDrawer}
-                onClose={closeDrawer}
+                onClose={closeView}
                 width={
-                    persistedDrawer === "add-product" || persistedDrawer === "edit" || persistedDrawer === "preview"
+                    activeDrawer === "add-product" || activeDrawer === "edit" || activeDrawer === "preview"
                         // Wide Drawers: Full width on mobile, fills remaining screen on desktop
                         ? "w-full max-w-none lg:w-[calc(100vw-280px)]"
                         // Standard Drawers (Specs, Variants, Care): Full width on mobile, strictly 600px on tablet/desktop

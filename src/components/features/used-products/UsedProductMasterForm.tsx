@@ -287,7 +287,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                                 <div className="relative flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-lg border-2 border-dashed border-brand-subtext/30 bg-brand-bg/50 transition-colors hover:border-emerald-500/50 hover:bg-emerald-50/50 cursor-pointer overflow-hidden group">
                                     {isEditMode ? (
                                         <>
-                                            <Image src="https://placehold.co/200x200/e2e8f0/64748b?text=Phone" alt="Thumbnail" fill className="object-cover" />
+                                            <Image src="/phone.png" alt="Thumbnail" fill className="object-cover" />
                                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <UploadCloud className="h-6 w-6 text-white" />
                                             </div>
@@ -329,7 +329,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                                 <div className="flex flex-wrap gap-4 mt-3">
                                     {attachments.map((id) => (
                                         <div key={id} className="relative h-20 w-20 rounded-md border border-brand-subtext/20 bg-brand-bg overflow-visible shrink-0 shadow-sm transition-transform hover:scale-105">
-                                            <Image src={`https://placehold.co/100x100/e2e8f0/64748b?text=Img${id}`} alt="Attachment" fill className="rounded-md object-cover" />
+                                            <Image src={`/phone.png${id}`} alt="Attachment" fill className="rounded-md object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={() => removeAttachment(id)}

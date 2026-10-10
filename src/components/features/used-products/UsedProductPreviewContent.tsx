@@ -27,7 +27,7 @@ export function UsedProductPreviewContent({ productId }: UsedProductPreviewConte
                         {/* Image Gallery Mock */}
                         <div className="bg-brand-bg/50 p-8 flex items-center justify-center border-r border-brand-subtext/10">
                             <div className="relative h-72 w-72 sm:h-96 sm:w-96 rounded-xl overflow-hidden shadow-lg border border-brand-subtext/20 bg-white">
-                                <Image src="https://placehold.co/800x800/e2e8f0/64748b?text=Pre-Owned+Device" alt="Product" fill className="object-cover" />
+                                <Image src="/banner.png" alt="Product" fill className="object-cover" />
                             </div>
                         </div>
 

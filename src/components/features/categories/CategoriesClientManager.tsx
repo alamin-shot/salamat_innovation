@@ -1,23 +1,19 @@
 "use client";
 import * as React from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Drawer } from "@/components/ui/Drawer";
 import { CategoryReorderTree } from "./CategoryReorderTree";
 import { CategoryMasterForm } from "./CategoryMasterForm";
 import { CategoriesTable } from "./CategoriesTable";
+import { useCommandParams } from "@/hooks/useCommandParams";
 
 export function CategoriesClientManager() {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
+    const { activeDrawer, openView, closeView } = useCommandParams();
 
-    const activeDrawer = searchParams.get("drawer");
+    // This stays local since it dictates the internal view of the drawer, not the URL
     const [selectedCategoryId, setSelectedCategoryId] = React.useState<string | null>(null);
 
-    const closeDrawer = () => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete("drawer");
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    const handleCloseDrawer = () => {
+        closeView();
         setSelectedCategoryId(null);
     };
 
@@ -30,7 +26,7 @@ export function CategoriesClientManager() {
                         <p className="text-xs sm:text-sm text-brand-subtext">Manage product taxonomy and storefront hierarchy</p>
                     </div>
                     <button
-                        onClick={() => router.push(`${pathname}?drawer=reorder`, { scroll: false })}
+                        onClick={() => openView("drawer", "reorder")}
                         className="rounded-lg border border-emerald-600 bg-emerald-50 px-4 py-2 text-xs sm:text-sm font-bold text-emerald-700 transition-colors hover:bg-emerald-100 shadow-sm"
                     >
                         Reorder Category
@@ -45,7 +41,7 @@ export function CategoriesClientManager() {
             <Drawer
                 title="Manage Categories"
                 isOpen={activeDrawer === "reorder"}
-                onClose={closeDrawer}
+                onClose={handleCloseDrawer}
                 width="w-[100vw] max-w-[100vw]" // Full width drawer
             >
                 <div className="flex h-full flex-col lg:flex-row bg-brand-bg/30">
@@ -65,7 +61,7 @@ export function CategoriesClientManager() {
 
                     {/* RIGHT COLUMN: Data Form */}
                     <div className="w-full lg:w-[55%] p-6 overflow-y-auto custom-scrollbar">
-                        <CategoryMasterForm categoryId={selectedCategoryId} onSave={closeDrawer} />
+                        <CategoryMasterForm categoryId={selectedCategoryId} onSave={handleCloseDrawer} />
                     </div>
                 </div>
             </Drawer>

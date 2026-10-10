@@ -28,9 +28,9 @@ export interface UsedProduct {
 }
 
 const MOCK_USED_PRODUCTS: UsedProduct[] = [
-    { id: "1", name: "iPhone 13 Pro", image: "https://placehold.co/100x100/e2e8f0/64748b?text=Phone", variant: "128GB/Gold", price: 53990.00, serialNumber: "359052378710667", carePlan: "TEKZO Care for Apple", isSold: false },
-    { id: "2", name: "iPhone 13 Pro", image: "https://placehold.co/100x100/e2e8f0/64748b?text=Phone", variant: "256GB/Gold", price: 56990.00, serialNumber: "355677815053877", carePlan: "TEKZO Screen Care", isSold: false },
-    { id: "3", name: "iPhone 13 Pro", image: "https://placehold.co/100x100/e2e8f0/64748b?text=Phone", variant: "128GB/Sierra Blue", price: 53990.00, serialNumber: "353100552915705", carePlan: "None", isSold: true },
+    { id: "1", name: "iPhone 13 Pro", image: "/phone.png", variant: "128GB/Gold", price: 53990.00, serialNumber: "359052378710667", carePlan: "TEKZO Care for Apple", isSold: false },
+    { id: "2", name: "iPhone 13 Pro", image: "/phone.png", variant: "256GB/Gold", price: 56990.00, serialNumber: "355677815053877", carePlan: "TEKZO Screen Care", isSold: false },
+    { id: "3", name: "iPhone 13 Pro", image: "/phone.png", variant: "128GB/Sierra Blue", price: 53990.00, serialNumber: "353100552915705", carePlan: "None", isSold: true },
 ];
 
 type ModalType = "price" | "care";
@@ -193,8 +193,8 @@ export function UsedProductTable() {
                                     <TableCell>
                                         <DropdownMenu.Root>
                                             <DropdownMenu.Trigger className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition-colors outline-none cursor-pointer ${!product.isSold
-                                                    ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm"
-                                                    : "bg-brand-bg text-brand-subtext border border-brand-subtext/20 hover:bg-brand-subtext/10"
+                                                ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm"
+                                                : "bg-brand-bg text-brand-subtext border border-brand-subtext/20 hover:bg-brand-subtext/10"
                                                 }`}>
                                                 <span>{!product.isSold ? "Available" : "Sold"}</span>
                                                 <ChevronDown className="h-3 w-3 opacity-80" />

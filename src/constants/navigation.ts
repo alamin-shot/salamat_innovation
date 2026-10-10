@@ -18,6 +18,15 @@ const nav = (title: string, items: string[]): NavSection => ({
     if (item === "Brands") {
       return { title: item, href: "/admin/brands" };
     }
+    if (item === "Pages") {
+      return { title: item, href: "/admin/pages" };
+    }
+    if (item === "Attributes") {
+      return { title: item, href: "/admin/attributes" };
+    }
+    if (item === "Specification Groups") {
+      return { title: item, href: "/admin/specification-groups" };
+    }
 
     return {
       title: item,

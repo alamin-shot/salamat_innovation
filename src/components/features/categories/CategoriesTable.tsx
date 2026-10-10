@@ -6,6 +6,7 @@ import { FilterBar } from "@/components/ui/FilterBar";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { Edit2, Trash2, Check, X, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+import { useTableManager } from "@/hooks/useTableManager";
 
 interface Category {
     id: string;
@@ -22,31 +23,14 @@ const MOCK_CATEGORIES: Category[] = [
 ];
 
 export function CategoriesTable() {
-    const [categories, setCategories] = React.useState(MOCK_CATEGORIES);
-    const [searchQuery, setSearchQuery] = React.useState("");
+    const table = useTableManager(MOCK_CATEGORIES, (cat, query) =>
+        cat.name.toLowerCase().includes(query.toLowerCase()) ||
+        cat.parentCategory.toLowerCase().includes(query.toLowerCase())
+    );
 
-    // 1. Inline Edit State
+    // Inline Edit State
     const [editingId, setEditingId] = React.useState<string | null>(null);
     const [editValue, setEditValue] = React.useState("");
-
-    // 2. Bulk Selection State (This fixes the 'selectedIds' not found error)
-    const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
-
-    const handleSelectAll = (checked: boolean) => {
-        if (checked) {
-            setSelectedIds(categories.map(c => c.id));
-        } else {
-            setSelectedIds([]);
-        }
-    };
-
-    const handleSelectRow = (id: string, checked: boolean) => {
-        if (checked) {
-            setSelectedIds(prev => [...prev, id]);
-        } else {
-            setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
-        }
-    };
 
     const handleStartEdit = (id: string, currentName: string) => {
         setEditingId(id);
@@ -55,20 +39,20 @@ export function CategoriesTable() {
 
     const handleSaveEdit = (id: string) => {
         if (!editValue.trim()) return;
-        setCategories(categories.map(c => c.id === id ? { ...c, name: editValue } : c));
+        table.setData(prev => prev.map(c => c.id === id ? { ...c, name: editValue } : c));
         setEditingId(null);
         toast.success("Category name updated");
     };
 
     const handleStatusChange = (id: string, status: "Visible" | "Hidden") => {
-        setCategories(categories.map(c => c.id === id ? { ...c, status } : c));
+        table.setData(prev => prev.map(c => c.id === id ? { ...c, status } : c));
         toast.success(`Category marked as ${status}`);
     };
 
     return (
         <div className="flex flex-col w-full h-full relative">
             <div className="border-b border-brand-subtext/20 bg-white">
-                <FilterBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+                <FilterBar searchQuery={table.searchQuery} onSearchChange={table.setSearchQuery} />
             </div>
 
             <div className="overflow-x-auto custom-scrollbar flex-1 pb-16">
@@ -77,8 +61,8 @@ export function CategoriesTable() {
                         <TableHeadCell className="w-[48px] px-4">
                             <input
                                 type="checkbox"
-                                checked={selectedIds.length === categories.length && categories.length > 0}
-                                onChange={(e) => handleSelectAll(e.target.checked)}
+                                checked={table.isAllSelected}
+                                onChange={(e) => table.handleSelectAll(e.target.checked)}
                                 className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600 cursor-pointer"
                             />
                         </TableHeadCell>
@@ -93,13 +77,13 @@ export function CategoriesTable() {
                     </TableHeader>
 
                     <TableBody>
-                        {categories.map((cat) => (
-                            <TableRow key={cat.id} className={selectedIds.includes(cat.id) ? "bg-emerald-50/30" : ""}>
+                        {table.filteredData.map((cat) => (
+                            <TableRow key={cat.id} className={table.selectedIds.includes(cat.id) ? "bg-emerald-50/30" : ""}>
                                 <TableCell className="w-[48px] px-4">
                                     <input
                                         type="checkbox"
-                                        checked={selectedIds.includes(cat.id)}
-                                        onChange={(e) => handleSelectRow(cat.id, e.target.checked)}
+                                        checked={table.selectedIds.includes(cat.id)}
+                                        onChange={(e) => table.handleSelectRow(cat.id, e.target.checked)}
                                         className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600 cursor-pointer"
                                     />
                                 </TableCell>
@@ -133,7 +117,6 @@ export function CategoriesTable() {
 
                                 <TableCell><span className="text-brand-subtext">{cat.parentCategory}</span></TableCell>
                                 <TableCell className="text-center font-medium text-brand-text">{cat.totalProducts}</TableCell>
-
                                 <TableCell className="text-center"><div className="mx-auto h-8 w-8 rounded bg-brand-bg/80 border border-brand-subtext/10 flex items-center justify-center text-[10px] text-brand-subtext">Img</div></TableCell>
                                 <TableCell className="text-center"><div className="mx-auto h-8 w-16 rounded bg-brand-bg/80 border border-brand-subtext/10 flex items-center justify-center text-[10px] text-brand-subtext">Img</div></TableCell>
                                 <TableCell className="text-center"><div className="mx-auto h-8 w-16 rounded bg-brand-bg/80 border border-brand-subtext/10 flex items-center justify-center text-[10px] text-brand-subtext">Img</div></TableCell>
@@ -163,15 +146,12 @@ export function CategoriesTable() {
                 </Table>
             </div>
 
-            {/* Using YOUR exact BulkActionBar syntax */}
-            <BulkActionBar
-                selectedCount={selectedIds.length}
-                onClearSelection={() => setSelectedIds([])}
-            >
+            <BulkActionBar selectedCount={table.selectedIds.length} onClearSelection={table.clearSelection}>
                 <button
                     onClick={() => {
-                        toast.success(`Deleted ${selectedIds.length} categories`);
-                        setSelectedIds([]);
+                        table.setData(prev => prev.filter(c => !table.selectedIds.includes(c.id)));
+                        toast.success(`Deleted ${table.selectedIds.length} categories`);
+                        table.clearSelection();
                     }}
                     className="flex items-center gap-2 rounded-md bg-red-500/10 px-3 py-1.5 text-sm font-bold text-red-400 transition-colors hover:bg-red-500/20 hover:text-red-300"
                 >

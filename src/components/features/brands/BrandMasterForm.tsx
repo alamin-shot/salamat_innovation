@@ -28,10 +28,10 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
 
     // Media Dropzone States (pre-filled in edit mode with legacy dimensions)
     const [media, setMedia] = React.useState<MediaState>({
-        primaryLogo: isEditMode ? "https://placehold.co/100x100/e2e8f0/64748b?text=Ap" : null,
-        secondaryLogo: isEditMode ? "https://placehold.co/100x100/e2e8f0/64748b?text=Ap" : null,
-        shopBanner: isEditMode ? "https://placehold.co/100x100/e2e8f0/64748b?text=Banner" : null,
-        infoBanner: isEditMode ? "https://placehold.co/100x100/e2e8f0/64748b?text=Info" : null,
+        primaryLogo: isEditMode ? "/phone.png" : null,
+        secondaryLogo: isEditMode ? "/phone.png" : null,
+        shopBanner: isEditMode ? "/banner.png" : null,
+        infoBanner: isEditMode ? "/banner.png" : null,
     });
 
     const removeImage = (key: keyof MediaState) => {
@@ -41,7 +41,7 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
     const handleMockUpload = (key: keyof MediaState) => {
         setMedia(prev => ({
             ...prev,
-            [key]: "https://placehold.co/100x100/e2e8f0/64748b?text=Uploaded"
+            [key]: "/phone.png"
         }));
         toast.success("Image uploaded successfully.");
     };

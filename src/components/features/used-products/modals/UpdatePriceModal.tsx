@@ -23,7 +23,7 @@ export function UpdatePriceModal({ productId }: UpdatePriceModalProps) {
             {/* Product Summary Header Card */}
             <div className="flex items-center gap-4 rounded-xl border border-brand-subtext/10 bg-brand-bg/50 p-4">
                 <div className="relative h-14 w-14 overflow-hidden rounded-lg border border-brand-subtext/20 bg-white shrink-0">
-                    <Image src="https://placehold.co/100x100/e2e8f0/64748b?text=Phone" alt="Product" fill className="object-cover" />
+                    <Image src="/phone.png" alt="Product" fill className="object-cover" />
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-base font-bold text-brand-text">iPhone 13 Pro</h3>

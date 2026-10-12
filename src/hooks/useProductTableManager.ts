@@ -3,7 +3,7 @@ import * as React from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useDataTable } from "@/hooks/useDataTable";
-import { ProductExtended } from "@/components/features/products/ProductTable";
+import { ProductExtended } from "@/components/features/products-pages/products/ProductTable";
 
 type ModalType = "warranty" | "variants" | "specs" | "care";
 

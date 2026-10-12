@@ -48,8 +48,13 @@ export const TableHeadCell = ({ children, sortable, activeDirection, onClick, cl
     </th>
 );
 
-export const TableCell = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
-    <td className={`whitespace-nowrap px-4 py-3 align-middle ${className}`}>
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+    children?: React.ReactNode;
+    className?: string;
+}
+
+export const TableCell = ({ children, className = "", ...props }: TableCellProps) => (
+    <td className={`whitespace-nowrap px-4 py-3 align-middle ${className}`} {...props}>
         {children}
     </td>
 );

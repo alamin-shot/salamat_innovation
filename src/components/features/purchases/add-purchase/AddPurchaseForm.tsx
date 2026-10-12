@@ -4,7 +4,6 @@ import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } fro
 import { Trash2, ChevronDown, Check, Image as ImageIcon, Search } from "lucide-react";
 import { useAddPurchaseManager } from "@/hooks/useAddPurchaseManager";
 
-// Reusable headless dropdown strictly for this form
 const CustomSelect = ({ value, onChange, options, placeholder }: { value: string, onChange: (v: string) => void, options: string[], placeholder: string }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     return (

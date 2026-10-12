@@ -8,7 +8,6 @@ export function AddPurchaseClient() {
     const { activeModal, closeView } = useCommandParams();
 
     return (
-        // Removed h-full, overflow-y-auto, and custom-scrollbar to eliminate the double scrollbar
         <div className="flex flex-col w-full p-4 sm:p-6 lg:p-8">
             <div className="mb-6">
                 <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Create Purchase</h1>

@@ -28,7 +28,6 @@ export function BarcodeHistoryClient() {
                 <BarcodeHistoryTable />
             </div>
 
-            {/* Always rendered in the DOM, visibility/animation controlled via isOpen prop */}
             <EditHistoryDrawer
                 id={retainedEditId}
                 isOpen={activeDrawer === "edit-history"}

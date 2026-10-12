@@ -1,15 +1,16 @@
-import { BarcodeListClient } from "@/components/features/barcodes-pages/barcode-list/BarcodeListClient";
+import { AddPurchaseClient } from "@/components/features/purchases/add-purchase/AddPurchaseClient";
 import { Loader } from "@/components/shared/loader/Loader";
 import { Suspense } from "react";
 
-export default function BarcodeListPage() {
+export default function AddPurchasePage() {
     return (
         <Suspense fallback={
             <div className="flex h-screen items-center justify-center">
                 <Loader />
             </div>
         }>
-            <BarcodeListClient />;
+            <AddPurchaseClient />;
+
         </Suspense>
     )
 }

@@ -6,46 +6,12 @@ const nav = (title: string, items: string[]): NavSection => ({
   title,
   items: items.map((item) => {
 
-    if (item === "Products") {
-      return { title: item, href: "/admin/products/products" };
-    }
-    if (item === "Used Products") {
-      return { title: item, href: "/admin/products/used-product" };
-    }
-    if (item === "Categories") {
-      return { title: item, href: "/admin/products/categories" };
-    }
-    if (item === "Brands") {
-      return { title: item, href: "/admin/products/brands" };
-    }
-    if (item === "Pages") {
-      return { title: item, href: "/admin/products/pages" };
-    }
-    if (item === "Attributes") {
-      return { title: item, href: "/admin/products/attributes" };
-    }
-    if (item === "Specification Groups") {
-      return { title: item, href: "/admin/products/specification-groups" };
-    }
-    if (item === "Barcode List") {
-      return { title: item, href: "/admin/barcodes/list" };
-    }
-    if (item === "Create Barcode") {
-      return { title: item, href: "/admin/barcodes/create" };
-    }
-    if (item === "Print Barcode") {
-      return { title: item, href: "/admin/barcodes/print" };
-    }
-    if (item === "Barcode History") {
-      return { title: item, href: "/admin/barcodes/history" };
-    }
-    if (item === "Generate Barcode") {
-      return { title: item, href: "/admin/barcodes/generated" };
-    }
+    const formattedTitle = title.toLowerCase().replace(/\s+/g, "-");
+    const formattedItem = item.toLowerCase().replace(/\s+/g, "-");
 
     return {
       title: item,
-      href: `/admin/coming-soon?p=${item.toLowerCase().replace(/\s+/g, "-")}`,
+      href: `/admin/${formattedTitle}/${formattedItem}`,
     };
   }),
 });
@@ -53,7 +19,7 @@ const nav = (title: string, items: string[]): NavSection => ({
 export const NAVIGATION_DATA: NavSection[] = [
   nav("Products", ["Products", "Used Products", "Categories", "Brands", "Pages", "Attributes", "Specification Groups"]),
   nav("Barcodes", ["Barcode List", "Create Barcode", "Print Barcode", "Barcode History", "Generate Barcode"]),
-  nav("Purchases", ["Purchases", "Purchase Return"]),
+  nav("Purchases", ["Purchases", "Add Purchase", "Purchase Return", "Add Purchase return"]),
   nav("Sales", ["Sales", "Sales Return", "Stock Transfer"]),
   nav("Cash Transfer", ["Cash Transfer"]),
   nav("Damage Product", ["Damage Product"]),

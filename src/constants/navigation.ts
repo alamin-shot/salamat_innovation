@@ -20,7 +20,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Products", ["Products", "Used Products", "Categories", "Brands", "Pages", "Attributes", "Specification Groups"]),
   nav("Barcodes", ["Barcode List", "Create Barcode", "Print Barcode", "Barcode History", "Generate Barcode"]),
   nav("Purchases", ["Purchases", "Add Purchase", "Purchase Return", "Add Purchase return"]),
-  nav("Sales", ["Sales", "Sales Return", "Stock Transfer"]),
+  nav("Sales", ["Sales", "Add Sale", "Sales Return", "Add Sale return"]),
   nav("Cash Transfer", ["Cash Transfer"]),
   nav("Damage Product", ["Damage Product"]),
   nav("People", ["People"]),

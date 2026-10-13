@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { useAddPurchaseReturnManager } from "@/hooks/useAddPurchaseReturnManager";
-import { CustomSelect } from "./CustomSelect";
+import { CustomSelect } from "../../../ui/CustomSelect";
 
 type Manager = ReturnType<typeof useAddPurchaseReturnManager>;
 

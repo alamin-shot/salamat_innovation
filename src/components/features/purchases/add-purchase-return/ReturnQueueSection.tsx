@@ -3,7 +3,7 @@ import * as React from "react";
 import { Search, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { useAddPurchaseReturnManager } from "@/hooks/useAddPurchaseReturnManager";
-import { CustomSelect } from "./CustomSelect";
+import { CustomSelect } from "../../../ui/CustomSelect";
 import { Button } from "@/components/ui/button";
 
 type Manager = ReturnType<typeof useAddPurchaseReturnManager>;

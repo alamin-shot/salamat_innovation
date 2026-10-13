@@ -3,6 +3,7 @@ import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Image as ImageIcon, Search, Trash2, FileText, ChevronDown } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
+import { Button } from "@/components/ui/button";
 
 export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     if (!id && !isOpen) return null;
@@ -87,8 +88,8 @@ export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
                                     <TableCell className="text-right text-[13px]">18990</TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex items-center justify-end gap-2">
-                                            <button className="flex h-7 w-7 items-center justify-center rounded bg-emerald-600 text-white hover:bg-emerald-700"><FileText className="h-3.5 w-3.5" /></button>
-                                            <button className="flex h-7 w-7 items-center justify-center rounded border border-red-200 text-red-500 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button>
+                                            <Button type="button" variant="success" size="icon-sm"><FileText className="h-3.5 w-3.5" /></Button>
+                                            <Button type="button" variant="destructive-ghost" size="icon-sm"><Trash2 className="h-4 w-4" /></Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -103,10 +104,10 @@ export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
                         <div>
                             <label className="text-[13px] text-gray-500 mb-2 block">Discount Type</label>
                             <div className="relative w-full">
-                                <button type="button" className="flex w-full items-center justify-between rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600">
+                                <Button type="button" variant="outline" className="w-full justify-between font-normal">
                                     <span>Choose a Discount Type</span>
                                     <ChevronDown className="h-4 w-4 text-gray-400" />
-                                </button>
+                                </Button>
                             </div>
                         </div>
                         <div>
@@ -143,9 +144,9 @@ export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
                 </div>
 
                 <div className="flex justify-end pt-4 mb-4">
-                    <button onClick={onClose} className="rounded bg-[#108c5d] px-8 py-2 text-[13px] font-medium text-white hover:bg-emerald-700 transition-colors">
+                    <Button type="button" variant="success" onClick={onClose} className="px-8">
                         Save
-                    </button>
+                    </Button>
                 </div>
             </div>
         </Drawer>

@@ -5,6 +5,8 @@ import { PurchaseTopSection } from "./PurchaseTopSection";
 import { PurchaseQueueSection } from "./PurchaseQueueSection";
 import { PurchaseSummarySection } from "./PurchaseSummarySection";
 
+import { Button } from "@/components/ui/button";
+
 export function AddPurchaseForm() {
     const manager = useAddPurchaseManager();
 
@@ -16,12 +18,14 @@ export function AddPurchaseForm() {
             <PurchaseSummarySection manager={manager} />
 
             <div className="flex justify-end pt-4 mt-2">
-                <button
+                <Button
+                    type="button"
+                    variant="success"
                     onClick={manager.handleSavePurchase}
-                    className="rounded bg-[#108c5d] px-6 py-2 text-[13px] font-medium text-white hover:bg-emerald-700 transition-colors"
+                    className="px-6"
                 >
                     Save
-                </button>
+                </Button>
             </div>
 
         </div>

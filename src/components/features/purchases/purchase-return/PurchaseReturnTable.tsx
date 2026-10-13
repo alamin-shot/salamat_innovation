@@ -3,6 +3,7 @@ import * as React from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
 import { useCommandParams } from "@/hooks/useCommandParams";
+import { Button } from "@/components/ui/button";
 
 export function PurchaseReturnTable() {
     const { openView } = useCommandParams();
@@ -54,27 +55,33 @@ export function PurchaseReturnTable() {
                                 <TableCell><span className="text-[12px] font-medium text-red-500">{row.status}</span></TableCell>
                                 <TableCell className="text-[13px] text-gray-600">{row.creator}</TableCell>
                                 <TableCell className="text-right">
-                                    <div className="flex items-center justify-end gap-3">
-                                        <button
+                                    <div className="flex items-center justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon-sm"
                                             onClick={() => openView("drawer", "view-return", row.id)}
-                                            className="text-gray-400 hover:text-blue-600 transition-colors"
                                             title="View"
                                         >
                                             <Eye className="h-4 w-4" />
-                                        </button>
-                                        <button
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon-sm"
                                             onClick={() => openView("drawer", "edit-return", row.id)}
-                                            className="text-gray-400 hover:text-emerald-600 transition-colors"
                                             title="Edit"
                                         >
                                             <Edit className="h-4 w-4" />
-                                        </button>
-                                        <button
-                                            className="text-gray-400 hover:text-red-600 transition-colors"
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="destructive-ghost"
+                                            size="icon-sm"
                                             title="Delete"
                                         >
                                             <Trash2 className="h-4 w-4" />
-                                        </button>
+                                        </Button>
                                     </div>
                                 </TableCell>
                             </TableRow>

@@ -3,6 +3,7 @@ import * as React from "react";
 import { Save, Edit3, Calendar, Building2, UserCheck, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Drawer } from "@/components/ui/Drawer";
+import { Button } from "@/components/ui/button";
 
 export function EditPurchaseDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     const [supplier, setSupplier] = React.useState("Rasel Raj");
@@ -97,21 +98,23 @@ export function EditPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
 
                 {/* Footer Actions */}
                 <div className="border-t border-brand-subtext/20 bg-brand-bg/30 px-6 py-4 flex items-center justify-end gap-3 mt-8 rounded-xl">
-                    <button
+                    <Button
                         onClick={onClose}
                         type="button"
-                        className="rounded-md border border-brand-subtext/30 bg-white px-5 py-2 text-sm font-bold text-brand-text hover:bg-brand-bg transition-colors"
+                        variant="outline"
+                        className="px-5"
                     >
                         Cancel
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="submit"
                         form="edit-purchase-form"
-                        className="flex items-center gap-2 rounded-md bg-emerald-600 px-6 py-2 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm"
+                        variant="success"
+                        className="gap-2 px-6"
                     >
                         <Save className="h-4 w-4" />
                         Save Changes
-                    </button>
+                    </Button>
                 </div>
             </div>
         </Drawer>

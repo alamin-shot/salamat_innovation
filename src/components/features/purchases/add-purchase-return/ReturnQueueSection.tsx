@@ -4,6 +4,7 @@ import { Search, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { useAddPurchaseReturnManager } from "@/hooks/useAddPurchaseReturnManager";
 import { CustomSelect } from "./CustomSelect";
+import { Button } from "@/components/ui/button";
 
 type Manager = ReturnType<typeof useAddPurchaseReturnManager>;
 
@@ -26,8 +27,8 @@ export function ReturnQueueSection({ manager }: { manager: Manager }) {
                         <label className="text-[13px] font-bold text-gray-600">Serial/IMEI no.</label>
                         <div className="flex gap-2">
                             <input type="text" placeholder="Serial/IMEI no." value={manager.manualSerial} onChange={(e) => manager.setManualSerial(e.target.value)} className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none" />
-                            <button onClick={manager.handleSuggestSerial} className="shrink-0 rounded bg-[#eab308] px-4 py-2 text-[13px] font-bold text-white hover:bg-yellow-600 transition-colors">Suggest</button>
-                            <button onClick={manager.handleApplyManualItem} className="shrink-0 rounded bg-[#108c5d] px-4 py-2 text-[13px] font-bold text-white hover:bg-emerald-700 transition-colors">Apply</button>
+                            <Button type="button" variant="warning" onClick={manager.handleSuggestSerial} className="shrink-0">Suggest</Button>
+                            <Button type="button" variant="success" onClick={manager.handleApplyManualItem} className="shrink-0">Apply</Button>
                         </div>
                     </div>
                 </div>
@@ -75,9 +76,14 @@ export function ReturnQueueSection({ manager }: { manager: Manager }) {
                                     </TableCell>
                                     <TableCell className="text-right"><span className="text-[13px] text-gray-700 font-medium">{(item.unitPrice * item.quantity).toLocaleString()}</span></TableCell>
                                     <TableCell className="text-right">
-                                        <button onClick={() => manager.handleRemoveItem(item.id)} className="inline-flex h-8 w-8 items-center justify-center rounded text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors">
+                                        <Button
+                                            type="button"
+                                            variant="destructive-ghost"
+                                            size="icon-sm"
+                                            onClick={() => manager.handleRemoveItem(item.id)}
+                                        >
                                             <Trash2 className="h-4 w-4" />
-                                        </button>
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Printer } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { useReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
 
 export function ViewPurchaseDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     // 1. Create a reference for the invoice container
@@ -27,12 +28,14 @@ export function ViewPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
             <div className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 bg-brand-bg/10 min-h-full">
                 {/* Print Action Bar */}
                 <div className="flex justify-end max-w-3xl mx-auto w-full">
-                    <button
+                    <Button
+                        type="button"
+                        variant="success"
                         onClick={() => handlePrint()}
-                        className="flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-emerald-700 shadow-sm"
+                        className="gap-2"
                     >
                         <Printer className="h-4 w-4" /> Print Invoice
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Invoice Paper Document - Attach the ref here */}

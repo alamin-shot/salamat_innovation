@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Printer } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { useReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
 
 export function ViewPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     const invoiceRef = React.useRef<HTMLDivElement>(null);
@@ -25,12 +26,14 @@ export function ViewPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
             <div className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 bg-brand-bg/10 min-h-full">
 
                 <div className="flex justify-end max-w-4xl mx-auto w-full">
-                    <button
+                    <Button
+                        type="button"
+                        variant="success"
                         onClick={() => handlePrint()}
-                        className="flex items-center gap-2 rounded bg-[#108c5d] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 shadow-sm"
+                        className="gap-2"
                     >
                         <Printer className="h-4 w-4" /> Print Invoice
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Print Container with Thick Orange Border */}

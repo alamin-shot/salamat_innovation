@@ -6,10 +6,9 @@ import { ReturnQueueSection } from "./ReturnQueueSection";
 import { ReturnSummarySection } from "./ReturnSummarySection";
 
 export function AddPurchaseReturnForm() {
-    // 1. Initialize the Brain
+
     const manager = useAddPurchaseReturnManager();
 
-    // 2. Pass the logic down into the Modular UI
     return (
         <div className="flex flex-col gap-8 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
 

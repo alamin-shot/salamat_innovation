@@ -1,16 +1,22 @@
 "use client";
 import * as React from "react";
 import { ChevronDown, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function CustomSelect({ value, onChange, options, placeholder }: { value: string, onChange: (v: string) => void, options: string[], placeholder: string }) {
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
         <div className="relative w-full">
-            <button type="button" onClick={() => setIsOpen(!isOpen)} className="flex w-full items-center justify-between rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+            <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full justify-between font-normal"
+            >
                 <span className={value ? "text-gray-700" : "text-gray-400"}>{value || placeholder}</span>
                 <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-            </button>
+            </Button>
             {isOpen && (
                 <>
                     <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />

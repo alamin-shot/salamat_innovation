@@ -3,6 +3,7 @@ import * as React from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { useAddPurchaseManager } from "@/hooks/useAddPurchaseManager";
 import { CustomSelect } from "./CustomSelect";
+import { Button } from "@/components/ui/button";
 
 type Manager = ReturnType<typeof useAddPurchaseManager>;
 
@@ -20,9 +21,9 @@ export function PurchaseTopSection({ manager }: { manager: Manager }) {
                             options={["Rasel Raj", "Bina Ambix", "Gadget Opia", "Cell Tech BD"]}
                             placeholder="Choose a Supplier"
                         />
-                        <button onClick={manager.openAddSupplierModal} className="shrink-0 rounded bg-[#108c5d] px-4 py-2 text-[13px] font-medium text-white hover:bg-emerald-700 transition-colors">
+                        <Button type="button" variant="success" onClick={manager.openAddSupplierModal} className="shrink-0">
                             Add Supplier
-                        </button>
+                        </Button>
                     </div>
                 </div>
 
@@ -48,13 +49,14 @@ export function PurchaseTopSection({ manager }: { manager: Manager }) {
                 </div>
 
                 <div className="flex flex-col gap-1.5 mt-1">
-                    <button
+                    <Button
                         type="button"
+                        variant="secondary"
                         onClick={manager.toggleManualEntry}
-                        className="w-full rounded bg-gray-100 border border-gray-200 py-2 text-[13px] text-gray-700 hover:bg-gray-200 transition-colors"
+                        className="w-full"
                     >
                         Create Barcode
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

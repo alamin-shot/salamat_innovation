@@ -2,6 +2,7 @@
 import * as React from "react";
 import { UploadCloud, X } from "lucide-react";
 import { ImageDropzoneProps } from "@/types/dropzone";
+import Image from "next/image";
 
 export function ImageDropzone({
     label,
@@ -45,7 +46,7 @@ export function ImageDropzone({
                 {previewUrl ? (
                     <div className="relative h-32 w-32 overflow-hidden rounded-md border border-brand-subtext/20">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={previewUrl} alt="Preview" className="h-full w-full object-cover" />
+                        <Image src={previewUrl} alt="Preview" className="h-full w-full object-cover" />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity hover:opacity-100">
                             <span className="text-xs font-medium text-white">Change Image</span>
                         </div>

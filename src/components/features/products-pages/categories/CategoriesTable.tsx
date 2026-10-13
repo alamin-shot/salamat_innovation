@@ -7,19 +7,23 @@ import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { Edit2, Trash2, Check, X, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useTableManager } from "@/hooks/useTableManager";
+import Image from "next/image";
 
 interface Category {
     id: string;
     name: string;
     parentCategory: string;
     totalProducts: number;
+    secLogo?: string;
+    banner?: string;
+    infoBanner?: string;
     status: "Visible" | "Hidden";
 }
 
 const MOCK_CATEGORIES: Category[] = [
-    { id: "1", name: "Smart Band", parentCategory: "Wearable Technology", totalProducts: 1, status: "Visible" },
-    { id: "2", name: "Desk Lamp", parentCategory: "Lighting", totalProducts: 1, status: "Visible" },
-    { id: "3", name: "Gaming", parentCategory: "-", totalProducts: 7, status: "Visible" },
+    { id: "1", name: "Smart Band", parentCategory: "Wearable Technology", totalProducts: 1, secLogo: "/phone.png", banner: "/banner.png", infoBanner: "/banner.png", status: "Visible" },
+    { id: "2", name: "Desk Lamp", parentCategory: "Lighting", totalProducts: 1, secLogo: "/phone.png", banner: "/banner.png", infoBanner: "/banner.png", status: "Visible" },
+    { id: "3", name: "Gaming", parentCategory: "-", totalProducts: 7, secLogo: "/phone.png", banner: "/banner.png", infoBanner: "/banner.png", status: "Visible" },
 ];
 
 export function CategoriesTable() {
@@ -117,9 +121,21 @@ export function CategoriesTable() {
 
                                 <TableCell><span className="text-brand-subtext">{cat.parentCategory}</span></TableCell>
                                 <TableCell className="text-center font-medium text-brand-text">{cat.totalProducts}</TableCell>
-                                <TableCell className="text-center"><div className="mx-auto h-8 w-8 rounded bg-brand-bg/80 border border-brand-subtext/10 flex items-center justify-center text-[10px] text-brand-subtext">Img</div></TableCell>
-                                <TableCell className="text-center"><div className="mx-auto h-8 w-16 rounded bg-brand-bg/80 border border-brand-subtext/10 flex items-center justify-center text-[10px] text-brand-subtext">Img</div></TableCell>
-                                <TableCell className="text-center"><div className="mx-auto h-8 w-16 rounded bg-brand-bg/80 border border-brand-subtext/10 flex items-center justify-center text-[10px] text-brand-subtext">Img</div></TableCell>
+                                <TableCell className="text-center">
+                                    <div className="relative mx-auto h-8 w-8 overflow-hidden rounded border border-brand-subtext/20 bg-brand-bg/50">
+                                        <Image src={cat.secLogo || "/phone.png"} alt="Sec. Logo" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" fill className="object-contain p-0.5" />
+                                    </div>
+                                </TableCell>
+                                <TableCell className="text-center">
+                                    <div className="relative mx-auto h-8 w-16 overflow-hidden rounded border border-brand-subtext/20 bg-brand-bg/50">
+                                        <Image src={cat.banner || "/banner.png"} alt="Banner" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" fill className="object-cover" />
+                                    </div>
+                                </TableCell>
+                                <TableCell className="text-center">
+                                    <div className="relative mx-auto h-8 w-16 overflow-hidden rounded border border-brand-subtext/20 bg-brand-bg/50">
+                                        <Image src={cat.infoBanner || "/banner.png"} alt="Info Banner" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" fill className="object-cover" />
+                                    </div>
+                                </TableCell>
 
                                 <TableCell>
                                     <DropdownMenu.Root>

@@ -19,14 +19,14 @@ export interface PageItem {
 }
 
 const MOCK_PAGES: PageItem[] = [
-    { id: "1", title: "home", slug: "home", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Info" },
-    { id: "2", title: "All Brands", slug: "brands", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Shop", infoBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Info" },
-    { id: "3", title: "All Categories", slug: "categories", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Shop", infoBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Info" },
-    { id: "4", title: "Shop", slug: "shop", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Shop", infoBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Info" },
+    { id: "1", title: "home", slug: "home", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "/banner.png" },
+    { id: "2", title: "All Brands", slug: "brands", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "/banner.png" },
+    { id: "3", title: "All Categories", slug: "categories", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "/banner.png" },
+    { id: "4", title: "Shop", slug: "shop", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "/banner.png" },
     { id: "5", title: "About Us", slug: "about-us", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: null, infoBanner: null },
-    { id: "6", title: "Contact Us", slug: "contact-us", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Shop", infoBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Info" },
+    { id: "6", title: "Contact Us", slug: "contact-us", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "/banner.png" },
     { id: "7", title: "Partners", slug: "partners", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: null, infoBanner: null },
-    { id: "8", title: "Career", slug: "career", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Shop", infoBanner: "https://placehold.co/100x100/e2e8f0/64748b?text=Info" },
+    { id: "8", title: "Career", slug: "career", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: "/banner.png", infoBanner: "/banner.png" },
     { id: "9", title: "News", slug: "news", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: null, infoBanner: null },
     { id: "10", title: "Dealer Registration", slug: "dealer-register", shop: "Salamat Innovation", avatar: "/phone.png", shopBanner: null, infoBanner: null },
 ];

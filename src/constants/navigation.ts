@@ -1,13 +1,18 @@
 export type NavItem = { title: string; href: string };
 export type NavSection = { title: string; items: NavItem[] };
 
-// Helper function to auto-generate links and keep the file strictly under 100 lines
 const nav = (title: string, items: string[]): NavSection => ({
   title,
   items: items.map((item) => {
 
     const formattedTitle = title.toLowerCase().replace(/\s+/g, "-");
     const formattedItem = item.toLowerCase().replace(/\s+/g, "-");
+    if (title === "Stock Transfer" && item === "Stock Transfers") {
+      return {
+        title: item,
+        href: `/admin/stock-transfers`,
+      };
+    }
 
     return {
       title: item,
@@ -20,7 +25,8 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Products", ["Products", "Used Products", "Categories", "Brands", "Pages", "Attributes", "Specification Groups"]),
   nav("Barcodes", ["Barcode List", "Create Barcode", "Print Barcode", "Barcode History", "Generate Barcode"]),
   nav("Purchases", ["Purchases", "Add Purchase", "Purchase Return", "Add Purchase return"]),
-  nav("Sales", ["Sales", "Add Sale", "Sales Return", "Add Sale return"]),
+  nav("Sales", ["Sales", "Add Sale", "Sales Return", "Add Sales Return"]),
+  nav("Stock Transfer", ["Stock Transfers"]),
   nav("Cash Transfer", ["Cash Transfer"]),
   nav("Damage Product", ["Damage Product"]),
   nav("People", ["People"]),

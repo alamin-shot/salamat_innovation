@@ -1,0 +1,71 @@
+"use client";
+import * as React from "react";
+import { Search, Columns } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+export function DamageProductToolbar({ manager }: { manager: any }) {
+    const { table, cols } = manager;
+
+    return (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-brand-subtext/20 bg-white px-4 py-3">
+            {/* Search Input */}
+            <div className="relative w-full sm:w-64">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Search className="h-4 w-4 text-brand-subtext" />
+                </div>
+                <input
+                    type="text"
+                    placeholder="Search"
+                    value={table.searchQuery}
+                    onChange={(e) => table.setSearchQuery(e.target.value)}
+                    className="w-full rounded-md border border-brand-subtext/30 bg-white py-2 pl-10 pr-4 text-sm text-brand-text focus:border-emerald-500 focus:outline-none"
+                />
+            </div>
+
+            {/* Right Controls: Columns & New Damage Entry */}
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <div className="relative">
+                    <button
+                        onClick={() => manager.setShowColumnsMenu(!manager.showColumnsMenu)}
+                        className="flex items-center gap-2 rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm font-medium text-brand-text hover:bg-brand-bg transition-colors"
+                    >
+                        <Columns className="h-4 w-4 text-brand-subtext" /> Columns
+                    </button>
+
+                    {manager.showColumnsMenu && (
+                        <>
+                            <div className="fixed inset-0 z-10" onClick={() => manager.setShowColumnsMenu(false)} />
+                            <div className="absolute right-0 mt-2 w-48 z-20 rounded-lg border border-brand-subtext/20 bg-white p-2 shadow-xl animate-in fade-in zoom-in-95">
+                                <div className="flex flex-col gap-2 mb-2">
+                                    {Object.entries(cols).map(([key, isVisible]) => (
+                                        <label key={key} className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-brand-bg rounded-md">
+                                            <input
+                                                type="checkbox"
+                                                checked={Boolean(isVisible)}
+                                                onChange={() => manager.toggleColumn(key)}
+                                                className="rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500"
+                                            />
+                                            <span className="text-sm text-brand-text capitalize">
+                                                {key === "ref" ? "Ref #" : key.replace(/([A-Z])/g, " $1").trim()}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                                <button
+                                    onClick={manager.showAllColumns}
+                                    className="w-full rounded-md bg-emerald-600 py-1.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors"
+                                >
+                                    Show All
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                <Button variant="success" size="sm" onClick={manager.handleCreate} className="h-9 px-4">
+                    New Damage Entry
+                </Button>
+            </div>
+        </div>
+    );
+}

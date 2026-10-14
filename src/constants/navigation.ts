@@ -21,6 +21,13 @@ const nav = (title: string, items: string[]): NavSection => ({
       };
     }
 
+    if (title === "Damage Products" && item === "Damage Products") {
+      return {
+        title: item,
+        href: `/admin/damage-products`,
+      };
+    }
+
     return {
       title: item,
       href: `/admin/${formattedTitle}/${formattedItem}`,
@@ -35,7 +42,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Sales", ["Sales", "Add Sale", "Sales Return", "Add Sales Return"]),
   nav("Stock Transfer", ["Stock Transfers"]),
   nav("Cash Transfers", ["Cash Transfers"]),
-  nav("Damage Product", ["Damage Product"]),
+  nav("Damage Products", ["Damage Products"]),
   nav("People", ["People"]),
   nav("Telesales", ["Telesale Report", "Telesale Results"]),
   nav("Order Confirmations", ["Order List", "Order Options"]),

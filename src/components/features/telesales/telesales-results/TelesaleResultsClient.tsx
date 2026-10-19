@@ -1,5 +1,5 @@
 "use client";
-import { useTelesaleResultsManager } from "@/hooks/useTelesaleResultsManager";
+import { useTelesaleResultsManager } from "@/hooks/telesales_hooks/useTelesaleResultsManager";
 import { TelesaleResultsTable } from "./TelesaleResultsTable";
 import { ViewTelesaleResultDrawer } from "./view-drawer/ViewTelesaleResultDrawer";
 import { TelesaleResultFormDrawer } from "./form-drawer/TelesaleResultFormDrawer";

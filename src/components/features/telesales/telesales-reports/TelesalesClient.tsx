@@ -1,5 +1,5 @@
 "use client";
-import { useTelesalesManager } from "@/hooks/useTelesalesManager";
+import { useTelesalesManager } from "@/hooks/telesales_hooks/useTelesalesManager";
 import { TelesalesTable } from "./TelesalesTable";
 import { ViewTelesaleDrawer } from "./view-drawer/ViewTelesaleDrawer";
 import { TelesalesFormDrawer } from "./form-drawer/TelesalesFormDrawer";

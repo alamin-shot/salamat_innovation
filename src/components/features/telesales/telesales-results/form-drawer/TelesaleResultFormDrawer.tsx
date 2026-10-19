@@ -1,9 +1,9 @@
 import { CheckCircle2 } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
-import { useTelesaleResultFormManager } from "@/hooks/useTelesaleResultFormManager";
+import { useTelesaleResultFormManager } from "@/hooks/telesales_hooks/useTelesaleResultFormManager";
 import { TelesaleResultFormFields } from "./TelesaleResultFormFields";
-import { TelesaleResultItem } from "@/hooks/useTelesaleResultsStore";
+import { TelesaleResultItem } from "@/hooks/telesales_hooks/useTelesaleResultsStore";
 
 export function TelesaleResultFormDrawer({
     mode,

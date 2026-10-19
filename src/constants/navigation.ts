@@ -28,6 +28,13 @@ const nav = (title: string, items: string[]): NavSection => ({
       };
     }
 
+    if (title === "People" && item === "People") {
+      return {
+        title: item,
+        href: `/admin/people`,
+      };
+    }
+
     return {
       title: item,
       href: `/admin/${formattedTitle}/${formattedItem}`,

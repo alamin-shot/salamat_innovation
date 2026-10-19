@@ -5,8 +5,8 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { Edit } from "lucide-react";
-import { useCommandParams } from "@/hooks/useCommandParams";
-import { useTableManager } from "@/hooks/useTableManager";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
 
 export interface PageItem {
     id: string;

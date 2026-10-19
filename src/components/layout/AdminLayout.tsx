@@ -2,7 +2,7 @@
 import * as React from "react";
 import { AdminSidebar } from "./sidebar/AdminSidebar";
 import { AdminHeader } from "./header/AdminHeader";
-import { useSidebarLayout } from "@/hooks/useSidebarLayout";
+import { useSidebarLayout } from "@/hooks/shared_hooks/useSidebarLayout";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { isMobileOpen, toggleSidebar, closeSidebar } = useSidebarLayout();

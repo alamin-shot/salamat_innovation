@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useSaleReturnManager } from "@/hooks/useSaleReturnManager";
+import { useSaleReturnManager } from "@/hooks/sales_hooks/useSaleReturnManager";
 
 type Manager = ReturnType<typeof useSaleReturnManager>;
 

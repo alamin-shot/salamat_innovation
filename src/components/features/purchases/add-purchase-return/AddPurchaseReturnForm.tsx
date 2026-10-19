@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useAddPurchaseReturnManager } from "@/hooks/useAddPurchaseReturnManager";
+import { useAddPurchaseReturnManager } from "@/hooks/purchases_hooks/useAddPurchaseReturnManager";
 import { ReturnTopSection } from "./ReturnTopSection";
 import { ReturnQueueSection } from "./ReturnQueueSection";
 import { ReturnSummarySection } from "./ReturnSummarySection";

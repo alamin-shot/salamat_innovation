@@ -1,8 +1,8 @@
 "use client";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/useTableManager";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { useOrderListStore, OrderItem } from "./useOrderListStore";
 
 export function useOrderListManager() {

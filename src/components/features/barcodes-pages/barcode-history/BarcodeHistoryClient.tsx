@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { BarcodeHistoryTable } from "./BarcodeHistoryTable";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { EditHistoryDrawer } from "./EditHistoryDrawer";
 import { ViewHistoryDrawer } from "./ViewHistoryDrawer";
 

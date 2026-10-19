@@ -3,7 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Search, Columns, Eye, Edit, Trash2 } from "lucide-react";
-import { useBarcodeHistoryManager } from "@/hooks/useBarcodeHistoryManager";
+import { useBarcodeHistoryManager } from "@/hooks/barcode_hooks/useBarcodeHistoryManager";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 
 export function BarcodeHistoryTable() {

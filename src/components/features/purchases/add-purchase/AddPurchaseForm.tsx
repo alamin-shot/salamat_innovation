@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useAddPurchaseManager } from "@/hooks/useAddPurchaseManager";
+import { useAddPurchaseManager } from "@/hooks/purchases_hooks/useAddPurchaseManager";
 import { PurchaseTopSection } from "./PurchaseTopSection";
 import { PurchaseQueueSection } from "./PurchaseQueueSection";
 import { PurchaseSummarySection } from "./PurchaseSummarySection";

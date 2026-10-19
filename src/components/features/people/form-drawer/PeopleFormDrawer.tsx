@@ -1,7 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
-import { usePeopleFormManager } from "@/hooks/usePeopleFormManager";
+import { usePeopleFormManager } from "@/hooks/people_hooks/usePeopleFormManager";
 import { PeopleBasicFields } from "./PeopleBasicFields";
 import { PeopleAddressFields } from "./PeopleAddressFields";
 

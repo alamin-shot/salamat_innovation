@@ -4,7 +4,7 @@ import { Drawer } from "@/components/ui/Drawer";
 import { CategoryReorderTree } from "./CategoryReorderTree";
 import { CategoryMasterForm } from "./CategoryMasterForm";
 import { CategoriesTable } from "./CategoriesTable";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function CategoriesClientManager() {
     const { activeDrawer, openView, closeView } = useCommandParams();

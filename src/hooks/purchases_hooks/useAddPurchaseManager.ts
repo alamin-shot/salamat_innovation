@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export interface StagedPurchaseItem {
     id: string;

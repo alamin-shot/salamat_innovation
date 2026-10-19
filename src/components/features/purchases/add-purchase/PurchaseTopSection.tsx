@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Image as ImageIcon } from "lucide-react";
-import { useAddPurchaseManager } from "@/hooks/useAddPurchaseManager";
+import { useAddPurchaseManager } from "@/hooks/purchases_hooks/useAddPurchaseManager";
 import { CustomSelect } from "./CustomSelect";
 import { Button } from "@/components/ui/Button";
 

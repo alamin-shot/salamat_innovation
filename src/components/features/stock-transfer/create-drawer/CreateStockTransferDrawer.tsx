@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
-import { useStockTransferManager } from "@/hooks/useStockTransferManager";
+import { useStockTransferManager } from "@/hooks/inventory_hooks/useStockTransferManager";
 import { TransferTopSection } from "./TransferTopSection";
 import { TransferQueueSection } from "./TransferQueueSection";
 

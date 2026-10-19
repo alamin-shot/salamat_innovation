@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { Drawer } from "@/components/ui/Drawer";
 import { BrandsTable } from "./BrandsTable";
 import { BrandMasterForm } from "./BrandMasterForm";

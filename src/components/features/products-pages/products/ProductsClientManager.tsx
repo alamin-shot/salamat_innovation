@@ -7,7 +7,7 @@ import { SpecificationsForm } from "@/components/features/products-pages/product
 import { CareForm } from "@/components/features/products-pages/products/CareForm";
 import { VariantsManager } from "@/components/features/products-pages/products/VariantsManager";
 import { ProductPreviewContent } from "@/components/features/products-pages/products/ProductPreviewContent";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function ProductsClientManager() {
     const { activeDrawer, activeId, closeView } = useCommandParams();

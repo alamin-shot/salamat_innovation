@@ -2,7 +2,7 @@
 import * as React from "react";
 import { AddPurchaseForm } from "./AddPurchaseForm";
 import { AddSupplierModal } from "./AddSupplierModal";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function AddPurchaseClient() {
     const { activeModal, closeView } = useCommandParams();

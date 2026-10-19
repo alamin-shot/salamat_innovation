@@ -6,7 +6,7 @@ import { FilterBar } from "@/components/ui/FilterBar";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { Edit2, Trash2, Check, X, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/useTableManager";
+import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
 import Image from "next/image";
 
 interface Category {

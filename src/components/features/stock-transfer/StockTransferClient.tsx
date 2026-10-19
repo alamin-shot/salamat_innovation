@@ -3,7 +3,7 @@ import * as React from "react";
 import { StockTransferToolbar } from "./StockTransferToolbar";
 import { StockTransferTable } from "./StockTransferTable";
 import { Pagination } from "@/components/ui/Pagination";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { ViewStockTransferDrawer } from "./view-drawer/ViewStockTransferDrawer";
 import { CreateStockTransferDrawer } from "./create-drawer/CreateStockTransferDrawer";
 

@@ -4,7 +4,7 @@ import { SaleListTable } from "./SaleListTable";
 import { UpdateSellerModal } from "./UpdateSellerModal";
 import { ViewSaleDrawer } from "./ViewSaleDrawer";
 import { EditSaleDrawer } from "./EditSaleDrawer";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 const initialData = [
     { id: "3268", initials: "MT", customer: "Md Shakhiur Rahman Tamal", date: "2026-10-12", invoice: "PS-003268", items: 5, sCost: "120.00", total: "1,750.00", due: "1,750.00", received: "0.00", payment: "—", status: "Due", seller: "AV", courier: "Pending", color: "bg-emerald-600" },

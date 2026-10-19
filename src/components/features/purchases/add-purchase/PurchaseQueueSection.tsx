@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Search, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { useAddPurchaseManager } from "@/hooks/useAddPurchaseManager";
+import { useAddPurchaseManager } from "@/hooks/purchases_hooks/useAddPurchaseManager";
 import { CustomSelect } from "./CustomSelect";
 import { Button } from "@/components/ui/Button";
 

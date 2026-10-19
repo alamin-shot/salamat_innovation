@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Search, Columns } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function StockTransferToolbar() {
     const { openView } = useCommandParams();

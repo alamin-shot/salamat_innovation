@@ -3,7 +3,7 @@ import * as React from "react";
 import { PurchaseReturnTable } from "./PurchaseReturnTable";
 import { ViewPurchaseReturnDrawer } from "./ViewPurchaseReturnDrawer";
 import { EditPurchaseReturnDrawer } from "./EditPurchaseReturnDrawer";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function PurchaseReturnClient() {
     const { activeDrawer, activeId, closeView } = useCommandParams();

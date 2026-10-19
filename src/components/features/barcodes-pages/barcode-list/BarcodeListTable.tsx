@@ -3,7 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { FilterBar } from "@/components/ui/FilterBar";
-import { useTableManager } from "@/hooks/useTableManager";
+import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
 
 interface BarcodeItem {
     id: string;

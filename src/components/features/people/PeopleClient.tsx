@@ -1,5 +1,5 @@
 "use client";
-import { usePeopleManager } from "@/hooks/usePeopleManager";
+import { usePeopleManager } from "@/hooks/people_hooks/usePeopleManager";
 import { PeopleTable } from "./PeopleTable";
 import { ViewPeopleDrawer } from "./view-drawer/ViewPeopleDrawer";
 import { PeopleFormDrawer } from "./form-drawer/PeopleFormDrawer";

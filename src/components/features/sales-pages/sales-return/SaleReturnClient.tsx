@@ -2,7 +2,7 @@
 import * as React from "react";
 import { SaleReturnListTable } from "./SaleReturnListTable";
 import { ViewSaleReturnDrawer } from "./ViewSaleReturnDrawer";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { EditSaleReturnDrawer } from "./edit-return/EditSaleReturnDrawer";
 
 const initialData = [

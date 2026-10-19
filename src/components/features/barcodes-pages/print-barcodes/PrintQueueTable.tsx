@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Search, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { usePrintQueueManager } from "@/hooks/usePrintQueueManager";
+import { usePrintQueueManager } from "@/hooks/barcode_hooks/usePrintQueueManager";
 
 export function PrintQueueTable() {
     const manager = usePrintQueueManager();

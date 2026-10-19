@@ -3,7 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Search, Columns, Eye, Edit, Trash2 } from "lucide-react";
-import { useGeneratedBarcodesManager } from "@/hooks/useGeneratedBarcodesManager";
+import { useGeneratedBarcodesManager } from "@/hooks/barcode_hooks/useGeneratedBarcodesManager";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 
 export function GeneratedBarcodesTable() {

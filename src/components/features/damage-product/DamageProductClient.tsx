@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import { useCommandParams } from "@/hooks/useCommandParams";
-import { useDamageProductsManager } from "@/hooks/useDamageProductsManager";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useDamageProductsManager } from "@/hooks/inventory_hooks/useDamageProductsManager";
 import { DamageProductTable } from "./DamageProductTable";
 import { ViewDamageProductDrawer } from "./view-drawer/ViewDamageProductDrawer";
 import { CreateDamageProductDrawer } from "./create-drawer/CreateDamageProductDrawer";

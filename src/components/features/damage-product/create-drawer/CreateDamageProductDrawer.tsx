@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
-import { useAddDamageProductManager } from "@/hooks/useAddDamageProductManager";
+import { useAddDamageProductManager } from "@/hooks/inventory_hooks/useAddDamageProductManager";
 import { DamageTopSection } from "./DamageTopSection";
 import { DamageQueueSection } from "./DamageQueueSection";
 

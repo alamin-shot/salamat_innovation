@@ -2,7 +2,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSidebarSearch } from "@/hooks/useSidebarSearch";
+import { useSidebarSearch } from "@/hooks/shared_hooks/useSidebarSearch";
 import { SidebarSection } from "./SidebarSection";
 import { Search, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";

@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/useTableManager";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export interface GeneratedBarcode {
     id: string;

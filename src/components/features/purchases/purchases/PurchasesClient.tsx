@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { PurchasesTable } from "./PurchasesTable";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { ViewPurchaseDrawer } from "./ViewPurchaseDrawer";
 import { EditPurchaseDrawer } from "./EditPurchaseDrawer";
 

@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { GeneratedBarcodesTable } from "./GeneratedBarcodesTable";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { EditBarcodeDrawer } from "./EditBarcodeDrawer";
 import { ViewBarcodeDrawer } from "./ViewBarcodeDrawer";
 

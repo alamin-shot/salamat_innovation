@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Search, Columns, Eye, Edit, Trash2 } from "lucide-react";
-import { usePurchasesManager } from "@/hooks/usePurchasesManager";
+import { usePurchasesManager } from "@/hooks/purchases_hooks/usePurchasesManager";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 
 export function PurchasesTable() {

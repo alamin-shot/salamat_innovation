@@ -3,7 +3,7 @@ import * as React from "react";
 import { Search, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
-import { useAddSaleManager } from "@/hooks/useAddSaleManager";
+import { useAddSaleManager } from "@/hooks/sales_hooks/useAddSaleManager";
 
 type Manager = ReturnType<typeof useAddSaleManager>;
 

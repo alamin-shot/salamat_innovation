@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useDataTable } from "@/hooks/useDataTable";
+import { useDataTable } from "@/hooks/shared_hooks/useDataTable";
 import { Product } from "@/types/product";
 import {
     Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell
@@ -20,7 +20,7 @@ import { SpecificationsForm } from "@/components/features/products-pages/product
 import { CareForm } from "@/components/features/products-pages/products/CareForm";
 import { Trash2, Tag, CheckCircle2, Globe, Settings, Package, Heart, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import { useProductTableManager } from "@/hooks/useProductTableManager";
+import { useProductTableManager } from "@/hooks/inventory_hooks/useProductTableManager";
 
 export interface ProductExtended extends Product {
     variantsCount?: number;

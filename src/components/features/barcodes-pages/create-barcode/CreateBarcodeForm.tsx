@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Trash2, ChevronDown, Check } from "lucide-react";
-import { useCreateBarcodeManager } from "@/hooks/useCreateBarcodeManager";
+import { useCreateBarcodeManager } from "@/hooks/barcode_hooks/useCreateBarcodeManager";
 
 export function CreateBarcodeForm() {
     const manager = useCreateBarcodeManager();

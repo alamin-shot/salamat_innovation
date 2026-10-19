@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { SpecGroupsTable } from "./SpecGroupsTable";
 import { SpecGroupModal } from "./SpecGroupModal";
 

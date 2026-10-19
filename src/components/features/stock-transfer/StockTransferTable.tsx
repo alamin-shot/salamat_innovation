@@ -4,7 +4,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } fro
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { useCommandParams } from "@/hooks/useCommandParams";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function StockTransferTable({ transfers }: { transfers: any[] }) {
     const { openView } = useCommandParams();

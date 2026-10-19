@@ -8,8 +8,8 @@ import { FilterBar } from "@/components/ui/FilterBar";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { Edit, Trash2, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import { useCommandParams } from "@/hooks/useCommandParams";
-import { useTableManager } from "@/hooks/useTableManager";
+import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
 
 export interface Brand {
     id: string;

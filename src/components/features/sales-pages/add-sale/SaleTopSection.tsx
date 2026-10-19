@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Button } from "@/components/ui/Button";
-import { useAddSaleManager } from "@/hooks/useAddSaleManager";
+import { useAddSaleManager } from "@/hooks/sales_hooks/useAddSaleManager";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 
 type Manager = ReturnType<typeof useAddSaleManager>;

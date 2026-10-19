@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function TransferQueueSection({ manager, onClose }: { manager: any, onClose: () => void }) {
     return (

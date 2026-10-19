@@ -5,7 +5,7 @@ import { PurchaseTopSection } from "./PurchaseTopSection";
 import { PurchaseQueueSection } from "./PurchaseQueueSection";
 import { PurchaseSummarySection } from "./PurchaseSummarySection";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function AddPurchaseForm() {
     const manager = useAddPurchaseManager();

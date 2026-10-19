@@ -3,7 +3,7 @@ import * as React from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { useCommandParams } from "@/hooks/useCommandParams";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { InlineDropdown } from "@/components/ui/InlineDropdown";
 

@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { X, Search, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 interface UpdateSellerModalProps {
     isOpen: boolean;

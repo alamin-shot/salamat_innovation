@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Printer } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { useReactToPrint } from "react-to-print";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function ViewPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     const invoiceRef = React.useRef<HTMLDivElement>(null);

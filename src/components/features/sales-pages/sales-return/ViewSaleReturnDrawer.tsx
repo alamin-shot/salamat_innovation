@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Printer } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { useReactToPrint } from "react-to-print";
 
 export function ViewSaleReturnDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {

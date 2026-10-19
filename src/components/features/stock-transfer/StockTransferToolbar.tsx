@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Search, Columns } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { useCommandParams } from "@/hooks/useCommandParams";
 
 export function StockTransferToolbar() {

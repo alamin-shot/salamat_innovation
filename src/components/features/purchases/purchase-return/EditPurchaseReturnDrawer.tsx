@@ -3,7 +3,7 @@ import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Image as ImageIcon, Search, Trash2, FileText, ChevronDown } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     if (!id && !isOpen) return null;

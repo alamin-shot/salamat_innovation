@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Printer } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { useReactToPrint } from "react-to-print";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function ViewPurchaseDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     // 1. Create a reference for the invoice container

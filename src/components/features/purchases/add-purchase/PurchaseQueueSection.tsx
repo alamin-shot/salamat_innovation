@@ -4,7 +4,7 @@ import { Search, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { useAddPurchaseManager } from "@/hooks/useAddPurchaseManager";
 import { CustomSelect } from "./CustomSelect";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 type Manager = ReturnType<typeof useAddPurchaseManager>;
 

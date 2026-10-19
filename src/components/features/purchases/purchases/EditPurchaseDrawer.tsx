@@ -3,7 +3,7 @@ import * as React from "react";
 import { Save, Edit3, Calendar, Building2, UserCheck, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Drawer } from "@/components/ui/Drawer";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function EditPurchaseDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
     const [supplier, setSupplier] = React.useState("Rasel Raj");

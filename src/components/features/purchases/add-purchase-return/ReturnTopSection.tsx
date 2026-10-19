@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { useAddPurchaseReturnManager } from "@/hooks/useAddPurchaseReturnManager";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 // Extract the type directly from our custom hook for perfect TypeScript safety
 type Manager = ReturnType<typeof useAddPurchaseReturnManager>;

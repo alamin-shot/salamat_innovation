@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Printer } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 export function TransferViewHeader({ refNo, status }: { refNo: string, status: string }) {

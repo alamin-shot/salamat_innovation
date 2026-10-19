@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Hammer, Trash2 } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function DamageQueueSection({ manager, onClose }: { manager: any; onClose: () => void }) {
     const isEmpty = manager.stagedSerials.length === 0;

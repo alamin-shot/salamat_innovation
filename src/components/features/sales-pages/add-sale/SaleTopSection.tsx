@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { useAddSaleManager } from "@/hooks/useAddSaleManager";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 

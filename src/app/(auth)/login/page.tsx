@@ -2,7 +2,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useLogin } from "@/hooks/auth/useLogin";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/components/shared/form/Form";
 

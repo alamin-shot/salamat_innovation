@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { ChevronDown, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 export function CustomSelect({ value, onChange, options, placeholder }: { value: string, onChange: (v: string) => void, options: string[], placeholder: string }) {
     const [isOpen, setIsOpen] = React.useState(false);

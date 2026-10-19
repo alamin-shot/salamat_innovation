@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { useOtp } from "@/hooks/auth/useOtp";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/components/shared/form/Form";
 

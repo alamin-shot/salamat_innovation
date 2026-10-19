@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Search, Trash2, FileText } from "lucide-react";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { useSaleReturnManager } from "@/hooks/useSaleReturnManager";
 
 type Manager = ReturnType<typeof useSaleReturnManager>;

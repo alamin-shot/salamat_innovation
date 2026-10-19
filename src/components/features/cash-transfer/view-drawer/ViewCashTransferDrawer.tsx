@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Printer } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 export function ViewCashTransferDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {

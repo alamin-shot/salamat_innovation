@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Printer, Check, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 interface DamageViewHeaderProps {

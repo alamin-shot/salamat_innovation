@@ -54,7 +54,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Telesales", ["Telesale Report", "Telesale Results"]),
   nav("Order Confirmations", ["Order List", "Order Options"]),
   nav("Payments", ["Add Payment", "Payment List"]),
-  nav("Expenses", ["Expenses", "Add Expenses", "Expense Categories"]),
+  nav("Expenses", ["Expenses", "Add Expenses", "Expense Categories", "Add Expense Category"]),
   nav("Withdrawal", ["Withdrawal", "Director"]),
   nav("Deposit", ["Deposit", "Director"]),
   nav("Directors", ["Directors"]),

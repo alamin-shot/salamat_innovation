@@ -67,7 +67,7 @@ export function useWithdrawalManager() {
     };
 
     const handleViewAttachment = (id: string) => {
-        toast.info("Viewing attachment..."); s
+        toast.info("Viewing attachment...");
     };
 
     return { activeDrawer, closeView, activeEditRecord, table: { ...table, paginatedData }, cols, showColumnsMenu, setShowColumnsMenu, toggleColumn, showAllColumns, activeNoteRowId, toggleNotePopover, closeNotePopover, currentPage, setCurrentPage, itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete, handleViewAttachment };

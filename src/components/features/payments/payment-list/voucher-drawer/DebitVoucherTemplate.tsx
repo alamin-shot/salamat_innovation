@@ -1,4 +1,4 @@
-import { PaymentLog } from "@/hooks/finance_hooks/usePaymentListStore";
+import { PaymentLog } from "@/hooks/finance_hooks/payments/usePaymentListStore";
 
 export function DebitVoucherTemplate({ record }: { record: PaymentLog }) {
     return (

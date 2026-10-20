@@ -1,5 +1,5 @@
 "use client";
-import { usePaymentListManager } from "@/hooks/finance_hooks/usePaymentListManager";
+import { usePaymentListManager } from "@/hooks/finance_hooks/payments/usePaymentListManager";
 import { PaymentListTable } from "./PaymentListTable";
 import { DebitVoucherDrawer } from "./voucher-drawer/DebitVoucherDrawer";
 

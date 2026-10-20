@@ -2,8 +2,8 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import { useAddPaymentStore, PaymentEntity } from "./useAddPaymentStore";
-import { useCommandParams } from "../shared_hooks/useCommandParams";
-import { useTableManager } from "../shared_hooks/useTableManager";
+import { useCommandParams } from "../../shared_hooks/useCommandParams";
+import { useTableManager } from "../../shared_hooks/useTableManager";
 
 export function useAddPaymentManager() {
     const { activeDrawer, activeId, openView, closeView } = useCommandParams();

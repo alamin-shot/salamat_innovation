@@ -1,5 +1,5 @@
 "use client";
-import { useAddPaymentManager } from "@/hooks/finance_hooks/useAddPaymentManager";
+import { useAddPaymentManager } from "@/hooks/finance_hooks/payments/useAddPaymentManager";
 import { AddPaymentTable } from "./AddPaymentTable";
 import { ReceivePaymentDrawer } from "./payment-drawers/ReceivePaymentDrawer";
 import { SendPaymentDrawer } from "./payment-drawers/SendPaymentDrawer";

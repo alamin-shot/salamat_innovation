@@ -14,7 +14,7 @@ const nav = (title: string, items: string[]): NavSection => ({
       };
     }
 
-    if (title === "Cash Transfer" && item === "Cash Transfers") {
+    if (title === "Cash Transfers" && (item === "Cash Transfer" || item === "Cash Transfers")) {
       return {
         title: item,
         href: `/admin/cash-transfers`,
@@ -54,7 +54,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Telesales", ["Telesale Report", "Telesale Results"]),
   nav("Order Confirmations", ["Order List", "Order Options"]),
   nav("Payments", ["Add Payment", "Payment List"]),
-  nav("Expenses", ["Expenses", "Expense Categories"]),
+  nav("Expenses", ["Expenses", "Add Expenses", "Expense Categories"]),
   nav("Withdrawal", ["Withdrawal", "Director"]),
   nav("Deposit", ["Deposit", "Director"]),
   nav("Directors", ["Directors"]),

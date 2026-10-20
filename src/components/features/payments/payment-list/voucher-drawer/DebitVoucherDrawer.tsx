@@ -2,7 +2,7 @@ import { Printer } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { DebitVoucherTemplate } from "./DebitVoucherTemplate";
-import { PaymentLog } from "@/hooks/finance_hooks/usePaymentListStore";
+import { PaymentLog } from "@/hooks/finance_hooks/payments/usePaymentListStore";
 
 export function DebitVoucherDrawer({
     record,

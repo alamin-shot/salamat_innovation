@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
-import { useCashTransferManager } from "@/hooks/finance_hooks/useCashTransferManager";
+import { useCashTransferManager } from "@/hooks/finance_hooks/cash_transfar/useCashTransferManager";
 import { Info } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 

@@ -1,5 +1,5 @@
 import { CustomSelect } from "@/components/ui/CustomSelect";
-import { PaymentEntity } from "@/hooks/finance_hooks/useAddPaymentStore";
+import { PaymentEntity } from "@/hooks/finance_hooks/payments/useAddPaymentStore";
 
 export function PaymentFormFields({
     manager,

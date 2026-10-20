@@ -1,9 +1,9 @@
 import { CheckCircle2 } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
-import { usePaymentFormManager } from "@/hooks/finance_hooks/usePaymentFormManager";
+import { usePaymentFormManager } from "@/hooks/finance_hooks/payments/usePaymentFormManager";
 import { PaymentFormFields } from "./PaymentFormFields";
-import { PaymentEntity } from "@/hooks/finance_hooks/useAddPaymentStore";
+import { PaymentEntity } from "@/hooks/finance_hooks/payments/useAddPaymentStore";
 
 export function SendPaymentDrawer({
     record,

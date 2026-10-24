@@ -18,6 +18,13 @@ export const getNavIcon = (title: string, className?: string) => {
     if (lowerTitle.includes("career") || lowerTitle.includes("teams")) return <Briefcase {...props} />;
     if (lowerTitle.includes("damage product")) return <AlertTriangle {...props} />;
 
-    // Premium default fallback for all other sections
     return <Component {...props} />;
+};
+
+export const formatCurrency = (amount: number): string => {
+    return `৳ ${amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+};
+
+export const generateId = (): string => {
+    return crypto.randomUUID();
 };

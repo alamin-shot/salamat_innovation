@@ -1,4 +1,4 @@
-import { ApplicationClient } from "@/components/features/partners/applications/ApplicationClient";
+import { SharedPartnerClient } from "@/components/features/partners/shared/SharedPartnerClient";
 import { Loader } from "@/components/shared/loader/Loader";
 import { Suspense } from "react";
 
@@ -10,7 +10,7 @@ export default function ApplicationsPage() {
                 <Loader />
             </div>
         }>
-            <ApplicationClient />
+            <SharedPartnerClient type="application" />
         </Suspense>
     );
 }

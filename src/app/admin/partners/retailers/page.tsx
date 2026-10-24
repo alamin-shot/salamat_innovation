@@ -1,4 +1,4 @@
-import { RetailerClient } from "@/components/features/partners/retailers/RetailerClient";
+import { SharedPartnerClient } from "@/components/features/partners/shared/SharedPartnerClient";
 import { Loader } from "@/components/shared/loader/Loader";
 import { Suspense } from "react";
 
@@ -9,7 +9,7 @@ export default function RetailersPage() {
                 <Loader />
             </div>
         }>
-            <RetailerClient />
+            <SharedPartnerClient type="retailer" />
         </Suspense>
     )
 }

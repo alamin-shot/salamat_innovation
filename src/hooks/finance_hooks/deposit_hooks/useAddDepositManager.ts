@@ -3,11 +3,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useDepositStore } from "./useDepositStore";
 import { useDirectorStore } from "../withdrawal_hooks/useDirectorStore";
+import { useRouter } from "next/navigation";
 
 export function useAddDepositManager() {
     const { addDeposit } = useDepositStore();
     const { directors } = useDirectorStore();
-
+    const router = useRouter();
     const [title, setTitle] = useState("");
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
     const [amount, setAmount] = useState<number | "">("");

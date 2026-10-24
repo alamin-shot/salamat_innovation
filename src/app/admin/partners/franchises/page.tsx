@@ -1,4 +1,4 @@
-import { FranchiseClient } from "@/components/features/partners/franchises/FranchiseClient";
+import { SharedPartnerClient } from "@/components/features/partners/shared/SharedPartnerClient";
 import { Loader } from "@/components/shared/loader/Loader";
 import { Suspense } from "react";
 
@@ -9,7 +9,7 @@ export default function FranchisesPage() {
                 <Loader />
             </div>
         }>
-            <FranchiseClient />
+            <SharedPartnerClient type="franchise" />
         </Suspense>
     );
 }

@@ -1,4 +1,4 @@
-import { B2bClient } from "@/components/features/partners/b2b/B2bClient";
+import { SharedPartnerClient } from "@/components/features/partners/shared/SharedPartnerClient";
 import { Loader } from "@/components/shared/loader/Loader";
 import { Suspense } from "react";
 
@@ -9,7 +9,7 @@ export default function B2bPage() {
                 <Loader />
             </div>
         }>
-            <B2bClient />
+            <SharedPartnerClient type="b2b" />
         </Suspense>
     )
 }

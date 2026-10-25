@@ -1,7 +1,8 @@
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { WithdrawalManagerType } from "@/hooks/finance_hooks/withdrawal_hooks/useWithdrawalManager";
 
-export function WithdrawalInlineNoteCell({ rowId, note, manager }: { rowId: string; note: string; manager: any }) {
+export function WithdrawalInlineNoteCell({ rowId, note, manager }: { rowId: string; note: string; manager: WithdrawalManagerType }) {
     if (!note || note === "-") return <span className="text-sm text-brand-subtext">-</span>;
 
     const isOpen = manager.activeNoteRowId === rowId;

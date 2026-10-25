@@ -1,13 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import { Search, Columns } from "lucide-react";
+import { Search, Columns, LayoutGrid } from "lucide-react";
 import { useDirectorViewManager } from "@/hooks/people_hooks/director_profile_hooks/useDirectorViewManager";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { DirectorProfileFormDrawer } from "../director-list/form-drawer/DirectorProfileFormDrawer";
+import { formatCurrency } from "@/utils/formatters";
 
 export function DirectorViewClient({ id }: { id: string }) {
     const manager = useDirectorViewManager(id);
-    const formatCurrency = (val: number) => `৳ ${val.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
     if (!manager.profile) return <div className="p-8">Profile not found.</div>;
 
@@ -15,7 +15,7 @@ export function DirectorViewClient({ id }: { id: string }) {
         <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-y-auto custom-scrollbar bg-gray-50/50 gap-6">
 
             <div className="flex items-center gap-2 text-gray-700 font-bold text-lg tracking-wide uppercase mb-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <LayoutGrid className="h-5 w-5 text-brand-text" />
                 CREATE PROFILES
             </div>
 
@@ -57,7 +57,7 @@ export function DirectorViewClient({ id }: { id: string }) {
 }
 
 // Inner Stateless Table Component for View Page
-function InnerMiniTable({ title, tableMgr, formatCurrency }: { title: string, tableMgr: any, formatCurrency: any }) {
+function InnerMiniTable({ title, tableMgr, formatCurrency }: { title: string, tableMgr: any, formatCurrency: (amount: number) => string }) {
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col flex-1">
             <div className="p-4 border-b border-gray-100"><h3 className="font-bold text-gray-700">{title}</h3></div>

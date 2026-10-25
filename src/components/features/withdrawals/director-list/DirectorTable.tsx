@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { Pagination } from "@/components/ui/Pagination";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { DirectorToolbar } from "./DirectorToolbar";
+import { DirectorManagerType } from "@/hooks/finance_hooks/withdrawal_hooks/useDirectorManager";
 
-export function DirectorTable({ manager }: { manager: any }) {
+export function DirectorTable({ manager }: { manager: DirectorManagerType }) {
     const { table, cols } = manager;
     return (
         <div className="flex flex-col w-full h-full relative bg-white">
@@ -22,7 +23,7 @@ export function DirectorTable({ manager }: { manager: any }) {
                         <TableHeadCell className="text-right pr-4 min-w-[100px]">Action</TableHeadCell>
                     </TableHeader>
                     <TableBody>
-                        {table.paginatedData.map((row: any) => (
+                        {table.paginatedData.map((row) => (
                             <TableRow key={row.id} className={table.selectedIds.includes(row.id) ? "bg-emerald-50/50" : ""}>
                                 <TableCell className="text-center">
                                     <input type="checkbox" checked={table.selectedIds.includes(row.id)} onChange={(e) => table.handleSelectRow(row.id, e.target.checked)} className="h-4 w-4 rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
@@ -47,7 +48,13 @@ export function DirectorTable({ manager }: { manager: any }) {
                         ))}
                     </TableBody>
                 </Table>
-                <Pagination />
+                <Pagination
+                    currentPage={manager.currentPage}
+                    totalPages={Math.max(1, Math.ceil(table.filteredData.length / manager.itemsPerPage))}
+                    onPageChange={manager.setCurrentPage}
+                    itemsPerPage={manager.itemsPerPage}
+                    onItemsPerPageChange={manager.setItemsPerPage}
+                />
             </div>
             <BulkActionBar selectedCount={table.selectedIds.length} onClearSelection={table.clearSelection}>
                 <Button type="button" variant="destructive-ghost" size="sm" onClick={manager.handleBulkDelete} className="gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-red-400 hover:bg-white/10 hover:text-red-300">

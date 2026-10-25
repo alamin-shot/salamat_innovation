@@ -1,19 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/Button";
+import { LayoutGrid } from "lucide-react";
 import { useDirectorListManager } from "@/hooks/people_hooks/director_profile_hooks/useDirectorListManager";
 import { DirectorProfileFormDrawer } from "./form-drawer/DirectorProfileFormDrawer";
-
+import { formatCurrency } from "@/utils/formatters";
 
 export function DirectorListClient() {
     const manager = useDirectorListManager();
-
-    const formatCurrency = (val: number) => `৳ ${val.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
     return (
         <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-hidden bg-gray-50/50">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2 text-gray-700 font-bold text-lg tracking-wide uppercase">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <LayoutGrid className="h-5 w-5 text-brand-text" />
                     DIRECTOR PROFILES
                 </div>
                 <Button variant="success" onClick={manager.handleCreateNew} className="rounded-md">Create Profile +</Button>

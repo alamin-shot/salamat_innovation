@@ -5,11 +5,11 @@ import { Pagination } from "@/components/ui/Pagination";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { ExpensesToolbar } from "./ExpensesToolbar";
 import { ExpenseInlineNoteCell } from "./ExpenseInlineCells";
+import { ExpensesManagerType } from "@/hooks/finance_hooks/expenses/useExpensesManager";
+import { formatCurrency } from "@/utils/formatters";
 
-export function ExpensesTable({ manager }: { manager: any }) {
+export function ExpensesTable({ manager }: { manager: ExpensesManagerType }) {
     const { table, cols } = manager;
-
-    const formatCurrency = (amount: number) => `৳ ${amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
     return (
         <div className="flex flex-col w-full h-full relative bg-white">
@@ -27,21 +27,21 @@ export function ExpensesTable({ manager }: { manager: any }) {
                             />
                         </TableHeadCell>
                         {cols.shopName && <TableHeadCell>Shop Name</TableHeadCell>}
-                        {cols.title && <TableHeadCell className="min-w-[180px]">Title</TableHeadCell>}
+                        {cols.title && <TableHeadCell>Title</TableHeadCell>}
                         {cols.invoiceNumber && <TableHeadCell>Invoice Number</TableHeadCell>}
                         {cols.date && <TableHeadCell>Date</TableHeadCell>}
-                        {cols.category && <TableHeadCell className="min-w-[200px]">Category</TableHeadCell>}
+                        {cols.category && <TableHeadCell>Category</TableHeadCell>}
                         {cols.attachments && <TableHeadCell>Attachments</TableHeadCell>}
                         {cols.note && <TableHeadCell>Note</TableHeadCell>}
                         {cols.paymentMethod && <TableHeadCell>Payment Method</TableHeadCell>}
                         {cols.amount && <TableHeadCell>Amount</TableHeadCell>}
-                        {cols.createdBy && <TableHeadCell className="min-w-[160px]">Created By</TableHeadCell>}
-                        <TableHeadCell className="text-right pr-4 min-w-[120px]">Action</TableHeadCell>
+                        {cols.createdBy && <TableHeadCell>Created By</TableHeadCell>}
+                        <TableHeadCell className="w-28 text-right pr-4">Action</TableHeadCell>
                     </TableHeader>
 
                     <TableBody>
-                        {table.paginatedData.map((row: any) => (
-                            <TableRow key={row.id} className={table.selectedIds.includes(row.id) ? "bg-emerald-50/50" : ""}>
+                        {table.paginatedData.map((row) => (
+                            <TableRow key={row.id}>
                                 <TableCell className="text-center">
                                     <input
                                         type="checkbox"
@@ -50,18 +50,16 @@ export function ExpensesTable({ manager }: { manager: any }) {
                                         className="h-4 w-4 rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                                     />
                                 </TableCell>
-
-                                {cols.shopName && <TableCell className="text-[13px] font-medium text-emerald-700">{row.shopName}</TableCell>}
-                                {cols.title && <TableCell className="text-[13px] text-gray-700">{row.title}</TableCell>}
-                                {cols.invoiceNumber && <TableCell className="text-[13px] text-gray-500">{row.invoiceNumber}</TableCell>}
+                                {cols.shopName && <TableCell className="text-[13px] text-gray-700">{row.shopName}</TableCell>}
+                                {cols.title && <TableCell className="text-[13px] text-gray-900 font-medium">{row.title}</TableCell>}
+                                {cols.invoiceNumber && <TableCell className="text-[13px] text-emerald-700 font-medium">{row.invoiceNumber}</TableCell>}
                                 {cols.date && <TableCell className="text-[13px] text-gray-600">{row.date}</TableCell>}
 
                                 {cols.category && (
                                     <TableCell>
-                                        <div className="flex items-center gap-1.5 text-[12px] text-gray-700 font-medium">
-                                            {row.category.includes("Entertainment") ? "🎉" : row.category.includes("Conveyance") ? "🛵" : row.category.includes("Tools") ? "🛠️" : "💼"}
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                                             {row.category}
-                                        </div>
+                                        </span>
                                     </TableCell>
                                 )}
 
@@ -97,7 +95,13 @@ export function ExpensesTable({ manager }: { manager: any }) {
                         ))}
                     </TableBody>
                 </Table>
-                <Pagination />
+                <Pagination
+                    currentPage={manager.currentPage}
+                    totalPages={Math.max(1, Math.ceil(table.filteredData.length / manager.itemsPerPage))}
+                    onPageChange={manager.setCurrentPage}
+                    itemsPerPage={manager.itemsPerPage}
+                    onItemsPerPageChange={manager.setItemsPerPage}
+                />
             </div>
 
             <BulkActionBar selectedCount={table.selectedIds.length} onClearSelection={table.clearSelection}>

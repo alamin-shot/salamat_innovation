@@ -51,24 +51,54 @@ export function useWithdrawalManager() {
         return mappedData.slice(start, start + itemsPerPage);
     }, [mappedData, currentPage, itemsPerPage]);
 
+    // Confirm Modal State
+    const [confirmModal, setConfirmModal] = useState<{ isOpen: boolean; title: string; message: string; onConfirm: () => void; }>({
+        isOpen: false, title: "", message: "", onConfirm: () => { }
+    });
+    const closeConfirm = () => setConfirmModal(prev => ({ ...prev, isOpen: false }));
+
     const handleEdit = (id: string) => openView("drawer", "edit-withdrawal", id);
 
     const handleDelete = (id: string) => {
-        deleteWithdrawal(id);
-        table.setSelectedIds((p) => p.filter((i) => i !== id));
-        toast.success("Withdrawal deleted.");
+        setConfirmModal({
+            isOpen: true,
+            title: "Delete Withdrawal",
+            message: "Are you sure you want to permanently delete this withdrawal? This action cannot be undone.",
+            onConfirm: () => {
+                deleteWithdrawal(id);
+                table.setSelectedIds((p) => p.filter((i) => i !== id));
+                toast.success("Withdrawal deleted.");
+                closeConfirm();
+            }
+        });
     };
 
     const handleBulkDelete = () => {
         if (table.selectedIds.length === 0) return;
-        bulkDeleteWithdrawals(table.selectedIds);
-        table.clearSelection();
-        toast.success("Selected withdrawals deleted.");
+        setConfirmModal({
+            isOpen: true,
+            title: "Delete Selected Withdrawals",
+            message: `Are you sure you want to permanently delete ${table.selectedIds.length} withdrawals?`,
+            onConfirm: () => {
+                bulkDeleteWithdrawals(table.selectedIds);
+                table.clearSelection();
+                toast.success("Selected withdrawals deleted.");
+                closeConfirm();
+            }
+        });
     };
 
     const handleViewAttachment = (id: string) => {
         toast.info("Viewing attachment...");
     };
 
-    return { activeDrawer, closeView, activeEditRecord, table: { ...table, paginatedData }, cols, showColumnsMenu, setShowColumnsMenu, toggleColumn, showAllColumns, activeNoteRowId, toggleNotePopover, closeNotePopover, currentPage, setCurrentPage, itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete, handleViewAttachment };
+    return {
+        activeDrawer, closeView, activeEditRecord, table: { ...table, paginatedData },
+        cols, showColumnsMenu, setShowColumnsMenu, toggleColumn, showAllColumns,
+        activeNoteRowId, toggleNotePopover, closeNotePopover, currentPage, setCurrentPage,
+        itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete, handleViewAttachment,
+        confirmModal, closeConfirm
+    };
 }
+
+export type WithdrawalManagerType = ReturnType<typeof useWithdrawalManager>;

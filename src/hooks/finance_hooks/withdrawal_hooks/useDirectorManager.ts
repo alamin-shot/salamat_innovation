@@ -43,3 +43,5 @@ export function useDirectorManager() {
 
     return { activeDrawer, closeView, retainedEditId, activeEditRecord, table: { ...table, paginatedData }, cols, showColumnsMenu, setShowColumnsMenu, toggleColumn, showAllColumns, currentPage, setCurrentPage, itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete };
 }
+
+export type DirectorManagerType = ReturnType<typeof useDirectorManager>;

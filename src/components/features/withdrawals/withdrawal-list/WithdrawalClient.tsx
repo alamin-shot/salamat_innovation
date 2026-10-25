@@ -2,6 +2,7 @@
 import { useWithdrawalManager } from "@/hooks/finance_hooks/withdrawal_hooks/useWithdrawalManager";
 import { WithdrawalTable } from "./WithdrawalTable";
 import { WithdrawalFormDrawer } from "./form-drawer/WithdrawalFormDrawer";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export function WithdrawalClient() {
     const manager = useWithdrawalManager();
@@ -17,6 +18,13 @@ export function WithdrawalClient() {
                 initialRecord={manager.activeEditRecord}
                 isOpen={manager.activeDrawer === "edit-withdrawal"}
                 onClose={manager.closeView}
+            />
+            <ConfirmModal
+                isOpen={manager.confirmModal.isOpen}
+                title={manager.confirmModal.title}
+                message={manager.confirmModal.message}
+                onConfirm={manager.confirmModal.onConfirm}
+                onCancel={manager.closeConfirm}
             />
         </div>
     );

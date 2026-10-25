@@ -105,3 +105,5 @@ export function usePaymentListManager() {
         handleBulkDelete,
     };
 }
+
+export type PaymentListManagerType = ReturnType<typeof usePaymentListManager>;

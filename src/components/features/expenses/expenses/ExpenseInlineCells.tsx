@@ -1,7 +1,8 @@
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ExpensesManagerType } from "@/hooks/finance_hooks/expenses/useExpensesManager";
 
-export function ExpenseInlineNoteCell({ rowId, note, manager }: { rowId: string; note: string; manager: any }) {
+export function ExpenseInlineNoteCell({ rowId, note, manager }: { rowId: string; note: string; manager: ExpensesManagerType }) {
     if (!note || note === "-") return <span className="text-sm text-brand-subtext">-</span>;
 
     const isOpen = manager.activeNoteRowId === rowId;

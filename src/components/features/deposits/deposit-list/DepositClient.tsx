@@ -2,6 +2,7 @@
 import { useDepositManager } from "@/hooks/finance_hooks/deposit_hooks/useDepositManager";
 import { DepositTable } from "./DepositTable";
 import { DepositFormDrawer } from "./form-drawer/DepositFormDrawer";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export function DepositClient() {
     const manager = useDepositManager();
@@ -17,6 +18,13 @@ export function DepositClient() {
                 initialRecord={manager.activeEditRecord}
                 isOpen={manager.activeDrawer === "edit-deposit"}
                 onClose={manager.closeView}
+            />
+            <ConfirmModal
+                isOpen={manager.confirmModal.isOpen}
+                title={manager.confirmModal.title}
+                message={manager.confirmModal.message}
+                onConfirm={manager.confirmModal.onConfirm}
+                onCancel={manager.closeConfirm}
             />
         </div>
     );

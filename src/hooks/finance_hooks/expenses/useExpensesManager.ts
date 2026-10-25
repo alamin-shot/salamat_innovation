@@ -68,6 +68,12 @@ export function useExpensesManager() {
         return table.filteredData.slice(start, start + itemsPerPage);
     }, [table.filteredData, currentPage, itemsPerPage]);
 
+    // Confirm Modal State
+    const [confirmModal, setConfirmModal] = useState<{ isOpen: boolean; title: string; message: string; onConfirm: () => void; }>({
+        isOpen: false, title: "", message: "", onConfirm: () => { }
+    });
+    const closeConfirm = () => setConfirmModal(prev => ({ ...prev, isOpen: false }));
+
     // Drawer Triggers
     const handleEdit = (id: string) => openView("drawer", "edit-expense", id);
     const handlePrintVoucher = (id: string) => openView("drawer", "view-expense-voucher", id);
@@ -87,16 +93,32 @@ export function useExpensesManager() {
     };
 
     const handleDelete = (id: string) => {
-        deleteExpense(id);
-        table.setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
-        toast.success("Expense deleted.");
+        setConfirmModal({
+            isOpen: true,
+            title: "Delete Expense",
+            message: "Are you sure you want to permanently delete this expense? This action cannot be undone.",
+            onConfirm: () => {
+                deleteExpense(id);
+                table.setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
+                toast.success("Expense deleted.");
+                closeConfirm();
+            }
+        });
     };
 
     const handleBulkDelete = () => {
         if (table.selectedIds.length === 0) return;
-        bulkDeleteExpenses(table.selectedIds);
-        table.clearSelection();
-        toast.success("Selected expenses deleted.");
+        setConfirmModal({
+            isOpen: true,
+            title: "Delete Selected Expenses",
+            message: `Are you sure you want to permanently delete ${table.selectedIds.length} expenses?`,
+            onConfirm: () => {
+                bulkDeleteExpenses(table.selectedIds);
+                table.clearSelection();
+                toast.success("Selected expenses deleted.");
+                closeConfirm();
+            }
+        });
     };
 
     return {
@@ -126,5 +148,9 @@ export function useExpensesManager() {
         handleBulkReport,
         handleDelete,
         handleBulkDelete,
+        confirmModal,
+        closeConfirm,
     };
 }
+
+export type ExpensesManagerType = ReturnType<typeof useExpensesManager>;

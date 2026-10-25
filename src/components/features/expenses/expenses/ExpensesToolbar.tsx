@@ -1,7 +1,8 @@
 import { Search, Filter, Columns, Download } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ExpensesManagerType } from "@/hooks/finance_hooks/expenses/useExpensesManager";
 
-export function ExpensesToolbar({ manager }: { manager: any }) {
+export function ExpensesToolbar({ manager }: { manager: ExpensesManagerType }) {
     const { table, cols } = manager;
 
     return (
@@ -35,7 +36,7 @@ export function ExpensesToolbar({ manager }: { manager: any }) {
                                 <div className="flex flex-col gap-1.5 mb-2 max-h-60 overflow-y-auto">
                                     {Object.entries(cols).map(([key, isVisible]) => (
                                         <label key={key} className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-brand-bg rounded-md">
-                                            <input type="checkbox" checked={Boolean(isVisible)} onChange={() => manager.toggleColumn(key)} className="rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500" />
+                                            <input type="checkbox" checked={Boolean(isVisible)} onChange={() => manager.toggleColumn(key as keyof typeof cols)} className="rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500" />
                                             <span className="text-xs text-brand-text capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                                         </label>
                                     ))}

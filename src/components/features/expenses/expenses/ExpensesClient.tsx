@@ -4,6 +4,7 @@ import { ExpensesTable } from "./ExpensesTable";
 import { ExpenseFormDrawer } from "./form-drawer/ExpenseFormDrawer";
 import { ExpenseVoucherDrawer } from "./voucher-drawer/ExpenseVoucherDrawer";
 import { ExpenseReportDrawer } from "./report-drawer/ExpensesReportDrawer";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export function ExpensesClient() {
     const manager = useExpensesManager();
@@ -34,6 +35,14 @@ export function ExpensesClient() {
                 data={manager.activeReportData}
                 isOpen={manager.activeDrawer === "view-expense-report"}
                 onClose={manager.closeView}
+            />
+
+            <ConfirmModal
+                isOpen={manager.confirmModal.isOpen}
+                title={manager.confirmModal.title}
+                message={manager.confirmModal.message}
+                onConfirm={manager.confirmModal.onConfirm}
+                onCancel={manager.closeConfirm}
             />
         </div>
     );

@@ -1,7 +1,8 @@
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { DepositManagerType } from "@/hooks/finance_hooks/deposit_hooks/useDepositManager";
 
-export function DepositInlineNoteCell({ rowId, note, manager }: { rowId: string; note: string; manager: any }) {
+export function DepositInlineNoteCell({ rowId, note, manager }: { rowId: string; note: string; manager: DepositManagerType }) {
     if (!note || note === "-") return <span className="text-sm text-brand-subtext">-</span>;
 
     const isOpen = manager.activeNoteRowId === rowId;

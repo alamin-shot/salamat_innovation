@@ -51,19 +51,41 @@ export function useDepositManager() {
         return mappedData.slice(start, start + itemsPerPage);
     }, [mappedData, currentPage, itemsPerPage]);
 
+    // Confirm Modal State
+    const [confirmModal, setConfirmModal] = useState<{ isOpen: boolean; title: string; message: string; onConfirm: () => void; }>({
+        isOpen: false, title: "", message: "", onConfirm: () => { }
+    });
+    const closeConfirm = () => setConfirmModal(prev => ({ ...prev, isOpen: false }));
+
     const handleEdit = (id: string) => openView("drawer", "edit-deposit", id);
 
     const handleDelete = (id: string) => {
-        deleteDeposit(id);
-        table.setSelectedIds((p) => p.filter((i) => i !== id));
-        toast.success("Deposit deleted.");
+        setConfirmModal({
+            isOpen: true,
+            title: "Delete Deposit",
+            message: "Are you sure you want to permanently delete this deposit? This action cannot be undone.",
+            onConfirm: () => {
+                deleteDeposit(id);
+                table.setSelectedIds((p) => p.filter((i) => i !== id));
+                toast.success("Deposit deleted.");
+                closeConfirm();
+            }
+        });
     };
 
     const handleBulkDelete = () => {
         if (table.selectedIds.length === 0) return;
-        bulkDeleteDeposits(table.selectedIds);
-        table.clearSelection();
-        toast.success("Selected deposits deleted.");
+        setConfirmModal({
+            isOpen: true,
+            title: "Delete Selected Deposits",
+            message: `Are you sure you want to permanently delete ${table.selectedIds.length} deposits?`,
+            onConfirm: () => {
+                bulkDeleteDeposits(table.selectedIds);
+                table.clearSelection();
+                toast.success("Selected deposits deleted.");
+                closeConfirm();
+            }
+        });
     };
 
     const handleViewAttachment = (id: string) => {
@@ -74,6 +96,9 @@ export function useDepositManager() {
         activeDrawer, closeView, activeEditRecord, table: { ...table, paginatedData },
         cols, showColumnsMenu, setShowColumnsMenu, toggleColumn, showAllColumns,
         activeNoteRowId, toggleNotePopover, closeNotePopover, currentPage, setCurrentPage,
-        itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete, handleViewAttachment
+        itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete, handleViewAttachment,
+        confirmModal, closeConfirm
     };
 }
+
+export type DepositManagerType = ReturnType<typeof useDepositManager>;

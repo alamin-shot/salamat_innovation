@@ -5,9 +5,11 @@ import { CustomSelect } from "@/components/ui/CustomSelect";
 import { DescriptionPopover } from "./DescriptionPopover";
 import { Edit, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 
 export function SharedSeoTable({ manager }: { manager: SharedSeoManagerType }) {
     return (
+        <>
         <div className="overflow-x-auto flex-1">
             <Table>
                 <TableHeader>
@@ -115,5 +117,15 @@ export function SharedSeoTable({ manager }: { manager: SharedSeoManagerType }) {
                 </TableBody>
             </Table>
         </div>
+        <div className="border-t border-gray-100 p-4 sm:px-6">
+            <Pagination
+                currentPage={manager.table.currentPage}
+                itemsPerPage={manager.table.itemsPerPage}
+                onItemsPerPageChange={manager.table.setItemsPerPage}
+                onPageChange={manager.table.setCurrentPage}
+                totalPages={manager.table.totalPages}
+            />
+        </div>
+        </>
     );
 }

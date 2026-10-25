@@ -31,7 +31,7 @@ export function DescriptionPopover({ description }: { description: string }) {
             </button>
 
             {isOpen && (
-                <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 w-72 bg-white border border-gray-200 shadow-xl rounded-lg p-4 text-[13px] text-gray-700 whitespace-pre-wrap animate-in fade-in zoom-in-95">
+                <div className="absolute left-0 top-full mt-2 z-[100] w-64 bg-white border border-gray-200 shadow-xl rounded-lg p-4 text-[13px] text-gray-700 whitespace-pre-wrap animate-in fade-in slide-in-from-top-2">
                     <div className="font-semibold text-gray-900 mb-2 border-b border-gray-100 pb-1">Description</div>
                     {description}
                 </div>

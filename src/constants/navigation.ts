@@ -59,7 +59,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Deposit", ["Deposit", "Add Deposit"]),
   nav("Directors", ["Directors"]),
   nav("Partners", ["Dealers", "Retailers", "B2B", "Franchises", "Applications"]),
-  nav("SEO", ["Salamat"]),
+  nav("SEO", ["Salamat", "Tekzo"]),
   nav("About Us", ["Tekzo About Us", "Salamat About Us"]),
   nav("Orders", ["All Orders", "Pending Orders", "Hold Order", "Confirm Orders", "Approve Orders", "Processing Orders", "Onway Orders", "Return Orders", "Complete Orders", "Rejected Orders"]),
   nav("Couriers", ["All Courier Orders", "Pathao Orders", "Steadfast Orders", "REDX Orders"]),

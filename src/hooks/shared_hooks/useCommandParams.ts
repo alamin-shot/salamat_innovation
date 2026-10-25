@@ -6,15 +6,23 @@ export function useCommandParams() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    // Read active states directly from the URL
+
     const activeModal = searchParams.get("modal");
     const activeDrawer = searchParams.get("drawer");
     const activeId = searchParams.get("id");
 
-    /**
-     * Opens a specific view (modal or drawer) and optionally sets an ID.
-     * Clears the opposite view type to prevent overlapping UI.
-     */
+    const activeTab = searchParams.get("tab");
+
+    const setTab = (tabName: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("tab", tabName);
+        params.delete("modal");
+        params.delete("drawer");
+        params.delete("id");
+        params.delete("page"); // Reset pagination when switching tabs
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    };
+
     const openView = (type: "modal" | "drawer", viewName: string, id?: string) => {
         const params = new URLSearchParams(searchParams.toString());
 
@@ -25,7 +33,7 @@ export function useCommandParams() {
             params.delete("id");
         }
 
-        // Ensure we don't have a modal and a drawer open simultaneously in the URL
+
         params.delete(type === "modal" ? "drawer" : "modal");
 
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
@@ -46,7 +54,9 @@ export function useCommandParams() {
         activeModal,
         activeDrawer,
         activeId,
+        activeTab,
         openView,
+        setTab,
         closeView
     };
 }

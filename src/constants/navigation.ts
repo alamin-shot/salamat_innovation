@@ -35,6 +35,13 @@ const nav = (title: string, items: string[]): NavSection => ({
       };
     }
 
+    if (title === "Chat" && item === "People") {
+      return {
+        title: item,
+        href: `/admin/chat`,
+      };
+    }
+
     return {
       title: item,
       href: `/admin/${formattedTitle}/${formattedItem}`,

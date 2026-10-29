@@ -10,7 +10,7 @@ interface EliteCardProps {
 }
 
 export function EliteCard({ tier, onEdit, onDelete }: EliteCardProps) {
-    // Generate a sleek dark gradient based on the tier name to match the aesthetic
+
     const getBgGradient = (name: string) => {
         const lower = name.toLowerCase();
         if (lower.includes("platinum")) return "bg-gradient-to-br from-slate-800 to-slate-900";

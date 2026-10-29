@@ -7,52 +7,11 @@ const nav = (title: string, items: string[]): NavSection => ({
 
     const formattedTitle = title.toLowerCase().replace(/\s+/g, "-");
     const formattedItem = item.toLowerCase().replace(/\s+/g, "-");
-    if (title === "Stock Transfer" && item === "Stock Transfers") {
-      return {
-        title: item,
-        href: `/admin/stock-transfers`,
-      };
-    }
 
-    if (title === "Cash Transfers" && (item === "Cash Transfer" || item === "Cash Transfers")) {
+    if (formattedTitle === formattedItem || items.length === 1) {
       return {
         title: item,
-        href: `/admin/cash-transfers`,
-      };
-    }
-
-    if (title === "Damage Products" && item === "Damage Products") {
-      return {
-        title: item,
-        href: `/admin/damage-products`,
-      };
-    }
-
-    if (title === "People" && item === "People") {
-      return {
-        title: item,
-        href: `/admin/people`,
-      };
-    }
-
-    if (title === "Chat" && item === "People") {
-      return {
-        title: item,
-        href: `/admin/chat`,
-      };
-    }
-
-    if (title === "Reels Video" && item === "Reels Video") {
-      return {
-        title: item,
-        href: `/admin/reels-video`,
-      };
-    }
-
-    if (title === "Elite" && item === "Elite") {
-      return {
-        title: item,
-        href: `/admin/elite`,
+        href: `/admin/${formattedItem}`,
       };
     }
 

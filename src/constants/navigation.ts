@@ -49,6 +49,13 @@ const nav = (title: string, items: string[]): NavSection => ({
       };
     }
 
+    if (title === "Elite" && item === "Elite") {
+      return {
+        title: item,
+        href: `/admin/elite`,
+      };
+    }
+
     return {
       title: item,
       href: `/admin/${formattedTitle}/${formattedItem}`,

@@ -42,6 +42,13 @@ const nav = (title: string, items: string[]): NavSection => ({
       };
     }
 
+    if (title === "Reels Video" && item === "Reels Video") {
+      return {
+        title: item,
+        href: `/admin/reels-video`,
+      };
+    }
+
     return {
       title: item,
       href: `/admin/${formattedTitle}/${formattedItem}`,

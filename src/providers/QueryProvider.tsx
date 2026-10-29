@@ -7,7 +7,6 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
         () => new QueryClient({
             defaultOptions: {
                 queries: {
-                    // Prevents excessive refetching while preserving real-time performance
                     staleTime: 60 * 1000,
                     refetchOnWindowFocus: false,
                 },

@@ -7,7 +7,6 @@ import { Toaster } from "sonner";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-roboto-condensed",
 });
 

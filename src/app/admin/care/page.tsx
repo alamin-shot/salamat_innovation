@@ -1,11 +1,15 @@
-import { EntityClient } from "@/components/shared/crud-factory/EntityClient";
-import { EntitySchemaField } from "@/components/shared/crud-factory/EntityTable";
+import { Suspense } from "react";
+import { Loader } from "@/components/shared/loader/Loader";
+import { CareClient } from "@/components/features/care/CareClient";
 
-const careSchema: EntitySchemaField[] = [
-    { key: "name", label: "Name", type: "text", required: true, isTableColumn: true },
-    { key: "value", label: "Value (%)", type: "number", required: true, isTableColumn: true }
-];
+export const metadata = {
+    title: "Care Services | Salamat Innovation ERP",
+};
 
 export default function CarePage() {
-    return <EntityClient title="Care" moduleKey="care" schema={careSchema} />;
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader /></div>}>
+            <CareClient />
+        </Suspense>
+    );
 }

@@ -14,6 +14,7 @@ export interface Applicant {
     age: number;
     skills: string; // Comma separated string from user input
     reasonToJoin: string;
+    cvUrl: string | null;
     status: ApplicantStatus;
     appliedOn: string;
 }
@@ -40,6 +41,7 @@ export const useApplicantStore = create<ApplicantStore>()(
                     age: 25,
                     skills: "Next.js, React.js, JavaScript (ES6+), TypeScript, Tailwind CSS",
                     reasonToJoin: "I want to join Salamat Innovation because I am eager to contribute my Next.js and React.js expertise to building innovative, scalable web applications...",
+                    cvUrl: "#",
                     status: "Pending",
                     appliedOn: "2026-10-29T10:00:00.000Z"
                 },
@@ -54,6 +56,7 @@ export const useApplicantStore = create<ApplicantStore>()(
                     age: 24,
                     skills: "React, Node.js, Express",
                     reasonToJoin: "Looking for a challenging role to grow my skills.",
+                    cvUrl: "#",
                     status: "Shortlisted",
                     appliedOn: "2026-10-26T14:30:00.000Z"
                 }
@@ -68,6 +71,6 @@ export const useApplicantStore = create<ApplicantStore>()(
                 applicants: state.applicants.filter(a => !ids.includes(a.id))
             }))
         }),
-        { name: "erp-applicant-storage-v1" }
+        { name: "erp-applicant-storage-v2" }
     )
 );

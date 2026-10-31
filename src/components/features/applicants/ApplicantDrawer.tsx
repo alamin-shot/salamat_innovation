@@ -2,7 +2,7 @@
 import { ApplicantManagerType } from "@/hooks/applicant_hooks/useApplicantManager";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
-import { Mail, Phone, User, Calendar, Sparkles, Megaphone } from "lucide-react";
+import { Mail, Phone, User, Calendar, Sparkles, Megaphone, FileText } from "lucide-react";
 
 export function ApplicantDrawer({ manager }: { manager: ApplicantManagerType }) {
     const activeApplicant = manager.getActiveApplicant();
@@ -14,13 +14,13 @@ export function ApplicantDrawer({ manager }: { manager: ApplicantManagerType }) 
             title="Applicant Detail"
             isOpen={manager.activeDrawer === "view"}
             onClose={manager.closeDrawer}
-            width="w-full sm:w-[calc(100vw-260px)] md:w-[700px]"
+            width="w-full sm:w-[calc(100vw-260px)]" // Strictly stretches to the sidebar
         >
             <div className="flex flex-col h-full pt-6">
                 <div className="flex-1 w-full flex flex-col gap-6 px-4 overflow-y-auto custom-scrollbar pb-10">
 
-                    {/* Header Profile Block */}
-                    <div className="flex items-center justify-between bg-white border border-gray-100 shadow-sm rounded-lg p-5">
+                    {/* Header Profile Block with CV Download */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-100 shadow-sm rounded-lg p-5 gap-4">
                         <div className="flex items-center gap-4">
                             <div className="h-16 w-16 bg-brand-primary/10 rounded-full flex items-center justify-center text-brand-primary font-bold text-2xl shrink-0">
                                 {activeApplicant.name.charAt(0)}
@@ -32,26 +32,44 @@ export function ApplicantDrawer({ manager }: { manager: ApplicantManagerType }) 
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${activeApplicant.status === 'Shortlisted' ? 'bg-green-50 text-green-600' :
-                                    activeApplicant.status === 'Rejected' ? 'bg-red-50 text-red-500' :
-                                        'bg-amber-50 text-amber-600'
-                                }`}>
-                                {activeApplicant.status}
-                            </span>
-                            <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded">
-                                {activeApplicant.gender}
-                            </span>
+
+                        <div className="flex items-center gap-3">
+                            {/* NEW: CV Download Button */}
+                            {activeApplicant.cvUrl ? (
+                                <a href={activeApplicant.cvUrl} target="_blank" rel="noreferrer" download>
+                                    <Button variant="outline" size="sm" className="flex items-center gap-2 h-8">
+                                        <FileText className="h-4 w-4" /> Download CV
+                                    </Button>
+                                </a>
+                            ) : (
+                                <span className="text-xs text-gray-400 italic bg-gray-50 px-3 py-1.5 rounded border border-gray-100">
+                                    No CV Attached
+                                </span>
+                            )}
+
+                            <div className="w-px h-6 bg-gray-200 hidden sm:block"></div>
+
+                            <div className="flex flex-col items-end gap-1.5">
+                                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${activeApplicant.status === 'Shortlisted' ? 'bg-green-50 text-green-600' :
+                                        activeApplicant.status === 'Rejected' ? 'bg-red-50 text-red-500' :
+                                            'bg-amber-50 text-amber-600'
+                                    }`}>
+                                    {activeApplicant.status}
+                                </span>
+                                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded">
+                                    {activeApplicant.gender}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     {/* Quick Stats Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-100 rounded-lg">
                             <Mail className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
-                            <div>
+                            <div className="min-w-0">
                                 <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block">Email</span>
-                                <a href={`mailto:${activeApplicant.email}`} className="text-sm text-blue-600 font-medium mt-0.5 hover:underline">
+                                <a href={`mailto:${activeApplicant.email}`} className="text-sm text-blue-600 font-medium mt-0.5 hover:underline truncate block">
                                     {activeApplicant.email}
                                 </a>
                             </div>

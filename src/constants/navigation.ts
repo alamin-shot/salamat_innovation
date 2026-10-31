@@ -1,14 +1,18 @@
 export type NavItem = { title: string; href: string };
 export type NavSection = { title: string; items: NavItem[] };
 
-const nav = (title: string, items: string[]): NavSection => ({
+
+const nav = (title: string, items: (string | [string, string])[]): NavSection => ({
   title,
   items: items.map((item) => {
+    if (Array.isArray(item)) {
+      return { title: item[0], href: item[1] };
+    }
 
     const formattedTitle = title.toLowerCase().replace(/\s+/g, "-");
     const formattedItem = item.toLowerCase().replace(/\s+/g, "-");
 
-    if (formattedTitle === formattedItem || items.length === 1) {
+    if (items.length === 1) {
       return {
         title: item,
         href: `/admin/${formattedItem}`,
@@ -37,7 +41,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Expenses", ["Expenses", "Add Expenses", "Expense Categories", "Add Expense Category"]),
   nav("Withdrawals", ["Withdrawals", "Add Withdrawal", "Director", "Add Director"]),
   nav("Deposit", ["Deposit", "Add Deposit"]),
-  nav("Directors", ["Directors"]),
+  nav("Directors", [["Directors", "/admin/directors/directors"]]),
   nav("Partners", ["Dealers", "Retailers", "B2B", "Franchises", "Applications"]),
   nav("SEO", ["Salamat", "Tekzo"]),
   nav("About Us", ["Tekzo About Us", "Salamat About Us"]),
@@ -61,9 +65,18 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Sell Device Requests", ["Sell Device Requests"]),
   nav("Our teams", ["Our teams"]),
   nav("EMI Banks", ["EMI Banks"]),
-  nav("Careers", ["Careers", "Applicants"]),
+  // Careers items live at /admin/careers and /admin/applicants (not /admin/careers/*)
+  nav("Careers", [
+    ["Careers", "/admin/careers"],
+    ["Applicants", "/admin/applicants"],
+  ]),
   nav("FAQs", ["FAQs"]),
-  nav("Blog", ["Blog Posts", "Blog Categories", "Blog Tags"]),
+  // Blog items live at /admin/blog-posts etc. (not /admin/blog/*)
+  nav("Blog", [
+    ["Blog Posts", "/admin/blog-posts"],
+    ["Blog Categories", "/admin/blog-categories"],
+    ["Blog Tags", "/admin/blog-tags"],
+  ]),
   nav("Outlets", ["Outlets"]),
   nav("Salamat Policy", ["Salamat Policy"]),
   nav("Tekzo Policy", ["Tekzo Policy"]),

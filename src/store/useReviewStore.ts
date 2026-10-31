@@ -7,7 +7,7 @@ export interface Review {
     id: string;
     productName: string;
     customerName: string;
-    rating: number; // 1-5
+    rating: number;
     comment: string;
     reply: string | null;
     status: ReviewStatus;

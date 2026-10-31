@@ -9,7 +9,7 @@ export interface WarrantyRequest {
     customerName: string;
     phone: string;
     productName: string;
-    serialNumber: string; // IMEI or Serial
+    serialNumber: string;
     issueDescription: string;
     adminNote: string | null;
     status: WarrantyStatus;

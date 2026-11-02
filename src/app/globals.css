@@ -40,6 +40,19 @@
   .accordion-inner {
     overflow: hidden;
   }
+
+  /* Drawer that fills the content area (viewport minus the 260px sidebar) */
+  .drawer-full-content {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* Target 'lg' desktop screens where the 260px sidebar is actually visible */
+  @media (min-width: 1024px) {
+    .drawer-full-content {
+      width: calc(100vw - 260px) !important;
+    }
+  }
 }
 
 @layer base {

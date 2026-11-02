@@ -6,4 +6,5 @@ export interface DrawerProps {
     onClose: () => void;
     children: React.ReactNode;
     width?: string;
+    drawerStyle?: React.CSSProperties;
 }

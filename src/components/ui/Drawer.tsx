@@ -8,7 +8,8 @@ export function Drawer({
     isOpen,
     onClose,
     children,
-    width = "w-[400px] sm:w-[540px]"
+    width = "w-[calc(100vw-260px)] sm:w-[540px]",
+    drawerStyle
 }: DrawerProps) {
     const [isMounted, setIsMounted] = React.useState(false);
     const [isVisible, setIsVisible] = React.useState(false);
@@ -42,6 +43,7 @@ export function Drawer({
             <div
                 className={`fixed inset-y-0 right-0 z-50 flex flex-col bg-white shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${width} ${isVisible ? "translate-x-0" : "translate-x-full"
                     }`}
+                style={drawerStyle}
                 role="dialog"
                 aria-modal="true"
             >

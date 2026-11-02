@@ -80,7 +80,7 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Outlets", ["Outlets"]),
   nav("Salamat Policy", ["Salamat Policy"]),
   nav("Tekzo Policy", ["Tekzo Policy"]),
-  nav("Employee", ["Employee", "Designation", "Employee Status", "Department"]),
+  nav("Employee", ["Employees", "Designation", "Employee Status", "Department"]),
   nav("Attendance", ["Attendances", "Attendance Report", "Daily Attendance Log", "Attendance Requests", "Break Time", "Work Shift"]),
   nav("Leaves", ["Leave Type", "Leave Request"]),
   nav("Payroll", ["Beneficiary", "Badge Value", "Payruns", "Payslips"]),

@@ -25,7 +25,7 @@ export function EntityClient({ title, moduleKey, schema }: EntityClientProps) {
                 </Button>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden">
+            <div className="flex-1  flex flex-col bg-white overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                     <input
                         type="text"

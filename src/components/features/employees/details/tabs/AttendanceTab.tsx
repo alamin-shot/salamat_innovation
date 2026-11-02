@@ -3,12 +3,17 @@ import { useState, useMemo } from "react";
 import { EmployeeDetailManagerType } from "@/hooks/employee_hooks/useEmployeeDetailManager";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Pagination } from "@/components/ui/Pagination";
+import { LocationViewDrawer, PunchLocationData } from "../drawers/LocationViewDrawer";
+import { MapPin } from "lucide-react";
 
 export function AttendanceTab({ manager }: { manager: EmployeeDetailManagerType }) {
     const logs = manager.employee.attendanceLogs;
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [searchQuery, setSearchQuery] = useState("");
+
+    // Local state for the Location View Drawer
+    const [activeLocation, setActiveLocation] = useState<PunchLocationData | null>(null);
 
     const filteredLogs = useMemo(() => {
         return logs.filter(log => log.inDate.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -17,9 +22,8 @@ export function AttendanceTab({ manager }: { manager: EmployeeDetailManagerType 
     const totalPages = Math.max(1, Math.ceil(filteredLogs.length / perPage));
     const paginatedLogs = filteredLogs.slice((currentPage - 1) * perPage, currentPage * perPage);
 
-    // Donut Chart Math (Mocked stats based on your screenshot)
     const stats = { late: 1, absent: 24, regular: 1, early: 0, holiday: 0, weekend: 4 };
-    const total = 30; // November days
+    const total = 30;
     const strokeWidth = 12;
     const radius = 40;
     const circumference = 2 * Math.PI * radius;
@@ -124,9 +128,29 @@ export function AttendanceTab({ manager }: { manager: EmployeeDetailManagerType 
                                 <TableRow key={log.id}>
                                     <TableCell className="font-medium text-gray-900">{log.inDate}</TableCell>
                                     <TableCell>{log.punchIn}</TableCell>
-                                    <TableCell className="text-xs text-gray-500 font-mono">📍 {log.inLocation}</TableCell>
+                                    <TableCell>
+                                        <button
+                                            onClick={() => setActiveLocation({ type: "In", ip: log.inLocation })}
+                                            className="flex items-center gap-1.5 text-xs font-mono text-brand-primary hover:text-brand-primary/80 hover:underline transition-colors"
+                                            title="View Map"
+                                        >
+                                            <MapPin className="w-3 h-3" /> {log.inLocation}
+                                        </button>
+                                    </TableCell>
                                     <TableCell>{log.punchOut}</TableCell>
-                                    <TableCell className="text-xs text-gray-500 font-mono">{log.outLocation !== "—" ? `📍 ${log.outLocation}` : "—"}</TableCell>
+                                    <TableCell>
+                                        {log.outLocation !== "—" ? (
+                                            <button
+                                                onClick={() => setActiveLocation({ type: "Out", ip: log.outLocation })}
+                                                className="flex items-center gap-1.5 text-xs font-mono text-brand-primary hover:text-brand-primary/80 hover:underline transition-colors"
+                                                title="View Map"
+                                            >
+                                                <MapPin className="w-3 h-3" /> {log.outLocation}
+                                            </button>
+                                        ) : (
+                                            <span className="text-gray-400">—</span>
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${log.behavior === "regular" ? "bg-emerald-50 text-emerald-600 border-emerald-200" :
                                                 log.behavior === "late" ? "bg-amber-50 text-amber-600 border-amber-200" : "bg-rose-50 text-rose-600 border-rose-200"
@@ -144,6 +168,13 @@ export function AttendanceTab({ manager }: { manager: EmployeeDetailManagerType 
                     <Pagination currentPage={currentPage} totalPages={totalPages} perPage={perPage} onPageChange={setCurrentPage} onPerPageChange={(v) => { setPerPage(v); setCurrentPage(1); }} />
                 </div>
             </div>
+
+            {/* Render the Drawer */}
+            <LocationViewDrawer
+                isOpen={!!activeLocation}
+                onClose={() => setActiveLocation(null)}
+                locationData={activeLocation}
+            />
         </div>
     );
 }

@@ -63,7 +63,7 @@ export function JobHistoryEditDrawer({ manager }: { manager: EmployeeDetailManag
     };
 
     return (
-        <Drawer title={getTitle()} isOpen={isOpen} onClose={manager.closeSubDrawer} width="w-full sm:w-[450px]">
+        <Drawer title={getTitle()} isOpen={isOpen} onClose={manager.closeSubDrawer} width="w-full sm:w-[calc(100vw-260px)]">
             <div className="flex flex-col h-full pt-6">
                 <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6">
 

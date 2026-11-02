@@ -61,7 +61,7 @@ export function EmployeeClient() {
                 </div>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden min-h-[480px] pb-32">
+            <div className="flex-1 flex flex-col bg-white overflow-hidden min-h-[500px] pb-32">
                 <Table>
                     <TableHeader>
                         <TableHeadCell className="w-12">

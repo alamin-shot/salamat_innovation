@@ -9,7 +9,7 @@ export function DirectorListClient() {
     const manager = useDirectorListManager();
 
     return (
-        <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-hidden bg-gray-50/50">
+        <div className="flex flex-col w-full h-full p-4 relative overflow-hidden bg-gray-50/50">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2 text-gray-700 font-bold text-lg tracking-wide uppercase">
                     <LayoutGrid className="h-5 w-5 text-brand-text" />

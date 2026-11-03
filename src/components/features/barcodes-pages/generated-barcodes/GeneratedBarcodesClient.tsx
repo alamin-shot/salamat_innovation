@@ -18,7 +18,7 @@ export function GeneratedBarcodesClient() {
     }, [activeDrawer, activeId]);
 
     return (
-        <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+        <div className="flex flex-col w-full h-full p-4 relative overflow-hidden">
             <div className="mb-6">
                 <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Generated Barcodes</h1>
             </div>

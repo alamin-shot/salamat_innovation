@@ -13,7 +13,7 @@ export function SharedPartnerClient({ type }: { type: PartnerType }) {
     const formManager = useSharedPartnerForm(type, manager.activeEditRecord, manager.closeView);
 
     return (
-        <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-hidden bg-gray-50/30">
+        <div className="flex flex-col w-full h-full p-4 relative overflow-hidden bg-gray-50/30">
             <div className="mb-6">
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900 capitalize">{type} List</h1>
             </div>

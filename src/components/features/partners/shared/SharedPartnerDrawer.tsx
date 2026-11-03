@@ -23,7 +23,7 @@ export function SharedPartnerDrawer({
     return (
         <Drawer title={`${isEdit ? "Update" : "Add"} ${partnerType}`} isOpen={isOpen} onClose={onClose} width="w-full max-w-none lg:w-[calc(100vw-280px)]">
             <div className="flex flex-col h-full bg-gray-50/50">
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+                <div className="flex-1 overflow-y-auto p-4">
                     <div className="flex flex-col gap-6 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100 max-w-4xl mx-auto">
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

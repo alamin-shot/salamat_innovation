@@ -4,8 +4,10 @@ import { useGlobalAttendanceStore } from "@/store/useGlobalAttendanceStore";
 import { BreakTimePolicy } from "@/types/attendance.types";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
+import { CustomSelect } from "@/components/ui/CustomSelect";
+import { Drawer } from "@/components/ui/Drawer";
 import { BreakTimeDrawer } from "./drawers/BreakTimeDrawer";
-import { Plus, Columns, Edit, Trash2, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
+import { Plus, Columns, Edit, Trash2, AlertTriangle, CheckCircle2, Clock, Play, Timer } from "lucide-react";
 import { toast } from "sonner";
 
 export function BreakTimeClient() {
@@ -15,6 +17,11 @@ export function BreakTimeClient() {
     const [activeTab, setActiveTab] = useState<"policies" | "live">("policies");
     const [drawerMode, setDrawerMode] = useState<"none" | "add" | "edit">("none");
     const [activePolicy, setActivePolicy] = useState<BreakTimePolicy | null>(null);
+
+    // Log Floor Break Drawer State
+    const [isLogBreakOpen, setIsLogBreakOpen] = useState(false);
+    const [selectedEmpId, setSelectedEmpId] = useState(store.employees[0]?.id || "3378");
+    const [selectedPolicyId, setSelectedPolicyId] = useState(store.breakPolicies[0]?.id || "bt-1");
 
     const filteredPolicies = store.breakPolicies.filter((b) =>
         b.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -27,13 +34,18 @@ export function BreakTimeClient() {
         }
     };
 
+    const empOptions = store.employees.map((e) => `${e.name} (${e.empCode})`);
+    const policyOptions = store.breakPolicies.map(
+        (p) => `${p.name} (${p.durationHours}h ${p.durationMinutes}m)`
+    );
+
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col w-full h-full gap-6 p-4">
             <div className="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h1 className="text-xl font-bold text-gray-900">Break Time</h1>
                     <p className="text-xs text-gray-500 mt-0.5">
-                        Configure break time policies and monitor active showroom floor breaks.
+                        Configure break time policies and sync live floor breaks directly to daily attendance logs.
                     </p>
                 </div>
 
@@ -58,6 +70,30 @@ export function BreakTimeClient() {
                             Live Floor Breaks ({store.liveBreaks.length})
                         </button>
                     </div>
+
+                    {activeTab === "live" && (
+                        <>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                    store.tickLiveBreaks();
+                                    toast.info("Advanced active break timers by +1 minute");
+                                }}
+                                className="h-9 bg-white flex items-center gap-1.5"
+                            >
+                                <Timer className="w-3.5 h-3.5" /> Simulate +1m
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setIsLogBreakOpen(true)}
+                                className="h-9 bg-white flex items-center gap-1.5"
+                            >
+                                <Play className="w-3.5 h-3.5 text-emerald-600" /> Log Floor Break
+                            </Button>
+                        </>
+                    )}
 
                     <Button variant="outline" size="sm" className="h-9 bg-white flex items-center gap-1.5">
                         <Columns className="w-3.5 h-3.5" /> Columns
@@ -91,8 +127,8 @@ export function BreakTimeClient() {
                         <TableHeader>
                             <TableHeadCell>Name</TableHeadCell>
                             <TableHeadCell>Duration</TableHeadCell>
-                            <TableHeadCell>Policy Type</TableHeadCell>
-                            <TableHeadCell>Applicable Shifts</TableHeadCell>
+                            <TableHeadCell>Policy Rules</TableHeadCell>
+                            <TableHeadCell>Applicable Work Shifts</TableHeadCell>
                             <TableHeadCell className="text-right">Action</TableHeadCell>
                         </TableHeader>
                         <TableBody>
@@ -146,7 +182,7 @@ export function BreakTimeClient() {
                             <TableHeadCell>Outlet</TableHeadCell>
                             <TableHeadCell>Break Policy</TableHeadCell>
                             <TableHeadCell>Started At</TableHeadCell>
-                            <TableHeadCell>Elapsed vs Allowed</TableHeadCell>
+                            <TableHeadCell>Elapsed vs Policy Limit</TableHeadCell>
                             <TableHeadCell>Status</TableHeadCell>
                             <TableHeadCell className="text-right">Action</TableHeadCell>
                         </TableHeader>
@@ -189,7 +225,7 @@ export function BreakTimeClient() {
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                                    <CheckCircle2 className="w-3 h-3" /> Completed
+                                                    <CheckCircle2 className="w-3 h-3" /> Completed & Synced
                                                 </span>
                                             )}
                                         </TableCell>
@@ -201,10 +237,12 @@ export function BreakTimeClient() {
                                                     className="h-7 text-xs"
                                                     onClick={() => {
                                                         store.endLiveBreakSession(lb.id);
-                                                        toast.success(`Ended break session for ${lb.employeeName}`);
+                                                        toast.success(
+                                                            `Completed break & synced ${lb.elapsedMinutes}m to ${lb.employeeName}'s Attendance Log`
+                                                        );
                                                     }}
                                                 >
-                                                    Force End Break
+                                                    Complete & Sync
                                                 </Button>
                                             )}
                                         </TableCell>
@@ -232,6 +270,63 @@ export function BreakTimeClient() {
                     setDrawerMode("none");
                 }}
             />
+
+            {/* Log Floor Break Drawer */}
+            <Drawer
+                title="Log Active Floor Break"
+                isOpen={isLogBreakOpen}
+                onClose={() => setIsLogBreakOpen(false)}
+                width="drawer-full-content"
+            >
+                <div className="flex flex-col h-full pt-6">
+                    <div className="flex-1 px-6 flex flex-col gap-5 max-w-xl">
+                        <div className="flex flex-col gap-1.5">
+                            <label className="erp-label">Select Employee</label>
+                            <CustomSelect
+                                value={
+                                    empOptions.find((o) => o.includes(selectedEmpId)) || empOptions[0]
+                                }
+                                options={empOptions}
+                                onChange={(label) => {
+                                    const emp = store.employees.find((e) => label.includes(e.empCode));
+                                    if (emp) setSelectedEmpId(emp.id);
+                                }}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                            <label className="erp-label">Select Break Policy</label>
+                            <CustomSelect
+                                value={
+                                    policyOptions[
+                                    store.breakPolicies.findIndex((p) => p.id === selectedPolicyId)
+                                    ] || policyOptions[0]
+                                }
+                                options={policyOptions}
+                                onChange={(label) => {
+                                    const pol = store.breakPolicies.find((p) => label.startsWith(p.name));
+                                    if (pol) setSelectedPolicyId(pol.id);
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="pt-4 border-t border-gray-100 flex justify-end gap-3 bg-white px-6 pb-4 mt-auto">
+                        <Button variant="outline" onClick={() => setIsLogBreakOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="default"
+                            onClick={() => {
+                                store.startLiveBreakSession(selectedEmpId, selectedPolicyId);
+                                toast.success("Floor break started");
+                                setIsLogBreakOpen(false);
+                                setActiveTab("live");
+                            }}
+                        >
+                            Start Break Session
+                        </Button>
+                    </div>
+                </div>
+            </Drawer>
         </div>
     );
 }

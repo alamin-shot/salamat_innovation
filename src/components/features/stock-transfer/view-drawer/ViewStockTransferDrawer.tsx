@@ -24,7 +24,7 @@ export function ViewStockTransferDrawer({ id, isOpen, onClose }: { id: string | 
 
     return (
         <Drawer title="Stock Transfer Detail" isOpen={isOpen} onClose={onClose} width="w-full max-w-none lg:w-[calc(100vw-280px)]">
-            <div className="p-4 sm:p-6 lg:p-8 bg-gray-50/50 min-h-full pb-12">
+            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 sm:p-7">
                     <TransferViewHeader refNo={data.ref} status={data.status} />
                     <div className="mt-5">

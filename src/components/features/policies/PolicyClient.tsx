@@ -12,7 +12,7 @@ export function PolicyClient({ tenant }: { tenant: TenantType }) {
     const title = tenant === "salamat" ? "Salamat Policy Settings" : "Tekzo Policy Settings";
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col w-full h-full gap-6 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                     <ShieldCheck className="w-6 h-6 text-brand-primary" /> {title}

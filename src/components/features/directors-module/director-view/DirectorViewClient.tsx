@@ -12,7 +12,7 @@ export function DirectorViewClient({ id }: { id: string }) {
     if (!manager.profile) return <div className="p-8">Profile not found.</div>;
 
     return (
-        <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-y-auto custom-scrollbar bg-gray-50/50 gap-6">
+        <div className="flex flex-col w-full h-full p-4 relative overflow-y-auto custom-scrollbar bg-gray-50/50 gap-6">
 
             <div className="flex items-center gap-2 text-gray-700 font-bold text-lg tracking-wide uppercase mb-2">
                 <LayoutGrid className="h-5 w-5 text-brand-text" />

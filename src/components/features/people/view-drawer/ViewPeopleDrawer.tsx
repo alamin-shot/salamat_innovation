@@ -38,7 +38,7 @@ export function ViewPeopleDrawer({
             onClose={onClose}
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
-            <div className="p-4 sm:p-6 lg:p-8 bg-gray-50/50 min-h-full pb-12">
+            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
                 <PeopleProfileHeader person={fallbackPerson} />
                 <PeopleDetailTabs
                     person={fallbackPerson}

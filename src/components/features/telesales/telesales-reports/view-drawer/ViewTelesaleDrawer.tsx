@@ -35,7 +35,7 @@ export function ViewTelesaleDrawer({
             onClose={onClose}
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
-            <div className="p-4 sm:p-6 lg:p-8 bg-gray-50/50 min-h-full pb-12">
+            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-6">
                     {/* Row 1: Date & Customer Type */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">

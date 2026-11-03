@@ -15,7 +15,7 @@ export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
             onClose={onClose}
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
-            <div className="flex flex-col gap-8 bg-white p-4 sm:p-6 lg:p-8 min-h-full">
+            <div className="flex flex-col gap-8 bg-white p-4 min-h-full">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     {/* Left: Supplier & Upload */}

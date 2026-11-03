@@ -43,7 +43,7 @@ export function EmployeeDetailClient({ employeeId }: { employeeId: string }) {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col w-full h-full gap-6 p-4">
             <div className="flex items-center gap-4">
                 <Button
                     variant="outline"

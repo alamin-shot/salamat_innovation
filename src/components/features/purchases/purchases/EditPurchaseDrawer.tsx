@@ -26,7 +26,7 @@ export function EditPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
             onClose={onClose}
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
-            <div className="flex flex-col justify-between h-full p-4 sm:p-6 lg:p-8">
+            <div className="flex flex-col justify-between h-full p-4">
                 <form id="edit-purchase-form" onSubmit={handleSave} className="mx-auto max-w-3xl w-full flex flex-col gap-8">
 
                     <div className="flex items-center gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-sm">

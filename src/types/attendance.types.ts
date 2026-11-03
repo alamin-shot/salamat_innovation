@@ -50,6 +50,16 @@ export interface GlobalAttendanceLog {
     segments: PunchSegment[];
 }
 
+export interface DayStatusOverride {
+    key: string; // `${employeeId}_${isoDate}`
+    employeeId: string;
+    isoDate: string;
+    code: MatrixCellCode;
+    leaveType?: string;
+    note: string;
+    updatedAt: string;
+}
+
 export interface AttendanceRequestItem {
     id: string;
     employeeId: string;
@@ -123,18 +133,36 @@ export interface ShiftSwapRequest {
     status: "Pending" | "Approved" | "Rejected";
 }
 
+export interface ReportCellData {
+    code: MatrixCellCode;
+    isLate?: boolean;
+    logId?: string;
+    leaveTitle?: string;
+    punchIn?: string;
+    punchOut?: string;
+    totalHours?: string;
+    note?: string;
+}
+
 export interface ReportEmployeeSummary {
     employeeId: string;
     employeeName: string;
     empCode: string;
     department: string;
-    dailyStatuses: Record<number, { code: MatrixCellCode; isLate?: boolean; logId?: string }>;
+    outlet: string;
+    shiftName: string;
+    dailyStatuses: Record<number, ReportCellData>;
+    totalCalendarDays: number;
+    workingDaysTarget: number;
     presentCount: number;
     absentCount: number;
     lateCount: number;
     earlyCount: number;
     leaveCount: number;
     holidayCount: number;
+    weeklyOffCount: number;
+    latePenaltyDays: number;
+    lopDays: number;
     totalWorkedHours: string;
     overtimeHours: string;
     payableDays: number;

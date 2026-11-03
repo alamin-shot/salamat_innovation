@@ -6,7 +6,7 @@ import { DirectorFormDrawer } from "./form-drawer/DirectorFormDrawer";
 export function DirectorClient() {
     const manager = useDirectorManager();
     return (
-        <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+        <div className="flex flex-col w-full h-full p-4 relative overflow-hidden">
             <div className="mb-6">
                 <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Director</h1>
             </div>

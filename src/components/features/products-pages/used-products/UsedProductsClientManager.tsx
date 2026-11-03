@@ -47,7 +47,7 @@ export function UsedProductsClientManager() {
 
     return (
         <>
-            <div className="flex flex-col w-full h-full p-4 sm:p-6 lg:p-8">
+            <div className="flex flex-col w-full h-full p-4">
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Used Products</h1>

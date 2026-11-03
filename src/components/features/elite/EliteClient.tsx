@@ -9,7 +9,7 @@ export function EliteClient() {
     const manager = useEliteManager();
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col w-full h-full gap-6 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Elite Loyalty Tiers</h1>
 

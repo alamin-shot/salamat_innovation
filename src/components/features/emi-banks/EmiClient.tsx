@@ -29,7 +29,7 @@ export function EmiClient() {
     const tenuresList = ["3 Months", "6 Months", "9 Months", "12 Months", "18 Months", "24 Months", "30 Months", "36 Months"];
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col w-full h-full gap-6 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">EMI Charge Matrix</h1>
                 <Button variant="success" onClick={manager.openAddDrawer} className="h-9 px-4 gap-2">

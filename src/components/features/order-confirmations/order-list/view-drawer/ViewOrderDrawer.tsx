@@ -43,9 +43,9 @@ export function ViewOrderDrawer({
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
             <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-6">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-2">
                     {/* Row 1: Dates */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Date</span>
                             <span className="text-sm font-medium text-gray-800">{data.date}</span>
@@ -57,7 +57,7 @@ export function ViewOrderDrawer({
                     </div>
 
                     {/* Row 2: Customer Name & Mobile */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Name</span>
                             <span className="text-sm font-medium text-gray-800">{data.customer}</span>
@@ -75,7 +75,7 @@ export function ViewOrderDrawer({
                     </div>
 
                     {/* Row 4: Order Media & Online/Offline */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Order Media</span>
                             <div>
@@ -131,7 +131,7 @@ export function ViewOrderDrawer({
                     </div>
 
                     {/* Row 6: Advance Media, Advance Amount, Selling Price */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Advance Media</span>
                             <div>
@@ -159,7 +159,7 @@ export function ViewOrderDrawer({
                     </div>
 
                     {/* Row 7: COD & Note */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">COD</span>
                             <span className="text-sm font-bold text-gray-900">
@@ -175,7 +175,7 @@ export function ViewOrderDrawer({
                     {/* Row 8: Delivery Section (Delivery Status, Invoice No, Delivery By, Track, Delivery Note) */}
                     <div className="flex flex-col gap-4 pt-2">
                         <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Delivery Information</h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             <div className="flex flex-col gap-1">
                                 <span className="text-xs font-semibold text-gray-400">Delivery Status</span>
                                 <span className="text-sm font-medium text-gray-800">{data.deliveryStatus}</span>
@@ -190,7 +190,7 @@ export function ViewOrderDrawer({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
                             <div className="flex flex-col gap-1">
                                 <span className="text-xs font-semibold text-gray-400">Track</span>
                                 <span className="text-sm text-emerald-600 underline truncate">{data.track}</span>

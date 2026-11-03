@@ -31,7 +31,7 @@ export function ReceivePaymentDrawer({ manager }: { manager: OrderManagerType })
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full">
-                <div className="flex-1 flex flex-col gap-6 max-w-lg mx-auto w-full pt-8">
+                <div className="flex-1 flex flex-col gap-2 max-w-lg mx-auto w-full pt-8">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-gray-50 border border-gray-100 rounded-lg p-4 flex flex-col items-center justify-center">
                             <span className="text-xs text-gray-500 font-medium">Payable Amount</span>

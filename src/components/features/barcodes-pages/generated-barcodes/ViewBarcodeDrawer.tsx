@@ -35,8 +35,8 @@ export function ViewBarcodeDrawer({ id, isOpen, onClose }: { id: string | null, 
                 </div>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-                    <div className="mx-auto max-w-3xl flex flex-col gap-6">
-                        <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col md:flex-row items-center gap-6">
+                    <div className="mx-auto max-w-3xl flex flex-col gap-2">
+                        <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col md:flex-row items-center gap-2">
                             <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-xl border border-brand-subtext/15 bg-brand-bg/30">
                                 <Image src="/phone.png" alt="Product" fill className="object-contain p-4" />
                             </div>

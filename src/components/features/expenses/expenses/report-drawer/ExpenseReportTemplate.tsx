@@ -47,7 +47,7 @@ export function ExpenseReportTemplate({ data }: { data: ExpenseItem[] }) {
                 </div>
                 <div className="flex flex-col gap-2 text-right">
                     <span className="text-gray-600 border-b border-gray-300 pb-1">Grand Total</span>
-                    <div className="flex items-center justify-end gap-6">
+                    <div className="flex items-center justify-end gap-2">
                         <span className="text-gray-600">Total Amount</span>
                         <span className="font-bold text-gray-900">: BDT {grandTotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                     </div>

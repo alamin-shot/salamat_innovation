@@ -49,7 +49,7 @@ export function PersonalInfoTab({ manager }: { manager: EmployeeDetailManagerTyp
                 <p className="text-xs text-gray-500 mt-1">Manage the employee&apos;s personal details</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
                 <div className="flex flex-col gap-1.5">
                     <label className="erp-label">Full Name <span className="text-red-500">*</span></label>
                     <input type="text" className="erp-input" value={name} onChange={(e) => setName(e.target.value)} />
@@ -68,7 +68,7 @@ export function PersonalInfoTab({ manager }: { manager: EmployeeDetailManagerTyp
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-6">
                 <div className="flex flex-col gap-1.5">
                     <label className="erp-label">Place of Birth</label>
                     <input type="text" className="erp-input" placeholder="Enter place of birth" value={placeOfBirth} onChange={(e) => setPlaceOfBirth(e.target.value)} />
@@ -86,7 +86,7 @@ export function PersonalInfoTab({ manager }: { manager: EmployeeDetailManagerTyp
 
                 <div className="flex flex-col gap-1.5 lg:col-span-2">
                     <label className="erp-label">Marital Status</label>
-                    <div className="flex flex-wrap items-center gap-6 h-[38px] px-3 border border-gray-200 rounded-md bg-white w-full">
+                    <div className="flex flex-wrap items-center gap-2 h-[38px] px-3 border border-gray-200 rounded-md bg-white w-full">
                         {(["Single", "Married", "Divorced", "Widowed"] as MaritalStatusType[]).map((m) => (
                             <label key={m} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                                 <input type="radio" checked={maritalStatus === m} onChange={() => setMaritalStatus(m)} className="text-brand-primary" /> {m}
@@ -96,7 +96,7 @@ export function PersonalInfoTab({ manager }: { manager: EmployeeDetailManagerTyp
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                 <div className="flex flex-col gap-1.5">
                     <label className="erp-label">Religion</label>
                     <CustomSelect value={religion} options={["select_an_item", "Islam", "Hinduism", "Christianity", "Buddhism", "Others"]} onChange={setReligion} />

@@ -23,10 +23,10 @@ export function SharedSeoClient({ platform }: { platform: SeoPlatform }) {
     ];
 
     return (
-        <div className="flex flex-col w-full h-full gap-6">
+        <div className="flex flex-col w-full h-full gap-2">
             <h1 className="text-xl font-bold text-gray-900 capitalize">{platform} Pages</h1>
 
-            <div className="flex flex-col md:flex-row gap-6 h-full">
+            <div className="flex flex-col md:flex-row gap-2 h-full">
                 <div className="w-full md:w-64 shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 p-4 h-fit">
                     <nav className="flex flex-col gap-1">
                         {tabs.map((tab) => {

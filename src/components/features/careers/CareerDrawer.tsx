@@ -105,7 +105,7 @@ export function CareerDrawer({ manager }: { manager: CareerManagerType }) {
                 <div className="flex-1 w-full flex flex-col gap-8 px-6 overflow-y-auto custom-scrollbar pb-12">
 
                     {/* Top Section: Basic Info & Image */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                         <div className="lg:col-span-2 flex flex-col gap-1.5">
                             <label className="erp-label">Heading <span className="text-red-500">*</span></label>
                             <input
@@ -139,7 +139,7 @@ export function CareerDrawer({ manager }: { manager: CareerManagerType }) {
                     </div>
 
                     {/* Middle Section: Specs */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Type</label>
                             <CustomSelect

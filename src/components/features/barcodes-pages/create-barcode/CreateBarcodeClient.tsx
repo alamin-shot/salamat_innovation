@@ -9,7 +9,7 @@ export function CreateBarcodeClient() {
                 <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Create barcode</h1>
             </div>
 
-            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 flex flex-col p-6 gap-6">
+            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 flex flex-col p-6 gap-2">
                 <CreateBarcodeForm />
             </div>
         </div>

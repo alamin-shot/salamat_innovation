@@ -4,7 +4,7 @@ export function TelesaleResultFormFields({ manager }: { manager: any }) {
     const colorOptions = ["Grey", "Green", "Yellow", "Red", "Blue"];
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-medium text-gray-600">
                     Name <span className="text-red-500">*</span>

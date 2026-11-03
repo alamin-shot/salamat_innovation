@@ -32,7 +32,7 @@ export function SyncPathaoDrawer({ manager }: { manager: CourierManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-lg mx-auto w-full flex flex-col gap-6">
+                <div className="flex-1 max-w-lg mx-auto w-full flex flex-col gap-2">
                     <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-800 flex gap-3">
                         <RefreshCcw className="h-5 w-5 shrink-0 text-blue-600" />
                         <p>Syncing will pull the latest delivery statuses and new consignment IDs directly from the Pathao merchant API.</p>

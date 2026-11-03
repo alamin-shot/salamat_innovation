@@ -70,9 +70,9 @@ export function EmiDrawer({ manager }: { manager: EmiManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-4xl mx-auto w-full flex flex-col gap-6 px-4 overflow-y-auto custom-scrollbar pb-10">
+                <div className="flex-1 max-w-4xl mx-auto w-full flex flex-col gap-2 px-4 overflow-y-auto custom-scrollbar pb-10">
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5 sm:col-span-1">
                             <label className="erp-label">Bank Name <span className="text-red-500">*</span></label>
                             <input

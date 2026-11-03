@@ -12,7 +12,7 @@ export function DirectorViewClient({ id }: { id: string }) {
     if (!manager.profile) return <div className="p-8">Profile not found.</div>;
 
     return (
-        <div className="flex flex-col w-full h-full p-4 relative overflow-y-auto custom-scrollbar bg-gray-50/50 gap-6">
+        <div className="flex flex-col w-full h-full p-4 relative overflow-y-auto custom-scrollbar bg-gray-50/50 gap-2">
 
             <div className="flex items-center gap-2 text-gray-700 font-bold text-lg tracking-wide uppercase mb-2">
                 <LayoutGrid className="h-5 w-5 text-brand-text" />
@@ -20,7 +20,7 @@ export function DirectorViewClient({ id }: { id: string }) {
             </div>
 
             {/* Header Summary Card */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row justify-between gap-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row justify-between gap-2">
                 <div className="flex gap-4 items-center">
                     <div className="w-16 h-16 rounded-full bg-emerald-800 text-white flex items-center justify-center text-xl font-bold shadow-sm">{manager.profile.avatar}</div>
                     <div className="flex flex-col text-sm">

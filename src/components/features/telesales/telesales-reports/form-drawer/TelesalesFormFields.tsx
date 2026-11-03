@@ -28,7 +28,7 @@ export function TelesalesFormFields({
     const salesmanOptions = ["Jannat Ull Naeem Sarah", "Alamin Rifat", "Md Zihadul Islam Sazzad"];
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             {/* Checkbox 1: Customer is not in our system (enter manually) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
                 <div className="hidden md:block" />

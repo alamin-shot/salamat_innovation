@@ -31,7 +31,7 @@ export function LeaveTab({ manager }: { manager: EmployeeDetailManagerType }) {
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full">
+        <div className="flex flex-col gap-2 h-full">
             <div className="erp-card bg-white p-6 shadow-sm">
                 <div className="border-b border-gray-100 pb-4 mb-6 flex justify-between items-start">
                     <div>

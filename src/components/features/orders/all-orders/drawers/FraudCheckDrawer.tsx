@@ -16,7 +16,7 @@ export function FraudCheckDrawer({ manager }: { manager: OrderManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col gap-8 max-w-4xl mx-auto w-full pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div className="border border-emerald-200 bg-emerald-50/30 rounded-xl p-5 relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
                         <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Genuine Probability</span>

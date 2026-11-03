@@ -8,8 +8,8 @@ export function AddWithdrawalForm({ manager }: { manager: any }) {
     const directorNames = directors.map(d => d.name);
 
     return (
-        <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Title <span className="text-red-500">*</span></label>
                     <input type="text" placeholder="Title" value={manager.title} onChange={(e) => manager.setTitle(e.target.value)} className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] focus:border-emerald-500 focus:outline-none h-9" />
@@ -20,7 +20,7 @@ export function AddWithdrawalForm({ manager }: { manager: any }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Amount <span className="text-red-500">*</span></label>
                     <input type="number" placeholder="Amount" value={manager.amount} onChange={(e) => manager.setAmount(e.target.value === "" ? "" : Number(e.target.value))} className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] focus:border-emerald-500 focus:outline-none h-9" />
@@ -36,7 +36,7 @@ export function AddWithdrawalForm({ manager }: { manager: any }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Attachments</label>
                     <div className="border border-dashed border-emerald-400 bg-emerald-50/30 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:bg-emerald-50 transition-colors">

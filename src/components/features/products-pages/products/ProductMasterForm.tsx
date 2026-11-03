@@ -43,13 +43,13 @@ export function ProductMasterForm({ productId, onCancel, onSave }: ProductMaster
     return (
         <form ref={formRef} onSubmit={handleSubmit} className="flex h-full flex-col bg-brand-bg/30">
             <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                <div className="mx-auto max-w-5xl flex flex-col gap-6">
+                <div className="mx-auto max-w-5xl flex flex-col gap-2">
 
                     {/* CARD 1: PRODUCT INFORMATION */}
-                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-6">
+                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-2">
                         <h3 className="text-sm font-bold text-brand-text uppercase tracking-wider border-b border-brand-subtext/10 pb-3">Product Information</h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-bold text-brand-subtext uppercase tracking-wider">Name <span className="text-red-500">*</span></label>
                                 <input type="text" defaultValue={isEditMode ? "iPhone 13 Pro" : ""} placeholder="Name" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" required />
@@ -137,7 +137,7 @@ export function ProductMasterForm({ productId, onCancel, onSave }: ProductMaster
                     </div>
 
                     {/* CARD 2: PRODUCT IMAGE & VIDEO LINKS */}
-                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-6">
+                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-2">
                         <h3 className="text-sm font-bold text-brand-text uppercase tracking-wider border-b border-brand-subtext/10 pb-3">Product Image & Video</h3>
 
                         <div className="flex flex-col gap-2">
@@ -164,10 +164,10 @@ export function ProductMasterForm({ productId, onCancel, onSave }: ProductMaster
                     </div>
 
                     {/* CARD 3: LOGISTICS & WARRANTY */}
-                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-6">
+                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-2">
                         <h3 className="text-sm font-bold text-brand-text uppercase tracking-wider border-b border-brand-subtext/10 pb-3">Logistics & Warranty</h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-bold text-brand-subtext uppercase tracking-wider">Booking Money</label>
                                 <input type="number" placeholder="Booking Money" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />

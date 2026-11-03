@@ -4,7 +4,7 @@ import { useState } from "react";
 export function CareForm({ productId }: { productId: string | null }) {
     const [content, setContent] = useState("");
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <RichTextEditor
                 label="Care & Maintenance Instructions"
                 value={content}

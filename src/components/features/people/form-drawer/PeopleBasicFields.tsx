@@ -2,13 +2,13 @@ import { ImagePlus } from "lucide-react";
 
 export function PeopleBasicFields({ manager }: { manager: any }) {
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             {/* Customer / Supplier Checkboxes */}
             <div className="flex items-center gap-3">
                 <label
                     className={`flex items-center gap-2.5 rounded-lg border px-4 py-2.5 text-xs font-medium cursor-pointer transition-colors ${manager.isCustomer
-                            ? "border-emerald-500 bg-emerald-50/40 text-emerald-800"
-                            : "border-gray-200 bg-white text-gray-600"
+                        ? "border-emerald-500 bg-emerald-50/40 text-emerald-800"
+                        : "border-gray-200 bg-white text-gray-600"
                         }`}
                 >
                     <input
@@ -22,8 +22,8 @@ export function PeopleBasicFields({ manager }: { manager: any }) {
 
                 <label
                     className={`flex items-center gap-2.5 rounded-lg border px-4 py-2.5 text-xs font-medium cursor-pointer transition-colors ${manager.isSupplier
-                            ? "border-emerald-500 bg-emerald-50/40 text-emerald-800"
-                            : "border-gray-200 bg-white text-gray-600"
+                        ? "border-emerald-500 bg-emerald-50/40 text-emerald-800"
+                        : "border-gray-200 bg-white text-gray-600"
                         }`}
                 >
                     <input
@@ -99,7 +99,7 @@ export function PeopleBasicFields({ manager }: { manager: any }) {
             </div>
 
             {/* Row 3: Profile Picture & Business Logo Uploaders */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:w-2/3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:w-2/3 gap-2">
                 <div className="flex flex-col gap-2">
                     <label className="text-[13px] font-medium text-gray-600">Profile Picture</label>
                     <div className="flex items-center gap-4">

@@ -20,7 +20,7 @@ export function OutletClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Outlets</h1>
                 <Button variant="default" onClick={manager.openAddDrawer} className="flex items-center gap-2">

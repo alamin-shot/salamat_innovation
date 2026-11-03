@@ -18,7 +18,7 @@ export function MediaClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             {/* Header & Actions */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -49,7 +49,7 @@ export function MediaClient() {
                 </div>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden p-6 gap-6">
+            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden p-6 gap-2">
 
                 {/* Folders Section */}
                 {manager.currentFolders.length > 0 && (

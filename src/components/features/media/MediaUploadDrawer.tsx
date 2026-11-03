@@ -29,7 +29,7 @@ export function MediaUploadDrawer({ isOpen, onClose, manager }: MediaUploadDrawe
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col gap-6 px-4 overflow-y-auto custom-scrollbar pb-10">
+                <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col gap-2 px-4 overflow-y-auto custom-scrollbar pb-10">
                     <div className="border-2 border-dashed border-gray-300 rounded-xl h-64 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-brand-primary/5 cursor-pointer transition-colors">
                         <Upload className="h-10 w-10 text-brand-primary" />
                         <span className="text-sm font-semibold text-gray-700">Click to upload or drag and drop</span>

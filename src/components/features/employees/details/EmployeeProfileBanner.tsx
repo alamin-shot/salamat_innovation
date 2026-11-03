@@ -9,7 +9,7 @@ export function EmployeeProfileBanner({ manager }: { manager: EmployeeDetailMana
     const colorClass = getAvatarColorClass(emp.id);
 
     return (
-        <div className="w-full erp-card bg-white p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-6 shadow-sm border-t-4 border-t-brand-primary">
+        <div className="w-full erp-card bg-white p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-2 shadow-sm border-t-4 border-t-brand-primary">
 
             {/* Avatar & Name Info */}
             <div className="flex items-center gap-4 min-w-[240px]">

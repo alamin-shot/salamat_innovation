@@ -8,7 +8,7 @@ export function DamageQueueSection({ manager, onClose }: { manager: any; onClose
     const isEmpty = manager.stagedSerials.length === 0;
 
     return (
-        <div className="flex flex-col gap-6 mt-2">
+        <div className="flex flex-col gap-2 mt-2">
             {/* Serial Search Input */}
             <div className="flex flex-col gap-1.5 w-full md:w-1/2 lg:w-5/12">
                 <label className="text-[12px] text-gray-700 font-semibold">

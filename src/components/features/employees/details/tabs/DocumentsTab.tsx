@@ -15,7 +15,7 @@ export function DocumentsTab({ manager }: { manager: EmployeeDetailManagerType }
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full">
+        <div className="flex flex-col gap-2 h-full">
             <div className="erp-card bg-white p-6 shadow-sm">
                 <div className="border-b border-gray-100 pb-4 mb-6">
                     <h2 className="text-lg font-bold text-gray-900">Documents</h2>
@@ -23,7 +23,7 @@ export function DocumentsTab({ manager }: { manager: EmployeeDetailManagerType }
                 </div>
 
                 <div className="bg-gray-50/50 border border-gray-100 rounded-lg p-5 mb-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start">
                         <div className="flex flex-col gap-3">
                             <label className="erp-label">Document Name <span className="text-red-500">*</span></label>
                             <input

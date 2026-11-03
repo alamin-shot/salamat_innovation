@@ -122,7 +122,7 @@ export function AttendanceReportClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-5 p-4">
+        <div className="flex flex-col w-full h-full gap-2">
             {/* Top Bar */}
             <div className="flex flex-wrap justify-between items-center gap-4">
                 <div className="flex flex-wrap items-center gap-3">
@@ -540,7 +540,7 @@ export function AttendanceReportClient() {
                 width="drawer-full-content"
             >
                 <div className="flex flex-col h-full pt-6">
-                    <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6 max-w-2xl">
+                    <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-2 max-w-2xl">
                         <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs text-gray-600">
                             Changes saved here immediately recalculate the <strong>30-Day Attendance Matrix</strong>,{" "}
                             <strong>Master Attendances Ledger</strong>, and <strong>Net Payable Days</strong>.

@@ -2,7 +2,7 @@ import { CustomSelect } from "@/components/ui/CustomSelect";
 
 export function ExpenseFormFields({ manager }: { manager: any }) {
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Shop Name <span className="text-red-500">*</span></label>

@@ -14,7 +14,7 @@ export function AttendanceCalendarTab({ manager }: { manager: EmployeeDetailMana
                 <p className="text-xs text-gray-500 mt-1">Monthly attendance calendar and statistics</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
 
                 {/* Calendar Grid */}
                 <div className="lg:col-span-2 border border-gray-100 rounded-lg p-5 shadow-sm">
@@ -35,8 +35,8 @@ export function AttendanceCalendarTab({ manager }: { manager: EmployeeDetailMana
                             return (
                                 <div key={day} className="flex justify-center items-center h-8">
                                     <div className={`w-8 h-8 flex items-center justify-center text-sm rounded-full font-medium ${isLate ? "bg-amber-100 text-amber-700 ring-1 ring-amber-400" :
-                                            isRegular ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500" :
-                                                "text-gray-700 hover:bg-gray-100"
+                                        isRegular ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500" :
+                                            "text-gray-700 hover:bg-gray-100"
                                         }`}>
                                         {day}
                                     </div>
@@ -58,7 +58,7 @@ export function AttendanceCalendarTab({ manager }: { manager: EmployeeDetailMana
                 {/* Right Side Stats */}
                 <div className="border border-gray-100 rounded-lg p-5 shadow-sm bg-gray-50/30 flex flex-col">
                     <h3 className="text-sm font-bold text-gray-900 mb-6">Leave Overview</h3>
-                    <div className="flex-1 flex flex-col justify-center gap-6">
+                    <div className="flex-1 flex flex-col justify-center gap-2">
                         <div className="flex items-center justify-between">
                             <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Days</span>
                             <span className="text-xl font-bold text-gray-900">0</span>

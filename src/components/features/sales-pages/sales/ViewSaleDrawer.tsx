@@ -23,7 +23,7 @@ export function ViewSaleDrawer({ id, isOpen, onClose }: { id: string | null, isO
             onClose={onClose}
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
-            <div className="flex flex-col gap-6 p-4 bg-brand-bg/10 min-h-full">
+            <div className="flex flex-col gap-2 p-4 bg-brand-bg/10 min-h-full">
 
                 <div className="flex justify-end max-w-4xl mx-auto w-full">
                     <Button variant="success" onClick={() => handlePrint()} className="flex items-center gap-2">

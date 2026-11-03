@@ -8,7 +8,7 @@ interface ProductPreviewContentProps {
 export function ProductPreviewContent({ productId }: ProductPreviewContentProps) {
 
     return (
-        <div className="flex flex-col gap-6 p-6">
+        <div className="flex flex-col gap-2 p-6">
             {/* Visual Header Banner */}
             <div className="flex flex-col items-center justify-center rounded-2xl bg-brand-bg/60 p-8 border border-brand-subtext/10">
                 <div className="flex h-24 w-24 items-center justify-center rounded-xl bg-white shadow-md border border-brand-subtext/10 mb-4">

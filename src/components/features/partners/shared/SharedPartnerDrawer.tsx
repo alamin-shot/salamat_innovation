@@ -24,9 +24,9 @@ export function SharedPartnerDrawer({
         <Drawer title={`${isEdit ? "Update" : "Add"} ${partnerType}`} isOpen={isOpen} onClose={onClose} width="w-full max-w-none lg:w-[calc(100vw-280px)]">
             <div className="flex flex-col h-full bg-gray-50/50">
                 <div className="flex-1 overflow-y-auto p-4">
-                    <div className="flex flex-col gap-6 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100 max-w-4xl mx-auto">
+                    <div className="flex flex-col gap-2 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100 max-w-4xl mx-auto">
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="erp-label">Name <span className="text-red-500">*</span></label>
                                 <input type="text" value={form.name} onChange={(e) => form.setName(e.target.value)} className="erp-input" />
@@ -37,7 +37,7 @@ export function SharedPartnerDrawer({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="erp-label">Primary Phone <span className="text-red-500">*</span></label>
                                 <input type="text" value={form.primaryPhone} onChange={(e) => form.setPrimaryPhone(e.target.value)} className="erp-input" />
@@ -48,7 +48,7 @@ export function SharedPartnerDrawer({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="erp-label">Business Name <span className="text-red-500">*</span></label>
                                 <input type="text" value={form.businessName} onChange={(e) => form.setBusinessName(e.target.value)} className="erp-input" />
@@ -59,7 +59,7 @@ export function SharedPartnerDrawer({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="erp-label">Business Logo</label>
                                 <input type="file" ref={form.fileInputRef} onChange={form.handleFileChange} accept="image/*" className="hidden" />

@@ -15,7 +15,7 @@ export function PaymentFormFields({
     const formatCurrency = (amount: number) => `৳ ${amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="rounded-lg bg-cyan-50/80 p-4 border border-cyan-100 flex flex-col gap-1">
                 <div className="text-[13px] text-cyan-800 font-medium">
                     {bannerType}: <span className="font-semibold">{record.name}</span>

@@ -5,7 +5,7 @@ export function OrderOptionFormFields({ manager }: { manager: any }) {
     const colorOptions = ["Grey", "Pink", "Green", "Yellow", "Red", "Blue"];
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-medium text-gray-600">
                     Type <span className="text-red-500">*</span>

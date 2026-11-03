@@ -65,7 +65,7 @@ export function JobHistoryEditDrawer({ manager }: { manager: EmployeeDetailManag
     return (
         <Drawer title={getTitle()} isOpen={isOpen} onClose={manager.closeSubDrawer} width="w-full sm:w-[calc(100vw-260px)]">
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6">
+                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-2">
 
                     <div className="bg-blue-50 text-blue-800 text-xs p-3 rounded border border-blue-200 leading-relaxed mb-2">
                         Updating this record will automatically close the current timeline entry and set this new value as <strong>CURRENT</strong>.

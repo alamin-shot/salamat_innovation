@@ -36,9 +36,9 @@ export function ViewTelesaleDrawer({
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
             <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-6">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-2">
                     {/* Row 1: Date & Customer Type */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Date</span>
                             <span className="text-sm font-medium text-gray-800">{data.date}</span>
@@ -50,7 +50,7 @@ export function ViewTelesaleDrawer({
                     </div>
 
                     {/* Row 2: Customer & Customer Number */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Customer</span>
                             <span className="text-sm font-medium text-gray-800">{data.customer}</span>
@@ -68,7 +68,7 @@ export function ViewTelesaleDrawer({
                     </div>
 
                     {/* Row 4: Customer Demand & Media */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Customer Demand</span>
                             <span className="text-sm font-medium text-gray-800">{data.customerDemand}</span>
@@ -80,7 +80,7 @@ export function ViewTelesaleDrawer({
                     </div>
 
                     {/* Row 5: Result & Salesman Name */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1 items-start">
                             <span className="text-xs font-semibold text-gray-400">Result</span>
                             <Badge variant={data.result === "Shop Visit" ? "success" : "default"}>

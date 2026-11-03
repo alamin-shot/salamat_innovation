@@ -27,7 +27,7 @@ export function PunchLocationDrawer({ locationData, onClose }: PunchLocationDraw
             width="drawer-full-content"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6 max-w-4xl">
+                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-2 max-w-4xl">
                     <div className="w-full h-80 rounded-xl overflow-hidden border border-gray-200 shadow-xs bg-gray-100 relative">
                         <iframe
                             title="Live Punch Location"

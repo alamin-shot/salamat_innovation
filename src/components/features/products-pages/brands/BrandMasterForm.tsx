@@ -68,7 +68,7 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
         <form onSubmit={handleSubmit} className="flex h-full flex-col bg-brand-bg/30">
             {/* Scrollable Form Content */}
             <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                <div className="mx-auto max-w-4xl flex flex-col gap-6">
+                <div className="mx-auto max-w-4xl flex flex-col gap-2">
 
                     {/* CARD 1: Basic Information */}
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-5">
@@ -138,7 +138,7 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
                             Brand Media
                         </h3>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             {mediaSlots.map(({ key, label }) => {
                                 const currentImage = media[key];
                                 return (

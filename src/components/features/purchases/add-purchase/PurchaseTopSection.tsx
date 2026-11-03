@@ -11,7 +11,7 @@ export function PurchaseTopSection({ manager }: { manager: Manager }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             {/* Left Side */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-600">Supplier</label>
                     <div className="flex gap-2">
@@ -42,7 +42,7 @@ export function PurchaseTopSection({ manager }: { manager: Manager }) {
             </div>
 
             {/* Right Side */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-600">Date <span className="text-red-500">*</span></label>
                     <input type="date" value={manager.date} onChange={(e) => manager.setDate(e.target.value)} className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />

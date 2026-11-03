@@ -85,10 +85,10 @@ export function OffersDrawer({ manager }: { manager: OffersManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col gap-6 px-4 overflow-y-auto custom-scrollbar pb-10">
+                <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col gap-2 px-4 overflow-y-auto custom-scrollbar pb-10">
 
                     {/* Header Row */}
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
                         <div className="flex flex-col gap-1.5 lg:col-span-3">
                             <label className="erp-label">Title <span className="text-red-500">*</span></label>
                             <input
@@ -128,7 +128,7 @@ export function OffersDrawer({ manager }: { manager: OffersManagerType }) {
                     </div>
 
                     {/* Settings Row */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Start At <span className="text-red-500">*</span></label>
                             <DatePicker

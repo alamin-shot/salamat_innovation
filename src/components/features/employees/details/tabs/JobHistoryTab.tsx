@@ -69,7 +69,7 @@ export function JobHistoryTab({ manager }: { manager: EmployeeDetailManagerType 
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {renderHistoryCard("Department", "department", <Building2 className="w-5 h-5" />, "blue", jobHistory.department)}
                 {renderHistoryCard("Designation", "designation", <Badge className="w-5 h-5" />, "purple", jobHistory.designation)}
                 {renderHistoryCard("Employee Status", "employeeStatus", <ShieldCheck className="w-5 h-5" />, "orange", jobHistory.employeeStatus)}

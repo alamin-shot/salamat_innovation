@@ -90,7 +90,7 @@ export function BlogPostDrawer({ manager }: { manager: BlogPostManagerType }) {
             <div className="flex flex-col h-full pt-6">
                 <div className="flex-1 w-full flex flex-col gap-8 px-6 overflow-y-auto custom-scrollbar pb-12">
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Category <span className="text-red-500">*</span></label>
                             <CustomSelect
@@ -132,7 +132,7 @@ export function BlogPostDrawer({ manager }: { manager: BlogPostManagerType }) {
 
                     <RichTextEditor label="Content" value={content} onChange={setContent} />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Thumbnail <span className="text-red-500">*</span></label>
                             <div className="border-2 border-dashed border-gray-300 rounded-lg h-32 flex flex-col items-center justify-center text-gray-500 hover:bg-gray-50 cursor-pointer">
@@ -149,7 +149,7 @@ export function BlogPostDrawer({ manager }: { manager: BlogPostManagerType }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Reading Time (minutes)</label>
                             <input
@@ -171,7 +171,7 @@ export function BlogPostDrawer({ manager }: { manager: BlogPostManagerType }) {
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-6 items-center pt-2">
+                    <div className="flex flex-wrap gap-2 items-center pt-2">
                         <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                             <input type="checkbox" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} className="rounded border-gray-300 text-brand-primary" />
                             Published

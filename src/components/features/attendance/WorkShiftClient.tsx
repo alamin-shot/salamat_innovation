@@ -44,7 +44,7 @@ export function WorkShiftClient() {
     const empOptions = store.employees.map((e) => `${e.name} (${e.empCode})`);
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2">
             <div className="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h1 className="text-xl font-bold text-gray-900">Work Shift</h1>

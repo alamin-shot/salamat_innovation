@@ -38,14 +38,14 @@ export function AttendanceTab({ manager }: { manager: EmployeeDetailManagerType 
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full">
+        <div className="flex flex-col gap-2 h-full">
             <div className="erp-card bg-white p-6 shadow-sm">
                 <div className="border-b border-gray-100 pb-4 mb-6">
                     <h2 className="text-lg font-bold text-gray-900">Attendance</h2>
                     <p className="text-xs text-gray-500 mt-1">November 2026 — current month overview</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                     {/* Donut Chart Card */}
                     <div className="lg:col-span-1 border border-gray-100 rounded-lg p-5 flex items-center justify-between shadow-sm">
                         <div className="flex flex-col">
@@ -153,7 +153,7 @@ export function AttendanceTab({ manager }: { manager: EmployeeDetailManagerType 
                                     </TableCell>
                                     <TableCell>
                                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${log.behavior === "regular" ? "bg-emerald-50 text-emerald-600 border-emerald-200" :
-                                                log.behavior === "late" ? "bg-amber-50 text-amber-600 border-amber-200" : "bg-rose-50 text-rose-600 border-rose-200"
+                                            log.behavior === "late" ? "bg-amber-50 text-amber-600 border-amber-200" : "bg-rose-50 text-rose-600 border-rose-200"
                                             }`}>
                                             {log.behavior}
                                         </span>

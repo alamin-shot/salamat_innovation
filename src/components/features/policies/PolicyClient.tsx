@@ -12,14 +12,14 @@ export function PolicyClient({ tenant }: { tenant: TenantType }) {
     const title = tenant === "salamat" ? "Salamat Policy Settings" : "Tekzo Policy Settings";
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                     <ShieldCheck className="w-6 h-6 text-brand-primary" /> {title}
                 </h1>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-6 items-start">
+            <div className="flex flex-col lg:flex-row gap-2 items-start">
 
                 {/* Left Column: Vertical Tabs */}
                 <div className="w-full lg:w-64 shrink-0 erp-card bg-white p-2 flex flex-col gap-1">
@@ -41,7 +41,7 @@ export function PolicyClient({ tenant }: { tenant: TenantType }) {
                 </div>
 
                 {/* Right Column: Editor & Actions */}
-                <div className="flex-1 w-full erp-card bg-white p-6 flex flex-col gap-6">
+                <div className="flex-1 w-full erp-card bg-white p-6 flex flex-col gap-2">
                     <div className="border-b border-gray-100 pb-4">
                         <h2 className="text-lg font-bold text-gray-800">{activeTabLabel}</h2>
                         <p className="text-xs text-gray-500 mt-1">

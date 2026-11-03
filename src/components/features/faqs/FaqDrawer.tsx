@@ -62,10 +62,10 @@ export function FaqDrawer({ manager }: { manager: FaqManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 w-full flex flex-col gap-6 px-6 overflow-y-auto custom-scrollbar pb-12">
+                <div className="flex-1 w-full flex flex-col gap-2 px-6 overflow-y-auto custom-scrollbar pb-12">
 
                     {/* Top Section: Meta Data */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Shop Name (Tenant) <span className="text-red-500">*</span></label>
                             <CustomSelect
@@ -113,7 +113,7 @@ export function FaqDrawer({ manager }: { manager: FaqManagerType }) {
                     </div>
 
                     {/* Translatable Inputs */}
-                    <div className="flex flex-col gap-6 animate-in fade-in duration-300">
+                    <div className="flex flex-col gap-2 animate-in fade-in duration-300">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Question ({activeTab.toUpperCase()}) <span className="text-red-500">*</span></label>
                             <textarea

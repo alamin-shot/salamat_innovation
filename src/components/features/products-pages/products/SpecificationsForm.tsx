@@ -75,7 +75,7 @@ export function SpecificationsForm({ productId }: SpecificationsFormProps) {
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full">
+        <div className="flex flex-col gap-2 h-full">
 
             {/* The Magic Scraper Zone */}
             <div className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-5 shadow-sm transition-colors hover:border-indigo-300">

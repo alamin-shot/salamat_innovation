@@ -37,8 +37,8 @@ export function EditPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
                         </div>
                     </div>
 
-                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-6 shadow-sm flex flex-col gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold text-brand-subtext flex items-center gap-1.5">
                                     <UserCheck className="h-4 w-4 text-emerald-600" /> Supplier Name

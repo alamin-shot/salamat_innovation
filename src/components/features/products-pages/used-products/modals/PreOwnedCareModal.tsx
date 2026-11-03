@@ -27,7 +27,7 @@ export function PreOwnedCareModal({ productId }: PreOwnedCareModalProps) {
     };
 
     return (
-        <div className="flex flex-col gap-6 p-6 min-h-[300px]">
+        <div className="flex flex-col gap-2 p-6 min-h-[300px]">
             <div className="flex flex-col gap-2 relative max-w-xl">
                 <label className="text-xs font-bold text-brand-subtext uppercase tracking-wider">Select Care</label>
 

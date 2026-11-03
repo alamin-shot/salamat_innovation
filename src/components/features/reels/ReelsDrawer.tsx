@@ -60,7 +60,7 @@ export function ReelsDrawer({ manager }: { manager: ReelsManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col gap-6">
+                <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col gap-2">
 
                     {/* Product Selection */}
                     <div className="flex flex-col gap-1.5">

@@ -34,8 +34,8 @@ export function ViewOrderOptionDrawer({
     return (
         <Drawer title="Order Option Details" isOpen={isOpen} onClose={onClose} width="w-full max-w-none lg:w-[calc(100vw-280px)]">
             <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-b border-gray-100 pb-5">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-gray-100 pb-5">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Type</span>
                             <span className="text-sm font-medium text-gray-800">{data.type}</span>
@@ -50,7 +50,7 @@ export function ViewOrderOptionDrawer({
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1">
                             <span className="text-xs font-semibold text-gray-400">Sort Order</span>
                             <span className="text-sm font-medium text-gray-800">{data.sortOrder}</span>

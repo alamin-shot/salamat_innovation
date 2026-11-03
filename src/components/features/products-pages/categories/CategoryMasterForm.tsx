@@ -22,7 +22,7 @@ export function CategoryMasterForm({ categoryId, onSave }: CategoryMasterFormPro
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-2xl mx-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-2xl mx-auto">
             <h2 className="text-lg font-bold text-brand-text mb-2">
                 {isEditMode ? "Update Category" : "Add Category"}
             </h2>

@@ -100,13 +100,13 @@ export function OutletDrawer({ manager }: { manager: OutletManagerType }) {
                 <div className="flex-1 w-full flex flex-col gap-8 px-6 overflow-y-auto custom-scrollbar pb-12">
 
                     {/* Basic Info & Main Image */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div className="lg:col-span-2 flex flex-col gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+                        <div className="lg:col-span-2 flex flex-col gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="erp-label">Name <span className="text-red-500">*</span></label>
                                 <input type="text" className="erp-input" value={name} onChange={(e) => setName(e.target.value)} />
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <div className="flex flex-col gap-1.5">
                                     <label className="erp-label">Phone</label>
                                     <input type="text" className="erp-input" value={phone} onChange={(e) => setPhone(e.target.value)} />
@@ -135,7 +135,7 @@ export function OutletDrawer({ manager }: { manager: OutletManagerType }) {
                         <textarea className="erp-input h-16 resize-none" value={address} onChange={(e) => setAddress(e.target.value)} />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Country <span className="text-red-500">*</span></label>
                             <CustomSelect value={country} options={["Bangladesh", "India", "UAE"]} onChange={setCountry} />
@@ -150,7 +150,7 @@ export function OutletDrawer({ manager }: { manager: OutletManagerType }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Postal Code</label>
                             <input type="text" className="erp-input" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
@@ -164,7 +164,7 @@ export function OutletDrawer({ manager }: { manager: OutletManagerType }) {
                     <hr className="border-gray-100" />
 
                     {/* Operations */}
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Opens <span className="text-red-500">*</span></label>
                             <input type="time" className="erp-input" value={opens} onChange={(e) => setOpens(e.target.value)} />

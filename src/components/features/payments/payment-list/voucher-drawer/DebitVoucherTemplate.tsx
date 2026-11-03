@@ -21,7 +21,7 @@ export function DebitVoucherTemplate({ record }: { record: PaymentLog }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-4 gap-2">
                 <div className="col-span-3 flex flex-col gap-4">
                     <div className="grid grid-cols-[130px_1fr] text-[13px]">
                         <span className="font-semibold text-gray-700">Paid to</span>

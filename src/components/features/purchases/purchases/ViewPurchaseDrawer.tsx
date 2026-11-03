@@ -25,7 +25,7 @@ export function ViewPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
             onClose={onClose}
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
-            <div className="flex flex-col gap-6 p-4 bg-brand-bg/10 min-h-full">
+            <div className="flex flex-col gap-2 p-4 bg-brand-bg/10 min-h-full">
                 {/* Print Action Bar */}
                 <div className="flex justify-end max-w-3xl mx-auto w-full">
                     <Button
@@ -41,7 +41,7 @@ export function ViewPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
                 {/* Invoice Paper Document - Attach the ref here */}
                 <div
                     ref={invoiceRef}
-                    className="w-full max-w-3xl bg-white shadow-sm border border-brand-subtext/15 p-6 sm:p-8 flex flex-col gap-6 rounded-xl mx-auto print:shadow-none print:border-none print:m-0"
+                    className="w-full max-w-3xl bg-white shadow-sm border border-brand-subtext/15 p-6 sm:p-8 flex flex-col gap-2 rounded-xl mx-auto print:shadow-none print:border-none print:m-0"
                 >
                     <div className="flex justify-between items-start">
                         <div className="flex flex-col gap-1 text-sm text-brand-text">
@@ -102,7 +102,7 @@ export function ViewPurchaseDrawer({ id, isOpen, onClose }: { id: string | null,
                     </div>
 
                     {/* Summary Totals */}
-                    <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mt-4 border-t border-brand-subtext/20 pt-4 text-sm text-brand-text">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mt-4 border-t border-brand-subtext/20 pt-4 text-sm text-brand-text">
                         <div className="flex flex-col gap-2 w-full sm:w-1/2 text-xs">
                             <div className="flex justify-between w-full sm:w-56"><span className="font-semibold">Total Quantity</span><span>: 1 PCS</span></div>
                             <div className="flex justify-between w-full sm:w-56"><span className="font-semibold">Payment Method</span><span>: Cash</span></div>

@@ -14,9 +14,9 @@ export function AddExpenseForm({ manager }: { manager: any }) {
     const paymentOptions = ["Cash", "Bkash", "Nagad", "Bank Transfer"];
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             {/* Row 1: Title and Date */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">
                         Title <span className="text-red-500">*</span>
@@ -43,7 +43,7 @@ export function AddExpenseForm({ manager }: { manager: any }) {
             </div>
 
             {/* Row 2: Amount and Category */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">
                         Amount <span className="text-red-500">*</span>
@@ -70,7 +70,7 @@ export function AddExpenseForm({ manager }: { manager: any }) {
             </div>
 
             {/* Row 3: Payment Method and Attachments */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">
                         Payment Method <span className="text-red-500">*</span>

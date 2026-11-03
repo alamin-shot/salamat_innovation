@@ -25,11 +25,11 @@ export function ProductForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full">
-            <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 w-full">
+            <div className="grid grid-cols-1 items-start gap-2 lg:grid-cols-3">
 
                 {/* LEFT COLUMN: Main Information */}
-                <div className="flex flex-col gap-6 lg:col-span-2">
+                <div className="flex flex-col gap-2 lg:col-span-2">
 
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm">
                         <h3 className="mb-4 text-sm font-bold text-brand-text">Product Information</h3>
@@ -86,7 +86,7 @@ export function ProductForm() {
                 </div>
 
                 {/* RIGHT COLUMN: Media & Metadata */}
-                <div className="flex flex-col gap-6 lg:col-span-1">
+                <div className="flex flex-col gap-2 lg:col-span-1">
 
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm">
                         <h3 className="mb-4 text-sm font-bold text-brand-text">Product Image</h3>

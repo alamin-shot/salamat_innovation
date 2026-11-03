@@ -18,7 +18,7 @@ export function AddSupplierModal({ isOpen, onClose }: { isOpen: boolean, onClose
                 </div>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-                    <form className="flex flex-col gap-6">
+                    <form className="flex flex-col gap-2">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-bold text-brand-subtext">Supplier Name *</label>
@@ -45,7 +45,7 @@ export function AddSupplierModal({ isOpen, onClose }: { isOpen: boolean, onClose
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-bold text-brand-subtext">Profile Picture</label>
                                 <div className="flex items-center gap-4 rounded-md border border-dashed border-brand-subtext/30 bg-brand-bg/10 p-3">

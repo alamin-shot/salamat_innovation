@@ -19,7 +19,7 @@ export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     {/* Left: Supplier & Upload */}
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="text-[13px] text-gray-500">Supplier</label>
                             <p className="text-[14px] font-medium text-gray-800 mt-1">World Trade Center</p>
@@ -40,7 +40,7 @@ export function EditPurchaseReturnDrawer({ id, isOpen, onClose }: { id: string |
                     </div>
 
                     {/* Right: Date */}
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="text-[13px] text-gray-500">Date <span className="text-red-500">*</span></label>
                             <input type="date" defaultValue="2026-10-08" className="w-full rounded border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none" />

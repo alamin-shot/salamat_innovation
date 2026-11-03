@@ -48,7 +48,7 @@ export function EditHistoryDrawer({ id, isOpen, onClose }: { id: string | null, 
 
                 {/* Body */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-                    <form id="edit-history-form" onSubmit={handleSave} className="mx-auto max-w-3xl flex flex-col gap-6">
+                    <form id="edit-history-form" onSubmit={handleSave} className="mx-auto max-w-3xl flex flex-col gap-2">
                         {/* Read-Only Identity Card */}
                         <div className="rounded-xl border border-brand-subtext/20 bg-brand-bg/30 p-5 flex items-start gap-4">
                             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-brand-subtext/15 bg-white">
@@ -62,7 +62,7 @@ export function EditHistoryDrawer({ id, isOpen, onClose }: { id: string | null, 
                         </div>
 
                         {/* Editable Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-bold text-brand-subtext tracking-wider">
                                     Entity Name (Customer/Supplier) <span className="text-red-500">*</span>

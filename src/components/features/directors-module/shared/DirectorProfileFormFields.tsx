@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/Button";
 
 export function DirectorProfileFormFields({ manager }: { manager: any }) {
     return (
-        <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Full Name <span className="text-red-500">*</span></label>
                     <input type="text" value={manager.fullName} onChange={(e) => manager.setFullName(e.target.value)} className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] focus:border-emerald-500 focus:outline-none h-9" />
@@ -15,7 +15,7 @@ export function DirectorProfileFormFields({ manager }: { manager: any }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Email <span className="text-red-500">*</span></label>
                     <input type="email" value={manager.email} onChange={(e) => manager.setEmail(e.target.value)} className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] focus:border-emerald-500 focus:outline-none h-9" />
@@ -26,7 +26,7 @@ export function DirectorProfileFormFields({ manager }: { manager: any }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Password <span className="text-red-500">*</span></label>
                     <div className="relative">

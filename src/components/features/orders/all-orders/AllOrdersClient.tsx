@@ -15,7 +15,7 @@ export function AllOrdersClient() {
     const manager = useOrderManager();
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             <h1 className="text-xl font-bold text-gray-900">All Orders</h1>
 
             <div className="flex-1 erp-card flex flex-col p-0 overflow-hidden">

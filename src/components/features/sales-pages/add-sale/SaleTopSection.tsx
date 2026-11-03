@@ -8,7 +8,7 @@ type Manager = ReturnType<typeof useAddSaleManager>;
 
 export function SaleTopSection({ manager }: { manager: Manager }) {
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-500">Customer Info</label>

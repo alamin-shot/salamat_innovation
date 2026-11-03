@@ -20,7 +20,7 @@ export function DirectorListClient() {
 
             <div className="flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-2 pb-10">
                 {manager.directorCards.map(card => (
-                    <div key={card.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div key={card.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col md:flex-row items-center justify-between gap-2">
 
                         {/* Left: Info */}
                         <div className="flex items-center gap-5 w-full md:w-auto">

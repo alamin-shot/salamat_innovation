@@ -9,7 +9,7 @@ export function EliteClient() {
     const manager = useEliteManager();
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Elite Loyalty Tiers</h1>
 
@@ -24,7 +24,7 @@ export function EliteClient() {
                         No Elite Tiers found. Create one to get started.
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
                         {manager.tiers.map(tier => (
                             <EliteCard
                                 key={tier.id}

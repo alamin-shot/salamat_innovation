@@ -37,7 +37,7 @@ export function WarrantyDrawer({ manager }: { manager: WarrantyManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)] md:w-[700px]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 w-full flex flex-col gap-6 px-4 overflow-y-auto custom-scrollbar pb-10">
+                <div className="flex-1 w-full flex flex-col gap-2 px-4 overflow-y-auto custom-scrollbar pb-10">
 
                     {/* Read-Only Context Block */}
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">

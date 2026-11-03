@@ -43,7 +43,7 @@ export function EmployeeDetailClient({ employeeId }: { employeeId: string }) {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             <div className="flex items-center gap-4">
                 <Button
                     variant="outline"
@@ -60,7 +60,7 @@ export function EmployeeDetailClient({ employeeId }: { employeeId: string }) {
             <EmployeeProfileBanner manager={manager} />
 
             {/* Main Content Split */}
-            <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
+            <div className="flex flex-col lg:flex-row gap-2 items-start w-full">
                 <EmployeeTabSidebar manager={manager} />
                 <div className="flex-1 w-full min-w-0">
                     {renderActiveTab()}

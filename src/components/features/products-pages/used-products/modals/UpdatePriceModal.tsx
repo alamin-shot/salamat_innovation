@@ -19,7 +19,7 @@ export function UpdatePriceModal({ productId }: UpdatePriceModalProps) {
     };
 
     return (
-        <div className="flex flex-col gap-6 p-6">
+        <div className="flex flex-col gap-2 p-6">
             {/* Product Summary Header Card */}
             <div className="flex items-center gap-4 rounded-xl border border-brand-subtext/10 bg-brand-bg/50 p-4">
                 <div className="relative h-14 w-14 overflow-hidden rounded-lg border border-brand-subtext/20 bg-white shrink-0">

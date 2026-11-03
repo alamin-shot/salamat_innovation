@@ -20,7 +20,7 @@ export function NewsClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-6 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">News</h1>
                 <Button variant="success" onClick={manager.openAddDrawer} className="h-9 px-4 gap-2">

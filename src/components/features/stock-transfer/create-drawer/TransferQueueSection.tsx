@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 
 export function TransferQueueSection({ manager, onClose }: { manager: any, onClose: () => void }) {
     return (
-        <div className="flex flex-col gap-6 mt-2">
+        <div className="flex flex-col gap-2 mt-2">
             <div className="flex flex-col gap-1.5 w-full md:w-1/3">
                 <label className="text-[13px] text-gray-500 font-medium">Search by Serial Number</label>
                 <input type="text" placeholder="Type serial number..." className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600 focus:outline-none focus:border-emerald-500 shadow-sm" />

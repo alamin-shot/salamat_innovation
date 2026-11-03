@@ -30,7 +30,7 @@ export function LocationViewDrawer({ isOpen, onClose, locationData }: LocationVi
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6 max-w-4xl mx-auto w-full">
+                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-2 max-w-4xl mx-auto w-full">
 
                     {/* Map Area */}
                     <div className="w-full h-80 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden relative shadow-sm">

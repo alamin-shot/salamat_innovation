@@ -24,7 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex flex-1 flex-col overflow-hidden w-full transition-all duration-300">
                 <AdminHeader toggleSidebar={toggleSidebar} isSidebarOpen={isMobileOpen} />
 
-                <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 custom-scrollbar">
+                <main className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                     {children}
                 </main>
             </div>

@@ -17,7 +17,7 @@ export function ApplicantDrawer({ manager }: { manager: ApplicantManagerType }) 
             width="w-full sm:w-[calc(100vw-260px)]" // Strictly stretches to the sidebar
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 w-full flex flex-col gap-6 px-4 overflow-y-auto custom-scrollbar pb-10">
+                <div className="flex-1 w-full flex flex-col gap-2 px-4 overflow-y-auto custom-scrollbar pb-10">
 
                     {/* Header Profile Block with CV Download */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-100 shadow-sm rounded-lg p-5 gap-4">
@@ -51,8 +51,8 @@ export function ApplicantDrawer({ manager }: { manager: ApplicantManagerType }) 
 
                             <div className="flex flex-col items-end gap-1.5">
                                 <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${activeApplicant.status === 'Shortlisted' ? 'bg-green-50 text-green-600' :
-                                        activeApplicant.status === 'Rejected' ? 'bg-red-50 text-red-500' :
-                                            'bg-amber-50 text-amber-600'
+                                    activeApplicant.status === 'Rejected' ? 'bg-red-50 text-red-500' :
+                                        'bg-amber-50 text-amber-600'
                                     }`}>
                                     {activeApplicant.status}
                                 </span>
@@ -104,7 +104,7 @@ export function ApplicantDrawer({ manager }: { manager: ApplicantManagerType }) 
                     <hr className="border-gray-100 border-dashed" />
 
                     {/* Long Form Content */}
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-2">
                         <div>
                             <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2 mb-3">
                                 <Sparkles className="h-4 w-4 text-amber-500" /> Skills

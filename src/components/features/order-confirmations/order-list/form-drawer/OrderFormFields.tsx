@@ -8,7 +8,7 @@ export function OrderFormFields({ manager }: { manager: any }) {
     const salesmanOptions = ["Jannat Ull Naeem Sarah", "Alamin Rifat"];
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             {/* Row 1: Dates & Customer */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="flex flex-col gap-1.5">

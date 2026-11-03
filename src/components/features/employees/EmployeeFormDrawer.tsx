@@ -83,8 +83,8 @@ export function EmployeeFormDrawer({ manager }: { manager: EmployeeManagerType }
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 w-full flex flex-col gap-6 px-6 overflow-y-auto custom-scrollbar pb-12">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="flex-1 w-full flex flex-col gap-2 px-6 overflow-y-auto custom-scrollbar pb-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Name <span className="text-red-500">*</span></label>
                             <input
@@ -107,7 +107,7 @@ export function EmployeeFormDrawer({ manager }: { manager: EmployeeManagerType }
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Phone Number</label>
                             <input
@@ -137,7 +137,7 @@ export function EmployeeFormDrawer({ manager }: { manager: EmployeeManagerType }
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Designation <span className="text-red-500">*</span></label>
                             <CustomSelect value={designation} options={manager.designations} onChange={setDesignation} />
@@ -148,7 +148,7 @@ export function EmployeeFormDrawer({ manager }: { manager: EmployeeManagerType }
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Employee Status <span className="text-red-500">*</span></label>
                             <CustomSelect value={employeeStatus} options={manager.employeeStatuses} onChange={setEmployeeStatus} />
@@ -164,7 +164,7 @@ export function EmployeeFormDrawer({ manager }: { manager: EmployeeManagerType }
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Base Salary ($) <span className="text-red-500">*</span></label>
                             <input
@@ -185,7 +185,7 @@ export function EmployeeFormDrawer({ manager }: { manager: EmployeeManagerType }
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Role Title <span className="text-red-500">*</span></label>
                             <CustomSelect value={role} options={manager.roles} onChange={setRole} />

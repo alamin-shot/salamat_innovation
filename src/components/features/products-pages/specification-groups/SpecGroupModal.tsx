@@ -82,7 +82,7 @@ export function SpecGroupModal({ isOpen, groupId, onClose }: SpecGroupModalProps
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-2 p-6">
                     <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-bold text-brand-subtext tracking-wider">
                             Specifications <span className="text-red-500">*</span>

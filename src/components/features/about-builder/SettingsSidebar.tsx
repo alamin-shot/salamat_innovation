@@ -37,7 +37,7 @@ export function SettingsSidebar({ manager }: { manager: AboutBuilderManagerType 
                 </div>
             </div>
 
-            <div className="p-5 overflow-y-auto custom-scrollbar flex flex-col gap-6 flex-1 text-xs">
+            <div className="p-5 overflow-y-auto custom-scrollbar flex flex-col gap-2 flex-1 text-xs">
                 {/* 1. Text / Content Inputs */}
                 {(["heading", "paragraph", "button", "tab", "profileCard", "featureItem", "timeline"].includes(activeBlock.type)) && (
                     <div className="flex flex-col gap-1.5">

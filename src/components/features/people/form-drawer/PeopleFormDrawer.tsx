@@ -28,7 +28,7 @@ export function PeopleFormDrawer({
             width="w-full max-w-none lg:w-[calc(100vw-280px)]"
         >
             <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <div className="flex flex-col gap-6 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100">
+                <div className="flex flex-col gap-2 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100">
                     <PeopleBasicFields manager={manager} />
                     <hr className="border-gray-100" />
                     <PeopleAddressFields manager={manager} />

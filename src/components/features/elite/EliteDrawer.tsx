@@ -77,9 +77,9 @@ export function EliteDrawer({ manager }: { manager: EliteManagerType }) {
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col gap-6 px-2 overflow-y-auto custom-scrollbar pb-10">
+                <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col gap-2 px-2 overflow-y-auto custom-scrollbar pb-10">
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Status Name <span className="text-red-500">*</span></label>
                             <input
@@ -102,7 +102,7 @@ export function EliteDrawer({ manager }: { manager: EliteManagerType }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5">
                             <label className="erp-label">Logo</label>
                             <div className="border-2 border-dashed border-gray-200 rounded-lg h-24 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-emerald-50 cursor-pointer transition-colors">

@@ -23,7 +23,7 @@ export function ViewCashTransferDrawer({ id, isOpen, onClose }: { id: string | n
     return (
         <Drawer title="Cash Transfer Detail" isOpen={isOpen} onClose={onClose} width="w-full max-w-none lg:w-[calc(100vw-280px)]">
             <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 sm:p-7 flex flex-col gap-6">
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 sm:p-7 flex flex-col gap-2">
 
                     {/* Header Row */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100 pb-5">

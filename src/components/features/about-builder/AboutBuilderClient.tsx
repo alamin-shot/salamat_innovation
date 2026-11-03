@@ -19,7 +19,7 @@ export function AboutBuilderClient({ platform }: { platform: "salamat" | "tekzo"
                 </button>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-6 h-full min-h-0">
+            <div className="flex flex-col md:flex-row gap-2 h-full min-h-0">
                 {/* Left Pane: The recursive canvas */}
                 <BuilderCanvas manager={manager} />
 

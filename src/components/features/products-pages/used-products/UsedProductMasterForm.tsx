@@ -54,7 +54,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                     {/* CARD 1: Core Identifiers */}
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm">
                         <h3 className="text-xs font-bold text-brand-subtext uppercase tracking-wider mb-4">Core Identifiers</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
 
                             {/* CUSTOM PRODUCT DROPDOWN */}
                             <div className="flex flex-col gap-1.5 relative">
@@ -118,7 +118,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                     {/* CARD 2: Pricing & Health */}
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm">
                         <h3 className="text-xs font-bold text-brand-subtext uppercase tracking-wider mb-4">Pricing & Health Metrics</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-semibold text-brand-text">Price <span className="text-red-500">*</span></label>
                                 <input type="number" defaultValue={isEditMode ? "53990.00" : ""} placeholder="Enter price" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" required />
@@ -162,7 +162,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                     {/* CARD 3: Logistics & Box */}
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm">
                         <h3 className="text-xs font-bold text-brand-subtext uppercase tracking-wider mb-4">Logistics & Box Availability</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-semibold text-brand-text">Booking Amount</label>
                                 <input type="number" defaultValue={isEditMode ? "2000.00" : ""} placeholder="Enter booking amount" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
@@ -173,7 +173,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                             </div>
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-semibold text-brand-text">Box Available</label>
-                                <div className="flex items-center gap-6 h-[38px]">
+                                <div className="flex items-center gap-2 h-[38px]">
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <input type="radio" name="boxAvailable" className="h-4 w-4 text-emerald-600 focus:ring-emerald-600" />
                                         <span className="text-sm font-medium text-brand-text">Yes</span>
@@ -190,7 +190,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                     {/* CARD 4: Warranty & Service */}
                     <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm">
                         <h3 className="text-xs font-bold text-brand-subtext uppercase tracking-wider mb-4">Warranty & Performance Specs</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-semibold text-brand-text">Charging Time</label>
                                 <input type="text" placeholder="Enter charging time" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
@@ -278,7 +278,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                     </div>
 
                     {/* CARD 6: Media & Rich Text */}
-                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm flex flex-col gap-6">
+                    <div className="rounded-xl border border-brand-subtext/20 bg-white p-5 shadow-sm flex flex-col gap-2">
                         <h3 className="text-xs font-bold text-brand-subtext uppercase tracking-wider">Media & Description</h3>
 
                         <div className="flex flex-col gap-2">

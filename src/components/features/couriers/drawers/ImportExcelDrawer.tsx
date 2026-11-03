@@ -40,7 +40,7 @@ export function ImportExcelDrawer({ manager }: { manager: CourierManagerType }) 
             width="w-full sm:w-[calc(100vw-260px)]"
         >
             <div className="flex flex-col h-full pt-6">
-                <div className="flex-1 max-w-lg mx-auto w-full flex flex-col gap-6">
+                <div className="flex-1 max-w-lg mx-auto w-full flex flex-col gap-2">
                     <div className="flex flex-col gap-1.5">
                         <label className="erp-label">Steadfast Orders File (.xlsx, .xls, .csv) <span className="text-red-500">*</span></label>
 

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { useGlobalAttendanceStore } from "@/store/useGlobalAttendanceStore";
-import { AttendanceRequest } from "@/types/attendance.types";
+import { AttendanceRequestItem } from "@/types/attendance.types";
 import { toast } from "sonner";
 
 export function useAttendanceRequestsManager() {
@@ -15,7 +15,8 @@ export function useAttendanceRequestsManager() {
 
     const filteredRequests = useMemo(() => {
         return store.requests.filter(req =>
-            req.employeeName.toLowerCase().includes(searchQuery.toLowerCase())
+            req.employeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            req.note.toLowerCase().includes(searchQuery.toLowerCase())
         );
     }, [store.requests, searchQuery]);
 
@@ -28,12 +29,12 @@ export function useAttendanceRequestsManager() {
     const openEditDrawer = (id: string) => { setActiveReqId(id); setActiveDrawer("edit"); };
     const closeDrawer = () => { setActiveDrawer("none"); setTimeout(() => setActiveReqId(null), 300); };
 
-    const handleSubmit = (data: Omit<AttendanceRequest, "id">) => {
+    const handleSubmit = (data: Omit<AttendanceRequestItem, "id" | "createdAt" | "status">) => {
         if (activeDrawer === "edit" && activeReqId) {
-            store.updateRequest(activeReqId, data);
+            store.updateAttendanceRequest(activeReqId, data);
             toast.success("Request updated");
         } else {
-            store.addRequest(data);
+            store.addAttendanceRequest(data);
             toast.success("Attendance request submitted");
         }
         closeDrawer();
@@ -41,7 +42,7 @@ export function useAttendanceRequestsManager() {
 
     const handleDelete = (id: string) => {
         if (confirm("Delete this request?")) {
-            store.deleteRequest(id);
+            store.deleteAttendanceRequest(id);
             toast.success("Request deleted");
         }
     };

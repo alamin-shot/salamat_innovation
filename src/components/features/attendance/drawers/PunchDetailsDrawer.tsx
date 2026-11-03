@@ -1,83 +1,148 @@
 "use client";
-import { AttendancesManagerType } from "@/hooks/attendance_hooks/useAttendancesManager";
+import { GlobalAttendanceLog } from "@/types/attendance.types";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { getInitials, getAvatarColorClass } from "@/utils/bdGeography";
-import { LogIn, LogOut, Clock, MapPin } from "lucide-react";
+import { LogIn, LogOut, Clock, MapPin, Calendar, ListChecks, ShieldCheck } from "lucide-react";
 
-export function PunchDetailsDrawer({ manager }: { manager: AttendancesManagerType }) {
-    const log = manager.getDetailsLog();
-    const isOpen = !!log;
+interface PunchDetailsDrawerProps {
+    log: GlobalAttendanceLog | null;
+    onClose: () => void;
+    onOpenLocation: (loc: {
+        type: "In" | "Out";
+        ip: string;
+        coordinates: string;
+        address: string;
+        employeeName: string;
+    }) => void;
+}
 
+export function PunchDetailsDrawer({ log, onClose, onOpenLocation }: PunchDetailsDrawerProps) {
     if (!log) return null;
 
     return (
-        <Drawer title={`${log.employeeName} — ${log.date}`} isOpen={isOpen} onClose={manager.closeDetails} width="w-full sm:w-[calc(100vw-260px)] max-w-4xl">
-            <div className="flex flex-col h-full pt-6 bg-gray-50/30">
-                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6 w-full mx-auto">
+        <Drawer
+            title={`${log.employeeName} — ${log.date}`}
+            isOpen={!!log}
+            onClose={onClose}
+            width="drawer-full-content"
+        >
+            <div className="flex flex-col h-full pt-6">
+                <div className="flex-1 px-6 overflow-y-auto custom-scrollbar pb-12 flex flex-col gap-6 max-w-4xl">
+                    {/* Employee Summary Header matching screenshot */}
+                    <div className="flex items-center justify-between border border-gray-100 rounded-xl p-4 bg-white shadow-2xs">
+                        <div className="flex items-center gap-3.5">
+                            <div
+                                className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm ${getAvatarColorClass(
+                                    log.employeeId
+                                )}`}
+                            >
+                                {getInitials(log.employeeName)}
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-gray-900 text-base">{log.employeeName}</h3>
+                                <p className="text-xs text-gray-500 flex items-center gap-1.5 mt-0.5">
+                                    <Calendar className="w-3.5 h-3.5" /> {log.date} • {log.outlet}
+                                </p>
+                            </div>
+                        </div>
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
+                            <ListChecks className="w-3.5 h-3.5" /> {log.segments.length} records
+                        </span>
+                    </div>
 
-                    {/* Header Card */}
-                    <div className="erp-card bg-white p-6 shadow-sm border border-gray-100 flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-lg shrink-0 ${getAvatarColorClass(log.employeeId)}`}>{getInitials(log.employeeName)}</div>
-                        <div className="flex flex-col">
-                            <h2 className="text-lg font-bold text-gray-900">{log.employeeName}</h2>
-                            <p className="text-xs text-gray-500 flex items-center gap-1.5"><Clock className="w-3 h-3" /> {log.date}</p>
+                    {/* 3 KPI Strip: FIRST IN | LAST OUT | TOTAL WORKED */}
+                    <div className="grid grid-cols-3 border border-gray-100 rounded-xl bg-gray-50/70 p-5 text-center divide-x divide-gray-200/60">
+                        <div className="flex flex-col items-center gap-1.5">
+                            <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                                <LogIn className="w-4 h-4" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                                FIRST IN
+                            </span>
+                            <span className="text-sm font-bold text-gray-900">{log.punchIn}</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-1.5">
+                            <div className="w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center">
+                                <LogOut className="w-4 h-4" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                                LAST OUT
+                            </span>
+                            <span className="text-sm font-bold text-gray-900">{log.punchOut}</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-1.5">
+                            <div className="w-9 h-9 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center">
+                                <Clock className="w-4 h-4" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                                TOTAL WORKED
+                            </span>
+                            <span className="text-sm font-bold text-gray-900">{log.totalHours}</span>
                         </div>
                     </div>
 
-                    {/* Timeline Summary Card */}
-                    <div className="erp-card bg-white p-6 shadow-sm border border-gray-100 grid grid-cols-3 divide-x divide-gray-100 text-center">
-                        <div className="flex flex-col items-center justify-center gap-2">
-                            <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center"><LogIn className="w-5 h-5" /></div>
-                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">First In</div>
-                            <div className="font-bold text-gray-900">{log.punchIn}</div>
-                        </div>
-                        <div className="flex flex-col items-center justify-center gap-2">
-                            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center"><LogOut className="w-5 h-5 ml-1" /></div>
-                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Last Out</div>
-                            <div className="font-bold text-gray-900">{log.punchOut}</div>
-                        </div>
-                        <div className="flex flex-col items-center justify-center gap-2">
-                            <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center"><Clock className="w-5 h-5" /></div>
-                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Worked</div>
-                            <div className="font-bold text-blue-600">{log.totalHours}</div>
-                        </div>
-                    </div>
-
-                    {/* Detailed Timeline with Live Map */}
-                    <div className="erp-card bg-white p-6 shadow-sm border border-gray-100 flex flex-col gap-6">
-                        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                            <div className="flex items-center gap-3">
-                                <span className="w-6 h-6 rounded bg-gray-100 text-gray-500 font-bold text-xs flex items-center justify-center">1</span>
-                                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded uppercase tracking-widest">Punch In</span>
-                                <span className="font-bold text-gray-900 text-sm">{log.punchIn}</span>
-                            </div>
-                            <div className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded border border-blue-100">{log.totalHours}</div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                            <div className="w-8 flex flex-col items-center gap-1 opacity-50 pt-1">
-                                <MapPin className="w-4 h-4 text-rose-500" />
-                                <span className="text-[9px] font-bold">IN</span>
-                            </div>
-                            <div className="flex-1 flex flex-col gap-3">
-                                <div className="text-sm font-mono text-gray-700">{log.inLocation}</div>
-                                {log.inCoordinates && (
-                                    <div className="w-full h-64 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden relative shadow-inner">
-                                        <iframe
-                                            width="100%" height="100%" frameBorder="0" scrolling="no"
-                                            src={`https://maps.google.com/maps?q=${log.inCoordinates}&t=m&z=15&output=embed`}
-                                            className="absolute inset-0"
-                                        ></iframe>
+                    {/* Individual Punch Segments List */}
+                    <div className="flex flex-col gap-3">
+                        {log.segments.map((seg, idx) => (
+                            <div
+                                key={seg.id}
+                                className="border border-gray-200 rounded-xl p-4 bg-white flex flex-col gap-3 shadow-2xs"
+                            >
+                                <div className="flex flex-wrap items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="w-6 h-6 rounded-full bg-gray-100 text-gray-700 text-xs font-bold flex items-center justify-center">
+                                            {idx + 1}
+                                        </span>
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+                                            <LogIn className="w-3 h-3" /> Punch In
+                                        </span>
+                                        <span className="font-bold text-sm text-gray-900">{seg.punchIn}</span>
+                                        {seg.inSelfie && (
+                                            <img
+                                                src={seg.inSelfie}
+                                                alt="Punch In Selfie"
+                                                className="w-7 h-7 rounded-full object-cover border border-gray-300"
+                                            />
+                                        )}
+                                        <span className="text-gray-400">→</span>
+                                        <span className="font-bold text-sm text-gray-700">{seg.punchOut}</span>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
 
+                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-50 text-cyan-700 text-xs font-mono font-bold border border-cyan-200">
+                                        <Clock className="w-3 h-3" /> {seg.duration}
+                                    </span>
+                                </div>
+
+                                <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-gray-100 text-xs">
+                                    <button
+                                        onClick={() =>
+                                            onOpenLocation({
+                                                type: "In",
+                                                ip: seg.inLocation,
+                                                coordinates: seg.inCoordinates,
+                                                address: seg.inAddress,
+                                                employeeName: log.employeeName
+                                            })
+                                        }
+                                        className="inline-flex items-center gap-1 font-mono text-gray-700 underline hover:text-brand-primary"
+                                    >
+                                        <MapPin className="w-3.5 h-3.5 text-rose-500" /> in: {seg.inLocation}
+                                    </button>
+
+                                    <span className="text-gray-500 flex items-center gap-1">
+                                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> {seg.deviceInfo}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="pt-4 border-t border-gray-200 flex justify-end gap-3 bg-white px-6 pb-4 mt-auto">
-                    <Button variant="outline" onClick={manager.closeDetails} className="px-6">Close Details</Button>
+
+                <div className="pt-4 border-t border-gray-100 flex justify-end bg-white px-6 pb-4 mt-auto">
+                    <Button variant="outline" onClick={onClose}>
+                        Close
+                    </Button>
                 </div>
             </div>
         </Drawer>

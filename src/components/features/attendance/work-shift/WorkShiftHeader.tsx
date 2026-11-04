@@ -13,65 +13,64 @@ interface WorkShiftHeaderProps {
 }
 
 export function WorkShiftHeader({
-    activeTab,
-    setActiveTab,
-    shiftCount,
-    employeeCount,
-    swapCount,
-    onAddShift,
-    onNewSwap
+    activeTab, setActiveTab, shiftCount, employeeCount, swapCount, onAddShift, onNewSwap
 }: WorkShiftHeaderProps) {
     return (
-        <div className="flex flex-wrap justify-between items-center gap-4">
+        // RESPONSIVE FIX: flex-col on mobile
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 className="text-xl font-bold text-gray-900">Work Shift</h1>
                 <p className="text-xs text-gray-500 mt-0.5">
-                    Manage shift templates, assign employee rosters (synced with Attendance Report), and approve shift swaps.
+                    Manage shift templates, assign employee rosters, and approve shift swaps.
                 </p>
             </div>
 
-            <div className="flex items-center gap-2.5">
-                <div className="inline-flex rounded-lg border border-gray-200 bg-white p-0.5">
+            {/* RESPONSIVE FIX: flex-col on tiny screens, w-full */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+                {/* RESPONSIVE FIX: flex-wrap so the 3 tabs don't squish into unreadable sizes */}
+                <div className="inline-flex flex-wrap sm:flex-nowrap rounded-lg border border-gray-200 bg-white p-0.5 w-full sm:w-auto">
                     <button
                         onClick={() => setActiveTab("templates")}
-                        className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${activeTab === "templates" ? "bg-brand-primary text-white" : "text-gray-600 hover:text-gray-900"
+                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-xs font-semibold transition ${activeTab === "templates" ? "bg-brand-primary text-white" : "text-gray-600 hover:text-gray-900"
                             }`}
                     >
-                        Shift Templates ({shiftCount})
+                        Templates ({shiftCount})
                     </button>
                     <button
                         onClick={() => setActiveTab("roster")}
-                        className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${activeTab === "roster" ? "bg-brand-primary text-white" : "text-gray-600 hover:text-gray-900"
+                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-xs font-semibold transition ${activeTab === "roster" ? "bg-brand-primary text-white" : "text-gray-600 hover:text-gray-900"
                             }`}
                     >
-                        Weekly Roster ({employeeCount})
+                        Roster ({employeeCount})
                     </button>
                     <button
                         onClick={() => setActiveTab("swaps")}
-                        className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${activeTab === "swaps" ? "bg-brand-primary text-white" : "text-gray-600 hover:text-gray-900"
+                        className={`flex-1 sm:flex-none px-3 py-1.5 rounded-md text-xs font-semibold transition ${activeTab === "swaps" ? "bg-brand-primary text-white" : "text-gray-600 hover:text-gray-900"
                             }`}
                     >
-                        Swap Requests ({swapCount})
+                        Swaps ({swapCount})
                     </button>
                 </div>
 
-                {activeTab === "swaps" && (
-                    <Button
-                        variant="outline"
-                        onClick={onNewSwap}
-                        className="h-9 bg-white flex items-center gap-1.5"
-                    >
-                        <ArrowLeftRight className="w-3.5 h-3.5" /> New Swap Request
-                    </Button>
-                )}
+                <div className="flex gap-2.5 w-full sm:w-auto">
+                    {activeTab === "swaps" && (
+                        <Button
+                            variant="outline"
+                            onClick={onNewSwap}
+                            className="h-9 bg-white flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
+                        >
+                            <ArrowLeftRight className="w-3.5 h-3.5" /> New Swap Request
+                        </Button>
+                    )}
 
-                <Button
-                    variant="default"
-                    onClick={onAddShift}
-                    className="h-9 flex items-center gap-1.5"
-                >
-                    <Plus className="w-4 h-4" /> Add Work Shift
-                </Button>
+                    <Button
+                        variant="default"
+                        onClick={onAddShift}
+                        className="h-9 flex items-center justify-center gap-1.5 w-full sm:w-auto flex-1 sm:flex-none"
+                    >
+                        <Plus className="w-4 h-4" /> Add Work Shift
+                    </Button>
+                </div>
             </div>
         </div>
     );

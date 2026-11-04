@@ -15,7 +15,6 @@ export function ReportMatrixTable({ manager }: { manager: ReturnType<typeof useA
         const cell = row.dailyStatuses[dayNum];
         const dimmed = isCellDimmed(cell);
         const dimClass = dimmed ? "opacity-20 scale-90" : "opacity-100";
-        const dateLabel = `${String(dayNum).padStart(2, "0")} ${manager.monthName.slice(0, 3)} ${manager.year} (${weekday})`;
 
         if (!cell || cell.code === "-") {
             return (
@@ -50,10 +49,10 @@ export function ReportMatrixTable({ manager }: { manager: ReturnType<typeof useA
     };
 
     return (
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
-            {/* Interactive Filterable Legend Strip */}
-            <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between text-xs text-gray-600 bg-white">
-                <div className="flex items-center gap-4">
+        <div className="flex-1 flex flex-col h-full overflow-hidden w-full">
+            {/* RESPONSIVE FIX: flex-col on mobile so the legend doesn't push the "Reset Filter" button off-screen */}
+            <div className="px-4 py-3 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-600 bg-white">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                     {(["P", "A", "LV", "H", "LATE"] as const).map((code) => (
                         <button
                             key={code}
@@ -66,13 +65,13 @@ export function ReportMatrixTable({ manager }: { manager: ReturnType<typeof useA
                     ))}
                 </div>
                 {manager.highlightFilter !== "ALL" && (
-                    <button onClick={() => manager.setHighlightFilter("ALL")} className="flex items-center gap-1 text-brand-primary">
+                    <button onClick={() => manager.setHighlightFilter("ALL")} className="flex items-center gap-1 text-brand-primary font-bold">
                         <RotateCcw className="w-3 h-3" /> Reset Filter
                     </button>
                 )}
             </div>
 
-            <div className="flex-1 w-full overflow-auto custom-scrollbar">
+            <div className="flex-1 w-full overflow-x-auto overflow-y-auto custom-scrollbar">
                 <table className="w-full text-left text-xs border-collapse min-w-max">
                     <thead>
                         <tr className="border-b border-gray-100 bg-gray-50/60">
@@ -117,7 +116,6 @@ export function ReportMatrixTable({ manager }: { manager: ReturnType<typeof useA
                             </tr>
                         ))}
 
-                        {/* Daily Totals Footer Row */}
                         <tr className="bg-gray-50/90 font-bold text-gray-900 border-t-2 border-gray-200">
                             <td className="py-3 px-4 sticky left-0 bg-gray-50 z-10 border-r border-gray-200 text-xs">Total</td>
                             {manager.daysInMonth.map((d) => (
@@ -129,7 +127,6 @@ export function ReportMatrixTable({ manager }: { manager: ReturnType<typeof useA
                 </table>
             </div>
 
-            {/* Interactive Bottom Summary Pills */}
             <div className="px-4 py-3 border-t border-gray-100 bg-white flex flex-wrap items-center gap-2.5 text-[10px] font-bold uppercase tracking-wider">
                 <button onClick={() => manager.setHighlightFilter(manager.highlightFilter === "P" ? "ALL" : "P")} className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 hover:ring-2 hover:ring-emerald-300 transition">{manager.footerStats.present} PRESENT</button>
                 <button onClick={() => manager.setHighlightFilter(manager.highlightFilter === "A" ? "ALL" : "A")} className="px-3 py-1 rounded-full bg-rose-100 text-rose-600 hover:ring-2 hover:ring-rose-300 transition">{manager.footerStats.absent} ABSENT</button>

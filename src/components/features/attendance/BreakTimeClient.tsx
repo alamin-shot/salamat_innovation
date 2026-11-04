@@ -63,12 +63,13 @@ export function BreakTimeClient() {
                 }}
             />
 
-            <div className="flex-1 erp-card p-0 flex flex-col bg-white overflow-hidden h-full shadow-sm">
+            <div className="flex-1 erp-card p-0 flex flex-col bg-white overflow-hidden h-full shadow-sm w-full">
                 <div className="p-4 border-b border-gray-100">
+
                     <input
                         type="text"
                         placeholder="Search..."
-                        className="erp-input max-w-xs"
+                        className="erp-input w-full sm:max-w-xs"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />

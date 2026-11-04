@@ -14,12 +14,14 @@ export function AttendanceReportClient() {
     const [locationData, setLocationData] = useState<any | null>(null);
 
     return (
-        <div className="flex flex-col w-full h-full gap-5 p-4">
+        // RESPONSIVE FIX: Changed gap-5 to gap-4, adjusted padding for mobile
+        <div className="flex flex-col w-full h-full gap-4 p-3 sm:p-4">
 
             <ReportHeader manager={manager} />
             <ReportFilterBar manager={manager} />
 
-            <div className="flex-1 erp-card p-0 flex flex-col bg-white overflow-hidden h-full shadow-sm">
+            {/* RESPONSIVE FIX: Removed strict h-full and added min-h-[500px] so it never collapses to 0 height */}
+            <div className="flex-1 erp-card p-0 flex flex-col bg-white overflow-hidden min-h-[500px] shadow-sm">
                 {manager.viewMode === "matrix" ? (
                     <ReportMatrixTable manager={manager} />
                 ) : (

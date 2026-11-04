@@ -4,9 +4,10 @@ import { useAttendanceReportManager } from "@/hooks/attendance_hooks/useAttendan
 
 export function ReportFilterBar({ manager }: { manager: ReturnType<typeof useAttendanceReportManager> }) {
     return (
-        <div className="erp-card bg-white p-4 flex flex-wrap items-center justify-between gap-4 border border-gray-100 shadow-2xs">
-            <div className="flex flex-wrap items-end gap-4">
-                <div className="flex flex-col gap-1.5 w-60">
+        <div className="erp-card bg-white p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border border-gray-100 shadow-2xs w-full">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 w-full md:w-auto">
+                {/* RESPONSIVE FIX: w-full on mobile, w-60 on sm+ */}
+                <div className="flex flex-col gap-1.5 w-full sm:w-60">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                         PROGRAM / DEPARTMENT
                     </span>
@@ -16,14 +17,15 @@ export function ReportFilterBar({ manager }: { manager: ReturnType<typeof useAtt
                         onChange={manager.setDepartmentFilter}
                     />
                 </div>
-                <div className="flex flex-col gap-1.5 w-64">
+                {/* RESPONSIVE FIX: w-full on mobile, w-64 on sm+ */}
+                <div className="flex flex-col gap-1.5 w-full sm:w-64">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                         SEARCH ATTENDEE
                     </span>
                     <input
                         type="text"
                         placeholder="Filter by employee name or ID..."
-                        className="erp-input h-[38px]"
+                        className="erp-input h-[38px] w-full"
                         value={manager.searchQuery}
                         onChange={(e) => manager.setSearchQuery(e.target.value)}
                     />
@@ -33,7 +35,8 @@ export function ReportFilterBar({ manager }: { manager: ReturnType<typeof useAtt
                 </span>
             </div>
 
-            <div className="text-right">
+            {/* RESPONSIVE FIX: Text aligns left on mobile, right on desktop */}
+            <div className="text-left md:text-right w-full md:w-auto mt-2 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
                 <h2 className="text-sm font-bold uppercase tracking-wide text-gray-700">
                     DAILY ATTENDANCE RECORD
                 </h2>

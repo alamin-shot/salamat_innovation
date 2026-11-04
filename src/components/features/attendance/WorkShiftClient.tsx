@@ -68,7 +68,7 @@ export function WorkShiftClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-3 sm:p-4">
 
             <WorkShiftHeader
                 activeTab={activeTab}

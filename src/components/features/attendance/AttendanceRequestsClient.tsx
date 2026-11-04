@@ -71,11 +71,10 @@ export function AttendanceRequestsClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col w-full h-full gap-2 p-3 sm:p-4">
             <RequestsHeader onAddClick={openAddDrawer} />
 
-            {/* Full-Viewport Table Card */}
-            <div className="flex-1 erp-card p-0 flex flex-col bg-white overflow-hidden h-full shadow-sm">
+            <div className="flex-1 erp-card p-0 flex flex-col bg-white overflow-hidden h-full shadow-sm w-full">
 
                 <RequestsFilterBar
                     searchQuery={searchQuery}

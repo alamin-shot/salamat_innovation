@@ -19,19 +19,12 @@ interface RequestsTableProps {
 }
 
 export function RequestsTable({
-    paginated,
-    handleReview,
-    onEditClick,
-    handleDelete,
-    currentPage,
-    totalPages,
-    perPage,
-    setCurrentPage,
-    setPerPage
+    paginated, handleReview, onEditClick, handleDelete, currentPage, totalPages, perPage, setCurrentPage, setPerPage
 }: RequestsTableProps) {
     return (
         <>
-            <Table containerClassName="flex-1 min-h-[400px]">
+            {/* RESPONSIVE FIX: Added overflow-x-auto w-full */}
+            <Table containerClassName="flex-1 min-h-[400px] overflow-x-auto w-full">
                 <TableHeader>
                     <TableHeadCell>Employee</TableHeadCell>
                     <TableHeadCell>Date</TableHeadCell>
@@ -102,10 +95,10 @@ export function RequestsTable({
                                 <TableCell>
                                     <span
                                         className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${req.status === "Approved"
-                                                ? "bg-emerald-50 text-emerald-600 border-emerald-200"
-                                                : req.status === "Pending"
-                                                    ? "bg-amber-50 text-amber-600 border-amber-200"
-                                                    : "bg-rose-50 text-rose-600 border-rose-200"
+                                            ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                                            : req.status === "Pending"
+                                                ? "bg-amber-50 text-amber-600 border-amber-200"
+                                                : "bg-rose-50 text-rose-600 border-rose-200"
                                             }`}
                                     >
                                         {req.status}

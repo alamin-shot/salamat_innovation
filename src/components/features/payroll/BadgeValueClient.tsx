@@ -21,7 +21,7 @@ export function BadgeValueClient() {
         const currentName = benOptions.find(b => b.id === badge.beneficiaryId)?.name || benMap[0];
 
         return (
-            // MOBILE FIX: flex-col on small screens, flex-row on sm: and up
+
             <div key={badge.id} className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-white border border-gray-100 rounded-lg shadow-2xs group hover:border-gray-300 transition w-full">
                 <div className="w-full sm:flex-1">
                     <CustomSelect

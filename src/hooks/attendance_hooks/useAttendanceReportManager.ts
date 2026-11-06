@@ -34,6 +34,8 @@ export function useAttendanceReportManager() {
     const [highlightFilter, setHighlightFilter] = useState<"ALL" | "P" | "A" | "LV" | "H" | "LATE">("ALL");
     const [viewMode, setViewMode] = useState<"matrix" | "analytics">("matrix");
 
+    const [density, setDensity] = useState<"compact" | "detailed">("compact");
+
     // Drawers State
     const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
     const [overrideCellTarget, setOverrideCellTarget] = useState<{
@@ -356,6 +358,8 @@ export function useAttendanceReportManager() {
         setHighlightFilter,
         viewMode,
         setViewMode,
+        density,
+        setDensity,
         daysInMonth,
         reportRows,
         columnTotals,

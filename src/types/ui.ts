@@ -7,4 +7,5 @@ export interface DrawerProps {
     children: React.ReactNode;
     width?: string;
     drawerStyle?: React.CSSProperties;
+    className?: string;
 }

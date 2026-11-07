@@ -27,7 +27,7 @@ export function ClosingDenominationDrawer({ manager }: { manager: ReturnType<typ
             isOpen={isOpen}
             onClose={() => manager.setDrawerMode("none")}
             title="Cash Denomination Tally"
-            className="w-full sm:w-[calc(100vw-260px)] xl:w-[500px]"
+            className="w-full sm:w-[calc(100vw-260px)] "
         >
             <div className="flex flex-col h-full bg-gray-50/50">
                 <div className="p-4 sm:p-6 flex-1 overflow-y-auto">

@@ -2,18 +2,18 @@ import { useState, useMemo, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGlobalClosingStore, TenderMatrix, ClosingTransaction } from "@/store/useGlobalClosingStore";
 
-export type ClosingTabKey = "summary" | "sale" | "purchase" | "sale_return" | "purchase_return" | "expense" | "withdrawal" | "deposit" | "stock" | "balance_sheet";
+export type ClosingTabKey = "hub" | "daily_closings" | "daily_closing_balance" | "profit_loss" | "sale" | "purchase" | "sale_return" | "purchase_return" | "expense" | "withdrawal" | "deposit" | "stock" | "balance_sheet";
+export type DrawerMode = "none" | "transaction" | "denomination" | "edit";
 
 export function useClosingManager() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const store = useGlobalClosingStore();
-    const [drawerMode, setDrawerMode] = useState<"none" | "transaction" | "denomination" | "lock_override">("none");
-    const [activeRecord, setActiveRecord] = useState<ClosingTransaction | null>(null);
+    const [drawerMode, setDrawerMode] = useState<DrawerMode>("none"); const [activeRecord, setActiveRecord] = useState<ClosingTransaction | null>(null);
     // --- CONCURRENT ROUTING STATE ---
     const [isPending, startTransition] = useTransition();
-    const activeDate = searchParams.get("date") || "2026-11-06"; // Defaulting to screenshot date
-    const activeTab = (searchParams.get("tab") as ClosingTabKey) || "summary";
+    const activeDate = searchParams.get("date") || "2026-11-06";
+    const activeTab = (searchParams.get("tab") as ClosingTabKey) || "hub";
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const perPage = 10;
@@ -27,21 +27,17 @@ export function useClosingManager() {
     };
 
 
-    // UI Drawer States
-
-
     const handleRouteChange = (key: "date" | "tab", value: string) => {
         startTransition(() => {
+            if (key === "tab") setSelectedIds([]); // Clear table selections when switching spokes
+
             const params = new URLSearchParams(searchParams.toString());
             params.set(key, value);
-            // Default to summary when changing dates so user sees math first
-            if (key === "date") params.set("tab", "summary");
+            if (key === "date") params.set("tab", "hub");
             router.push(`?${params.toString()}`, { scroll: false });
         });
     };
 
-    // --- RECONCILIATION MATH ENGINE ---
-    // Mathematically calculates the "Expected" balances based on the ledger arrays for the active date.
     const expectedMath = useMemo(() => {
         const expected: TenderMatrix = { cash: 0, bkash: 0, pos: 0 };
 
@@ -86,7 +82,7 @@ export function useClosingManager() {
 
     // --- DYNAMIC TAB DATA ENGINE ---
     const activeTabData = useMemo(() => {
-        if (activeTab === "summary") return [];
+        if (activeTab === "daily_closings") return [];
         let data: ClosingTransaction[] = [];
         switch (activeTab) {
             case "sale": data = store.sales; break;

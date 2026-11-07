@@ -52,6 +52,10 @@ interface GlobalClosingState {
     deposits: ClosingTransaction[];
     salesReturns: ClosingTransaction[];
     purchaseReturns: ClosingTransaction[];
+    profitLoss: ClosingTransaction[];
+    balanceSheets: ClosingTransaction[];
+    stockStatements: ClosingTransaction[];
+    dailyClosingBalances: ClosingTransaction[];
 
     // 3. Actions
     updateActualTender: (date: string, tender: TenderType, amount: number) => void;
@@ -92,6 +96,10 @@ export const useGlobalClosingStore = create<GlobalClosingState>()(
             deposits: [],
             salesReturns: [],
             purchaseReturns: [],
+            profitLoss: [],
+            balanceSheets: [],
+            stockStatements: [],
+            dailyClosingBalances: [],
 
             // --- ACTIONS ---
             updateActualTender: (date, tender, amount) => set((state) => {

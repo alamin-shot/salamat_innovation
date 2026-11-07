@@ -23,7 +23,6 @@ const REPORT_CATEGORIES = [
             { id: "deposit", label: "Deposit Report", desc: "Monitor incoming funds and deposits", icon: PiggyBank, color: "text-blue-600", bg: "bg-blue-100" },
             { id: "withdrawal", label: "Withdrawal Report", desc: "Oversee outbound transfers", icon: CreditCard, color: "text-amber-600", bg: "bg-amber-100" },
             { id: "transaction", label: "Transactions", desc: "Full ledger of all system transactions", icon: Activity, color: "text-indigo-600", bg: "bg-indigo-100" },
-            { id: "daily_bank", label: "Daily Bank", desc: "Daily banking activities and balances", icon: Landmark, color: "text-teal-600", bg: "bg-teal-100" },
             { id: "total_bank", label: "Total Bank Amount", desc: "Current balances across all accounts", icon: Landmark, color: "text-violet-600", bg: "bg-violet-100" },
         ]
     },

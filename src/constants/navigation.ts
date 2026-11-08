@@ -85,10 +85,8 @@ export const NAVIGATION_DATA: NavSection[] = [
   nav("Assets", ["Assets"]),
   nav("Communications", ["Communications"]),
   nav("Ledger", ["Ledger"]),
-  // nav("Reports", ["Stock", "Profit Loss Report", "Sale", "Sales Return", "Purchase", "Purchase Return", "Stock Transfer", "Cash Transfer", "Damage Product", "Expense", "Deposit Report", "Withdrawal Report", "Transactions"]),
   nav("Reports", ["Reports"]),
-  // nav("Daily Closing", ["Daily Closings", "Daily Closing Balance", "Profit Loss", "Balance Sheets", "Stock Statements", "Sale Statements", "Purchase Statements", "Purchase Return Statements", "Sale Return Statements", "Expense Statements", "Withdrawal Statements", "Deposit Statements"]),
   nav("Daily Closing", ["Daily Closing"]),
   nav("User Roles", ["Users", "Roles"]),
-  nav("Settings", ["General Setting", "Payment Method", "Shop", "Ecommerce"]),
+  nav("Settings", ["Settings"]),
 ];

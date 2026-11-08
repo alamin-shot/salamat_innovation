@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { useGlobalSettingsStore, ShopRecord } from "@/store/useGlobalSettingsStore";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Save, ImagePlus } from "lucide-react";
+import { ShopRecord } from "@/types/settings";
 
 // We utilize global TS type inference, no ReturnType import needed
 function ShopFormContent({ record, manager }: { record: ShopRecord | null; manager: any }) {

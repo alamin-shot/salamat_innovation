@@ -1,8 +1,8 @@
 "use client";
 import React, { memo } from "react";
-import { AreaShippingRecord } from "@/store/useGlobalSettingsStore";
 import { Edit, MapPin, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { AreaShippingRecord } from "@/types/settings";
 
 const AreaRow = memo(({
     row, onEdit

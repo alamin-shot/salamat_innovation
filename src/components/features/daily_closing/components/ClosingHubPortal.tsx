@@ -6,13 +6,12 @@ import { getHubCategories } from "@/hooks/daily_closing_hooks/closingHubFactory"
 export function ClosingHubPortal({ manager }: { manager: ReturnType<typeof useClosingManager> }) {
     const store = useGlobalClosingStore();
 
-    // Calculate active transactions for the selected date
     const getCount = (arr: any[]) => arr.filter(t => t.date === manager.activeDate).length;
 
-    // Map the precise transaction counts for the UI badges
     const dynamicCounts: Partial<Record<ClosingTabKey, number>> = {
         daily_closing_balance: getCount(store.dailyClosingBalances),
         profit_loss: getCount(store.profitLoss),
+        daily_bank: getCount(store.dailyBankRecords),
         sale: getCount(store.sales),
         purchase: getCount(store.purchases),
         expense: getCount(store.expenses),
@@ -24,9 +23,7 @@ export function ClosingHubPortal({ manager }: { manager: ReturnType<typeof useCl
         balance_sheet: getCount(store.balanceSheets)
     };
 
-    // Generate the categories using the separated Factory Config
     const categories = getHubCategories(dynamicCounts);
-
     return (
         <div className="flex flex-col gap-8 pb-10">
             {categories.map((cat) => (

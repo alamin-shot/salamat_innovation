@@ -1,9 +1,10 @@
 import { useState, useMemo, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useGlobalClosingStore, TenderMatrix, ClosingTransaction } from "@/store/useGlobalClosingStore";
+import { useGlobalClosingStore } from "@/store/useGlobalClosingStore";
+import { ClosingTransaction, TenderMatrix } from "@/types/daily_closing";
 
-export type ClosingTabKey = "hub" | "daily_closings" | "daily_closing_balance" | "profit_loss" | "sale" | "purchase" | "sale_return" | "purchase_return" | "expense" | "withdrawal" | "deposit" | "stock" | "balance_sheet";
-export type DrawerMode = "none" | "transaction" | "denomination" | "edit";
+export type ClosingTabKey = "hub" | "daily_closings" | "daily_closing_balance" | "profit_loss" | "sale" | "purchase" | "sale_return" | "purchase_return" | "expense" | "withdrawal" | "deposit" | "stock" | "balance_sheet" | "daily_bank";;
+export type DrawerMode = "none" | "transaction" | "denomination" | "edit" | "bank_form";;
 
 export function useClosingManager() {
     const router = useRouter();

@@ -1,9 +1,9 @@
 "use client";
 import React, { memo } from "react";
-import { PaymentMethodRecord } from "@/store/useGlobalSettingsStore";
 import { Edit, Trash2, CreditCard, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
+import { PaymentMethodRecord } from "@/types/settings";
 
 const PaymentRow = memo(({
     row, isSelected, onToggle, onEdit, onDelete

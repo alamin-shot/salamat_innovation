@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { PaymentMethodRecord } from "@/store/useGlobalSettingsStore";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Save, ImagePlus } from "lucide-react";
+import { PaymentMethodRecord } from "@/types/settings";
 
 function PaymentFormContent({ record, manager }: { record: PaymentMethodRecord | null; manager: any }) {
     const [formData, setFormData] = useState({

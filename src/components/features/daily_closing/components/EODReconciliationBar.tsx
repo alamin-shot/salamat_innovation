@@ -1,12 +1,13 @@
 "use client";
 import { useClosingManager } from "@/hooks/daily_closing_hooks/useClosingManager";
-import { TenderType } from "@/store/useGlobalClosingStore";
+
 import { Button } from "@/components/ui/Button";
 import { CheckCircle2, AlertTriangle, Calculator, Lock, Send, Unlock } from "lucide-react";
+import { TenderType } from "@/types/daily_closing";
 
 export function EODReconciliationBar({ manager }: { manager: ReturnType<typeof useClosingManager> }) {
     const { expectedMath, dayState, discrepancies, isLocked, isSubmitted } = manager;
-    const tenders: TenderType[] = ["Cash", "Bkash", "POS"];
+    const tenders: TenderType[] = ["cash", "bkash", "pos"];
 
     const isReadOnly = isLocked || isSubmitted;
 
@@ -44,7 +45,7 @@ export function EODReconciliationBar({ manager }: { manager: ReturnType<typeof u
                     <div className="flex flex-col gap-1 relative">
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex justify-between">
                             Actual Count
-                            {tender === "Cash" && !isReadOnly && (
+                            {tender === "cash" && !isReadOnly && (
                                 <button
                                     onClick={() => manager.setDrawerMode("denomination")}
                                     className="text-brand-primary hover:text-brand-primary/80 flex items-center gap-0.5 transition-colors"

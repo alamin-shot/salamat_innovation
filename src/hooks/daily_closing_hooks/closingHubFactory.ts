@@ -1,7 +1,7 @@
 import { ClosingTabKey } from "./useClosingManager";
 import {
     Calculator, ShoppingCart, ArrowDownRight, ArrowUpRight,
-    RefreshCcw, Package, Wallet, Banknote, ShieldAlert, LucideIcon
+    RefreshCcw, Package, Wallet, Banknote, ShieldAlert, LucideIcon, Landmark // Added Landmark
 } from "lucide-react";
 
 export interface HubItem {
@@ -25,7 +25,8 @@ export function getHubCategories(counts: Partial<Record<ClosingTabKey, number>>)
             items: [
                 { id: "daily_closings", label: "Daily Closings", icon: Calculator, desc: "Split-tender math & EOD lock", color: "text-indigo-600 bg-indigo-50 border-indigo-100" },
                 { id: "daily_closing_balance", label: "Daily Closing Balance", count: counts.daily_closing_balance || 0, icon: Wallet, desc: "Historical closing balances", color: "text-indigo-600 bg-indigo-50 border-indigo-100" },
-                { id: "profit_loss", label: "Profit Loss", count: counts.profit_loss || 0, icon: Calculator, desc: "Daily P&L statement", color: "text-indigo-600 bg-indigo-50 border-indigo-100" }
+                { id: "profit_loss", label: "Profit Loss", count: counts.profit_loss || 0, icon: Calculator, desc: "Daily P&L statement", color: "text-indigo-600 bg-indigo-50 border-indigo-100" },
+                { id: "daily_bank", label: "Daily Bank Records", count: counts.daily_bank || 0, icon: Landmark, desc: "Record deposits & withdrawals", color: "text-emerald-600 bg-emerald-50 border-emerald-100" }
             ]
         },
         {
@@ -35,6 +36,7 @@ export function getHubCategories(counts: Partial<Record<ClosingTabKey, number>>)
                 { id: "deposit", label: "Deposit Statements", count: counts.deposit || 0, icon: ArrowDownRight, desc: "Incoming funds & additions", color: "text-emerald-600 bg-emerald-50 border-emerald-100" }
             ]
         },
+        // ... (Keep the rest of your existing categories exactly the same)
         {
             title: "Payables & Costs",
             items: [

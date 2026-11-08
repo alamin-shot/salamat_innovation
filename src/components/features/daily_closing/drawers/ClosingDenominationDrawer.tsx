@@ -4,7 +4,7 @@ import { useClosingManager } from "@/hooks/daily_closing_hooks/useClosingManager
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { Calculator, Check } from "lucide-react";
-import { DenominationTally } from "@/store/useGlobalClosingStore";
+import { DenominationTally } from "@/types/daily_closing";
 
 export function ClosingDenominationDrawer({ manager }: { manager: ReturnType<typeof useClosingManager> }) {
     const isOpen = manager.drawerMode === "denomination";

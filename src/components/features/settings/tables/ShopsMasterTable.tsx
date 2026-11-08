@@ -1,9 +1,9 @@
 "use client";
 import React, { memo } from "react";
-import { ShopRecord } from "@/store/useGlobalSettingsStore";
 import { Edit, Trash2, Store, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
+import { ShopRecord } from "@/types/settings";
 
 const ShopRow = memo(({
     row, isSelected, onToggle, onEdit, onDelete

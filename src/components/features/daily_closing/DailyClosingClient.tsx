@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useClosingManager } from "@/hooks/daily_closing_hooks/useClosingManager";
@@ -6,10 +7,14 @@ import { ClosingHubPortal } from "./components/ClosingHubPortal";
 import { ClosingSpokeView } from "./components/ClosingSpokeView";
 import { ClosingDenominationDrawer } from "./drawers/ClosingDenominationDrawer";
 import { ClosingDetailDrawer } from "./drawers/ClosingDetailDrawer";
+import { ClosingEditDrawer } from "./drawers/ClosingEditDrawer";
 import { MasterZReportPrint } from "./print/MasterZReportPrint";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { Lock, Unlock } from "lucide-react";
-import { ClosingEditDrawer } from "./drawers/ClosingEditDrawer";
+import { DailyBankDrawer } from "./drawers/DailyBankDrawer";
+
+
+
 
 export function DailyClosingClient() {
     const manager = useClosingManager();
@@ -57,6 +62,8 @@ export function DailyClosingClient() {
                 )}
             </div>
 
+
+            <DailyBankDrawer manager={manager} />
             <ClosingEditDrawer manager={manager} />
             <ClosingDenominationDrawer manager={manager} />
             <ClosingDetailDrawer manager={manager} />

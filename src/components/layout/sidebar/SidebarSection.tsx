@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SidebarLink } from "./SidebarLink";
-import type { NavSection } from "@/constants/navigation";
+import type { NavSection } from "@/types/navigation";
 
 interface SidebarSectionProps {
     section: NavSection;

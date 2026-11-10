@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import type { NavItem } from "@/constants/navigation";
+import type { NavItem } from "@/types/navigation";
 
 interface SidebarLinkProps {
     item: NavItem;
@@ -10,6 +10,8 @@ interface SidebarLinkProps {
 }
 
 export function SidebarLink({ item, isActive, icon }: SidebarLinkProps) {
+    const ItemIcon = item.icon;
+
     return (
         <Link
             href={item.href}
@@ -18,7 +20,10 @@ export function SidebarLink({ item, isActive, icon }: SidebarLinkProps) {
                 isActive ? "text-brand-primary bg-brand-bg/50" : "text-brand-text"
             )}
         >
-            {icon && <span className="flex h-5 w-5 items-center justify-center shrink-0">{icon}</span>}
+
+            <span className="flex h-5 w-5 items-center justify-center shrink-0 text-brand-subtext">
+                <ItemIcon className="w-4 h-4" />
+            </span>
             <span className="truncate">{item.title}</span>
         </Link>
     );

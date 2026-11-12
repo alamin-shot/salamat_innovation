@@ -4,16 +4,16 @@ import { Drawer } from "@/components/ui/Drawer";
 import { CategoryReorderTree } from "./CategoryReorderTree";
 import { CategoryMasterForm } from "./CategoryMasterForm";
 import { CategoriesTable } from "./CategoriesTable";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useProductsManager } from "@/hooks/products_hooks/useProductsManager";
 
 export function CategoriesClientManager() {
-    const { activeDrawer, openView, closeView } = useCommandParams();
+    const manager = useProductsManager("categories");
 
     // This stays local since it dictates the internal view of the drawer, not the URL
     const [selectedCategoryId, setSelectedCategoryId] = React.useState<string | null>(null);
 
     const handleCloseDrawer = () => {
-        closeView();
+        manager.closeDrawer();
         setSelectedCategoryId(null);
     };
 
@@ -26,21 +26,21 @@ export function CategoriesClientManager() {
                         <p className="text-xs sm:text-sm text-brand-subtext">Manage product taxonomy and storefront hierarchy</p>
                     </div>
                     <button
-                        onClick={() => openView("drawer", "reorder")}
+                        onClick={() => manager.openDrawer("drawer", "reorder")}
                         className="rounded-lg border border-emerald-600 bg-emerald-50 px-4 py-2 text-xs sm:text-sm font-bold text-emerald-700 transition-colors hover:bg-emerald-100 shadow-sm"
                     >
                         Reorder Category
                     </button>
                 </div>
 
-                <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1">
-                    <CategoriesTable />
+                <div className={`rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+                    <CategoriesTable manager={manager} />
                 </div>
             </div>
 
             <Drawer
                 title="Manage Categories"
-                isOpen={activeDrawer === "reorder"}
+                isOpen={manager.drawerMode === "reorder"}
                 onClose={handleCloseDrawer}
                 width="w-[100vw] max-w-[100vw]" // Full width drawer
             >

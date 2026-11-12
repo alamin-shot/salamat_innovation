@@ -1,48 +1,41 @@
 "use client";
 import * as React from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { Drawer } from "@/components/ui/Drawer";
+import { useProductsManager } from "@/hooks/products_hooks/useProductsManager";
+import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
+import { UsedProductInput } from "@/types/products";
 import { UsedProductTable } from "@/components/features/products-pages/used-products/UsedProductTable";
 import { UsedProductMasterForm } from "@/components/features/products-pages/used-products/UsedProductMasterForm";
-import { ProductPreviewContent } from "@/components/features/products-pages/products/ProductPreviewContent";
 import { UsedProductPreviewContent } from "./UsedProductPreviewContent";
+import { UsedQuickViewDrawer } from "./drawers/UsedQuickViewDrawer";
 
 export function UsedProductsClientManager() {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
+    const manager = useProductsManager("used_products");
 
-    const activeDrawer = searchParams.get("drawer");
-    const activeId = searchParams.get("id");
-
-    const [persistedDrawer, setPersistedDrawer] = React.useState(activeDrawer);
-    const [persistedId, setPersistedId] = React.useState(activeId);
-
-    React.useEffect(() => {
-        if (activeDrawer) {
-            setPersistedDrawer(activeDrawer);
-            setPersistedId(activeId);
-        }
-    }, [activeDrawer, activeId]);
-
-    React.useEffect(() => {
-        setPersistedDrawer(null);
-    }, [pathname]);
-
-    const closeDrawer = () => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete("drawer");
-        params.delete("id");
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    };
+    const isOpen = manager.drawerMode === "add-used" || manager.drawerMode === "edit-used" || manager.drawerMode === "preview";
+    // Keep the drawer content in place while it slides out.
+    const drawerMode = useRetainedValue(manager.drawerMode, isOpen);
+    const product = useRetainedValue(manager.drawerMode === "add-used" ? null : manager.activeRecord, isOpen);
 
     const getDrawerTitle = () => {
-        switch (persistedDrawer) {
+        switch (drawerMode) {
             case "add-used": return "Add Used Product";
             case "edit-used": return "Update Used Product";
             case "preview": return "Live Storefront Preview";
             default: return "";
         }
+    };
+
+    const handleSubmit = (input: UsedProductInput) => {
+        if (product) {
+            manager.store.updateUsedProduct(product.id, input);
+            toast.success("Used product updated successfully.");
+        } else {
+            manager.store.addUsedProduct(input);
+            toast.success("Used product created successfully.");
+        }
+        manager.closeDrawer();
     };
 
     return (
@@ -54,34 +47,37 @@ export function UsedProductsClientManager() {
                         <p className="text-xs sm:text-sm text-brand-subtext">Manage pre-owned inventory, serial numbers, and pricing</p>
                     </div>
                     <button
-                        onClick={() => router.push(`${pathname}?drawer=add-used`)}
+                        onClick={() => manager.openDrawer("drawer", "add-used")}
                         className="rounded-lg bg-emerald-600 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-sm transition-colors hover:bg-emerald-700"
                     >
                         + Add Used Product
                     </button>
                 </div>
 
-                <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1">
-                    <UsedProductTable />
+                <div className={`rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+                    <UsedProductTable manager={manager} />
                 </div>
             </div>
 
             <Drawer
                 title={getDrawerTitle()}
-                isOpen={!!activeDrawer}
-                onClose={closeDrawer}
-                width={
-                    persistedDrawer === "preview"
-                        ? "w-[100vw] max-w-[100vw] lg:max-w-none lg:w-[calc(100vw-280px)]"
-                        : "w-[100vw] max-w-[100vw] lg:max-w-none lg:w-[calc(100vw-280px)]"
-                }
+                isOpen={isOpen}
+                onClose={manager.closeDrawer}
+                width="w-[100vw] max-w-[100vw] lg:max-w-none lg:w-[calc(100vw-280px)]"
             >
-                {persistedDrawer === "add-used" || persistedDrawer === "edit-used" ? (
-                    <UsedProductMasterForm productId={persistedId} onCancel={closeDrawer} onSave={closeDrawer} />
-                ) : persistedDrawer === "preview" ? (
-                    <UsedProductPreviewContent productId={persistedId} />
+                {drawerMode === "add-used" || drawerMode === "edit-used" ? (
+                    <UsedProductMasterForm
+                        key={product?.id || "new"}
+                        product={product}
+                        onCancel={manager.closeDrawer}
+                        onSubmit={handleSubmit}
+                    />
+                ) : drawerMode === "preview" ? (
+                    <UsedProductPreviewContent product={product} />
                 ) : null}
             </Drawer>
+
+            <UsedQuickViewDrawer manager={manager} />
         </>
     );
 }

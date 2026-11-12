@@ -75,7 +75,7 @@ export function SpecificationsForm({ productId }: SpecificationsFormProps) {
     };
 
     return (
-        <div className="flex flex-col gap-2 h-full">
+        <div className="mx-auto flex h-full w-full max-w-6xl flex-col gap-2 pb-32">
 
             {/* The Magic Scraper Zone */}
             <div className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-5 shadow-sm transition-colors hover:border-indigo-300">
@@ -126,7 +126,7 @@ export function SpecificationsForm({ productId }: SpecificationsFormProps) {
                     <div className="col-span-1 text-center">Action</div>
                 </div>
 
-                <div className="flex flex-col gap-3 overflow-y-auto custom-scrollbar pb-2">
+                <div className="flex flex-col gap-3 pb-2">
                     {specs.map((spec) => (
                         <div key={spec.id} className="grid grid-cols-12 gap-4 items-start group">
                             <div className="col-span-4">

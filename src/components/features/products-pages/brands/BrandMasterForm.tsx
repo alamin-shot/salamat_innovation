@@ -3,11 +3,13 @@ import * as React from "react";
 import Image from "next/image";
 import { UploadCloud, X, Save } from "lucide-react";
 import { toast } from "sonner";
+import { Brand, BrandInput } from "@/types/products";
+import { AuditFooter } from "../shared/AuditCells";
 
 interface BrandMasterFormProps {
-    brandId?: string | null;
+    brand: Brand | null;
     onCancel: () => void;
-    onSave: () => void;
+    onSubmit: (input: BrandInput) => void;
 }
 
 interface MediaState {
@@ -17,21 +19,19 @@ interface MediaState {
     infoBanner: string | null;
 }
 
-export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormProps) {
-    const isEditMode = !!brandId;
-
+export function BrandMasterForm({ brand, onCancel, onSubmit }: BrandMasterFormProps) {
     // Form Field States - strictly matching legacy fields
-    const [name, setName] = React.useState(isEditMode ? "Apple" : "");
-    const [tagline, setTagline] = React.useState(isEditMode ? "Think Different" : "");
-    const [androidAppLink, setAndroidAppLink] = React.useState(isEditMode ? "https://play.google.com/store/apps/details?id=com.apple" : "");
-    const [iosAppLink, setIosAppLink] = React.useState(isEditMode ? "https://apps.apple.com/app/id123456" : "");
+    const [name, setName] = React.useState(brand?.name ?? "");
+    const [tagline, setTagline] = React.useState(brand?.tagline ?? "");
+    const [androidAppLink, setAndroidAppLink] = React.useState(brand?.androidAppLink ?? "");
+    const [iosAppLink, setIosAppLink] = React.useState(brand?.iosAppLink ?? "");
 
-    // Media Dropzone States (pre-filled in edit mode with legacy dimensions)
+    // Media Dropzone States (pre-filled in edit mode from the saved brand)
     const [media, setMedia] = React.useState<MediaState>({
-        primaryLogo: isEditMode ? "/phone.png" : null,
-        secondaryLogo: isEditMode ? "/phone.png" : null,
-        shopBanner: isEditMode ? "/banner.png" : null,
-        infoBanner: isEditMode ? "/banner.png" : null,
+        primaryLogo: brand?.primaryLogo ?? null,
+        secondaryLogo: brand?.secondaryLogo ?? null,
+        shopBanner: brand?.shopBanner ?? null,
+        infoBanner: brand?.infoBanner ?? null,
     });
 
     const removeImage = (key: keyof MediaState) => {
@@ -53,8 +53,18 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
             return;
         }
 
-        toast.success(isEditMode ? "Brand updated successfully." : "Brand created successfully.");
-        onSave();
+        onSubmit({
+            name: name.trim(),
+            tagline,
+            androidAppLink,
+            iosAppLink,
+            ...media,
+            // The table thumbnail follows the primary logo.
+            logo: media.primaryLogo,
+            totalProducts: brand?.totalProducts ?? 0,
+            status: brand?.status ?? "Active",
+            ecommerce: brand?.ecommerce ?? true,
+        });
     };
 
     const mediaSlots: { key: keyof MediaState; label: string }[] = [
@@ -67,7 +77,7 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
     return (
         <form onSubmit={handleSubmit} className="flex h-full flex-col bg-brand-bg/30">
             {/* Scrollable Form Content */}
-            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-6 pb-32 custom-scrollbar">
                 <div className="mx-auto max-w-4xl flex flex-col gap-2">
 
                     {/* CARD 1: Basic Information */}
@@ -184,6 +194,17 @@ export function BrandMasterForm({ brandId, onCancel, onSave }: BrandMasterFormPr
                             })}
                         </div>
                     </div>
+
+                    {brand && (
+                        <div className="px-1 pt-2">
+                            <AuditFooter
+                                createdBy={brand.createdBy}
+                                createdAt={brand.createdAt}
+                                updatedBy={brand.updatedBy}
+                                updatedAt={brand.updatedAt}
+                            />
+                        </div>
+                    )}
 
                 </div>
             </div>

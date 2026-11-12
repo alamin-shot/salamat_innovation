@@ -15,11 +15,11 @@ const AVAILABLE_TAGS = [
 ];
 
 interface ProductTagsDropdownProps {
-    productId: string;
     initialTags?: string[];
+    onChange?: (tags: string[]) => void;
 }
 
-export function ProductTagsDropdown({ productId, initialTags = [] }: ProductTagsDropdownProps) {
+export function ProductTagsDropdown({ initialTags = [], onChange }: ProductTagsDropdownProps) {
     const [selectedTags, setSelectedTags] = React.useState<Set<string>>(new Set(initialTags));
 
     const handleToggleTag = (tagId: string) => {
@@ -27,7 +27,7 @@ export function ProductTagsDropdown({ productId, initialTags = [] }: ProductTags
         if (next.has(tagId)) next.delete(tagId);
         else next.add(tagId);
         setSelectedTags(next);
-        // Here you would also fire an API call to update the backend instantly
+        onChange?.(Array.from(next));
     };
 
     return (

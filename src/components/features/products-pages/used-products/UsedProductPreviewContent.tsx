@@ -2,20 +2,25 @@
 import * as React from "react";
 import Image from "next/image";
 import { Battery, Box, ShieldCheck, Hash, Smartphone } from "lucide-react";
+import { UsedProduct } from "@/types/products";
 
 interface UsedProductPreviewContentProps {
-    productId?: string | null;
+    product: UsedProduct | null;
 }
 
-export function UsedProductPreviewContent({ productId }: UsedProductPreviewContentProps) {
+export function UsedProductPreviewContent({ product: record }: UsedProductPreviewContentProps) {
+    if (!record) {
+        return null;
+    }
 
+    // Battery health and warranty are not stored on the record yet; they keep their previous preview values.
     const product = {
-        name: "iPhone 13 Pro",
-        variant: "128GB / Gold",
-        price: 53990.00,
+        name: record.name,
+        variant: record.variant,
+        price: record.sellingPrice ?? 0,
         batteryHealth: "90%",
-        serialNumber: "359052378710667",
-        boxAvailable: "No",
+        serialNumber: record.serialNumber,
+        boxAvailable: record.boxAvailable ? "Yes" : "No",
         warranty: "1 Year Official Service",
     };
 

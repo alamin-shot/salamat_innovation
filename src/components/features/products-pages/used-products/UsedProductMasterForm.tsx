@@ -3,21 +3,33 @@ import * as React from "react";
 import Image from "next/image";
 import { UploadCloud, Trash2, ChevronDown, Save, Check, X } from "lucide-react";
 import { toast } from "sonner";
+import { UsedProduct, UsedProductInput } from "@/types/products";
+import { computeDiscount, parsePriceInput, toPriceInput } from "@/utils/productRules";
+import { DiscountSummary } from "../shared/DiscountSummary";
+import { AuditFooter } from "../shared/AuditCells";
 
 interface UsedProductMasterFormProps {
-    productId?: string | null;
+    product: UsedProduct | null;
     onCancel: () => void;
-    onSave: () => void;
+    onSubmit: (input: UsedProductInput) => void;
 }
 
-export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProductMasterFormProps) {
-    const isEditMode = !!productId;
+export function UsedProductMasterForm({ product, onCancel, onSubmit }: UsedProductMasterFormProps) {
+    const isEditMode = !!product;
 
     // Dropdown States
-    const [activeDropdown, setActiveDropdown] = React.useState<"product" | "variant" | "discountType" | null>(null);
-    const [selectedProduct, setSelectedProduct] = React.useState(isEditMode ? "iPhone 13 Pro" : "");
-    const [selectedVariant, setSelectedVariant] = React.useState(isEditMode ? "Gold / 128GB" : "");
-    const [selectedDiscountType, setSelectedDiscountType] = React.useState("Fixed");
+    const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
+    const [selectedProduct, setSelectedProduct] = React.useState(product?.name ?? "");
+    const [selectedVariant, setSelectedVariant] = React.useState(product?.variant ?? "");
+
+    // Stored fields
+    const [serialNumber, setSerialNumber] = React.useState(product?.serialNumber ?? "");
+    const [maxRetailPrice, setMaxRetailPrice] = React.useState(toPriceInput(product?.maxRetailPrice ?? null));
+    const [sellingPrice, setSellingPrice] = React.useState(toPriceInput(product?.sellingPrice ?? null));
+    const [boxAvailable, setBoxAvailable] = React.useState(product?.boxAvailable ?? false);
+
+    const mrp = parsePriceInput(maxRetailPrice);
+    const selling = parsePriceInput(sellingPrice);
 
     // Dynamic Attributes State
     const [attributes, setAttributes] = React.useState([{ id: 1, name: "Color", value: "Gold" }]);
@@ -42,13 +54,41 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        toast.success(isEditMode ? "Used product updated successfully." : "Used product created successfully.");
-        onSave();
+        if (!selectedProduct) {
+            toast.error("Please choose a product.");
+            return;
+        }
+        if (!selectedVariant) {
+            toast.error("Please choose a variant.");
+            return;
+        }
+        if (mrp === null || selling === null) {
+            toast.error("MRP and Selling Price are required.");
+            return;
+        }
+        if (computeDiscount(mrp, selling).state === "selling_above_mrp") {
+            toast.error("Selling Price cannot be higher than MRP.");
+            return;
+        }
+
+        onSubmit({
+            name: selectedProduct,
+            variant: selectedVariant,
+            serialNumber: serialNumber.trim(),
+            maxRetailPrice: mrp,
+            sellingPrice: selling,
+            boxAvailable,
+            image: product?.image ?? null,
+            carePlan: product?.carePlan ?? "None",
+            isSold: product?.isSold ?? false,
+            status: product?.status ?? "Active",
+            ecommerce: product?.ecommerce ?? true,
+        });
     };
 
     return (
         <form ref={formRef} onSubmit={handleSubmit} className="flex h-full flex-col">
-            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-6 pb-32 custom-scrollbar">
                 <div className="mx-auto max-w-5xl flex flex-col gap-8">
 
                     {/* CARD 1: Core Identifiers */}
@@ -110,7 +150,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
 
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-semibold text-brand-text">Serial Number <span className="text-red-500">*</span></label>
-                                <input type="text" defaultValue={isEditMode ? "359052378710667" : ""} placeholder="Enter serial number" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono" required />
+                                <input type="text" value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} placeholder="Enter serial number" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono" required />
                             </div>
                         </div>
                     </div>
@@ -120,37 +160,19 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                         <h3 className="text-xs font-bold text-brand-subtext uppercase tracking-wider mb-4">Pricing & Health Metrics</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-semibold text-brand-text">Price <span className="text-red-500">*</span></label>
-                                <input type="number" defaultValue={isEditMode ? "53990.00" : ""} placeholder="Enter price" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" required />
-                            </div>
-
-                            {/* CUSTOM DISCOUNT TYPE DROPDOWN */}
-                            <div className="flex flex-col gap-1.5 relative">
-                                <label className="text-xs font-semibold text-brand-text">Discount Type</label>
-                                <div
-                                    onClick={() => setActiveDropdown(activeDropdown === "discountType" ? null : "discountType")}
-                                    className={`flex w-full cursor-pointer items-center justify-between rounded-md border bg-white px-3 py-2 text-sm transition-colors ${activeDropdown === "discountType" ? "border-emerald-500 ring-1 ring-emerald-500" : "border-brand-subtext/30 hover:border-emerald-400"}`}
-                                >
-                                    <span className="text-brand-text font-medium">{selectedDiscountType}</span>
-                                    <ChevronDown className={`h-4 w-4 text-brand-subtext transition-transform duration-200 ${activeDropdown === "discountType" ? "rotate-180 text-emerald-600" : ""}`} />
-                                </div>
-                                {activeDropdown === "discountType" && (
-                                    <div className="absolute left-0 top-[calc(100%+4px)] z-50 w-full rounded-lg border border-brand-subtext/20 bg-white shadow-xl overflow-hidden animate-in fade-in zoom-in-95">
-                                        <div className="p-1">
-                                            {["Fixed", "Percentage"].map(type => (
-                                                <div key={type} onClick={() => { setSelectedDiscountType(type); setActiveDropdown(null); }} className="flex cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm text-brand-text hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
-                                                    <span>{type}</span>
-                                                    {selectedDiscountType === type && <Check className="h-4 w-4 text-emerald-600" />}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+                                <label className="text-xs font-semibold text-brand-text">Max Retail Price <span className="text-red-500">*</span></label>
+                                <input type="number" value={maxRetailPrice} onChange={(e) => setMaxRetailPrice(e.target.value)} placeholder="Enter MRP" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" required />
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-semibold text-brand-text">Discount Amount</label>
-                                <input type="number" defaultValue={isEditMode ? "0.00" : ""} placeholder="Discount Amount" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                                <label className="text-xs font-semibold text-brand-text">Selling Price <span className="text-red-500">*</span></label>
+                                <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} placeholder="Enter selling price" className="w-full rounded-md border border-brand-subtext/30 bg-white px-3 py-2 text-sm text-brand-text focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" required />
+                            </div>
+
+                            {/* Discount is derived from MRP vs. Selling Price */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-xs font-semibold text-brand-text">Discount (Auto)</label>
+                                <DiscountSummary maxRetailPrice={mrp} sellingPrice={selling} />
                             </div>
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-xs font-semibold text-brand-text">Battery Health (%)</label>
@@ -175,11 +197,11 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                                 <label className="text-xs font-semibold text-brand-text">Box Available</label>
                                 <div className="flex items-center gap-2 h-[38px]">
                                     <label className="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="boxAvailable" className="h-4 w-4 text-emerald-600 focus:ring-emerald-600" />
+                                        <input type="radio" name="boxAvailable" checked={boxAvailable} onChange={() => setBoxAvailable(true)} className="h-4 w-4 text-emerald-600 focus:ring-emerald-600" />
                                         <span className="text-sm font-medium text-brand-text">Yes</span>
                                     </label>
                                     <label className="flex items-center gap-2 cursor-pointer">
-                                        <input type="radio" name="boxAvailable" defaultChecked className="h-4 w-4 text-emerald-600 focus:ring-emerald-600" />
+                                        <input type="radio" name="boxAvailable" checked={!boxAvailable} onChange={() => setBoxAvailable(false)} className="h-4 w-4 text-emerald-600 focus:ring-emerald-600" />
                                         <span className="text-sm font-medium text-brand-text">No</span>
                                     </label>
                                 </div>
@@ -216,7 +238,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                                 {/* ATTRIBUTE NAME DROPDOWN */}
                                 <div className="col-span-5 relative">
                                     <div
-                                        onClick={() => setActiveDropdown(activeDropdown === `attr-name-${attr.id}` ? null : `attr-name-${attr.id}` as any)}
+                                        onClick={() => setActiveDropdown(activeDropdown === `attr-name-${attr.id}` ? null : `attr-name-${attr.id}`)}
                                         className={`flex w-full cursor-pointer items-center justify-between rounded-md border bg-white px-3 py-2 text-sm transition-colors ${activeDropdown === `attr-name-${attr.id}` ? "border-emerald-500 ring-1 ring-emerald-500" : "border-brand-subtext/30 hover:border-emerald-400"}`}
                                     >
                                         <span className={attr.name ? "text-brand-text font-medium" : "text-brand-subtext"}>
@@ -241,7 +263,7 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
                                 {/* ATTRIBUTE VALUE DROPDOWN */}
                                 <div className="col-span-6 relative">
                                     <div
-                                        onClick={() => setActiveDropdown(activeDropdown === `attr-val-${attr.id}` ? null : `attr-val-${attr.id}` as any)}
+                                        onClick={() => setActiveDropdown(activeDropdown === `attr-val-${attr.id}` ? null : `attr-val-${attr.id}`)}
                                         className={`flex w-full cursor-pointer items-center justify-between rounded-md border bg-white px-3 py-2 text-sm transition-colors ${activeDropdown === `attr-val-${attr.id}` ? "border-emerald-500 ring-1 ring-emerald-500" : "border-brand-subtext/30 hover:border-emerald-400"}`}
                                     >
                                         <span className={attr.value ? "text-brand-text font-medium" : "text-brand-subtext"}>
@@ -349,6 +371,16 @@ export function UsedProductMasterForm({ productId, onCancel, onSave }: UsedProdu
 
             {/* Sticky Footer */}
             <div className="shrink-0 flex items-center justify-end gap-3 border-t border-brand-subtext/20 bg-white p-4 sm:px-6">
+                {product && (
+                    <div className="mr-auto hidden sm:block">
+                        <AuditFooter
+                            createdBy={product.createdBy}
+                            createdAt={product.createdAt}
+                            updatedBy={product.updatedBy}
+                            updatedAt={product.updatedAt}
+                        />
+                    </div>
+                )}
                 <button type="button" onClick={onCancel} className="rounded-md px-4 py-2 text-sm font-medium text-brand-subtext hover:bg-brand-bg hover:text-brand-text">Cancel</button>
                 <button type="submit" className="flex items-center gap-2 rounded-md bg-emerald-600 px-8 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-emerald-700">
                     <Save className="h-4 w-4" /> Submit

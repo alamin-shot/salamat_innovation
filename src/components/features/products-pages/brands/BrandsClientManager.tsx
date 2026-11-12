@@ -1,21 +1,40 @@
 "use client";
 import * as React from "react";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { toast } from "sonner";
 import { Drawer } from "@/components/ui/Drawer";
+import { useProductsManager } from "@/hooks/products_hooks/useProductsManager";
+import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
+import { BrandInput } from "@/types/products";
 import { BrandsTable } from "./BrandsTable";
 import { BrandMasterForm } from "./BrandMasterForm";
 import { BrandReorderList } from "./BrandReorderList";
 
 export function BrandsClientManager() {
-    const { activeDrawer, activeId, openView, closeView } = useCommandParams();
+    const manager = useProductsManager("brands");
+
+    const isOpen = manager.drawerMode === "add" || manager.drawerMode === "edit" || manager.drawerMode === "reorder";
+    // Keep the drawer content in place while it slides out.
+    const drawerMode = useRetainedValue(manager.drawerMode, isOpen);
+    const brand = useRetainedValue(manager.drawerMode === "edit" ? manager.activeRecord : null, isOpen);
 
     const getDrawerTitle = () => {
-        switch (activeDrawer) {
+        switch (drawerMode) {
             case "add": return "Add Brand";
             case "edit": return "Update Brand";
             case "reorder": return "Reorder Brands";
             default: return "";
         }
+    };
+
+    const handleSubmit = (input: BrandInput) => {
+        if (brand) {
+            manager.store.updateBrand(brand.id, input);
+            toast.success("Brand updated successfully.");
+        } else {
+            manager.store.addBrand(input);
+            toast.success("Brand created successfully.");
+        }
+        manager.closeDrawer();
     };
 
     return (
@@ -29,13 +48,13 @@ export function BrandsClientManager() {
 
                     <div className="flex items-center gap-3">
                         <button
-                            onClick={() => openView("drawer", "reorder")}
+                            onClick={() => manager.openDrawer("drawer", "reorder")}
                             className="rounded-lg border border-emerald-600 bg-emerald-50 px-4 py-2 text-xs sm:text-sm font-bold text-emerald-700 transition-colors hover:bg-emerald-100 shadow-sm"
                         >
                             Reorder Brands
                         </button>
                         <button
-                            onClick={() => openView("drawer", "add")}
+                            onClick={() => manager.openDrawer("drawer", "add")}
                             className="rounded-lg bg-emerald-600 px-4 py-2 text-xs sm:text-sm font-bold text-white transition-colors hover:bg-emerald-700 shadow-sm"
                         >
                             + Add Brand
@@ -43,21 +62,26 @@ export function BrandsClientManager() {
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1">
-                    <BrandsTable />
+                <div className={`rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+                    <BrandsTable manager={manager} />
                 </div>
             </div>
 
             <Drawer
                 title={getDrawerTitle()}
-                isOpen={!!activeDrawer}
-                onClose={closeView}
+                isOpen={isOpen}
+                onClose={manager.closeDrawer}
                 width="w-[100vw] max-w-[100vw] lg:max-w-none lg:w-[calc(100vw-280px)]"
             >
-                {activeDrawer === "add" || activeDrawer === "edit" ? (
-                    <BrandMasterForm brandId={activeId} onCancel={closeView} onSave={closeView} />
-                ) : activeDrawer === "reorder" ? (
-                    <BrandReorderList onBack={closeView} />
+                {drawerMode === "add" || drawerMode === "edit" ? (
+                    <BrandMasterForm
+                        key={brand?.id || "new"}
+                        brand={brand}
+                        onCancel={manager.closeDrawer}
+                        onSubmit={handleSubmit}
+                    />
+                ) : drawerMode === "reorder" ? (
+                    <BrandReorderList onBack={manager.closeDrawer} />
                 ) : null}
             </Drawer>
         </>

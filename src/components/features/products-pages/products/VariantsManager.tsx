@@ -1,22 +1,43 @@
 "use client";
 import * as React from "react";
-import { Trash2, X, Search, Plus, ChevronDown, UploadCloud } from "lucide-react";
+import Image from "next/image";
+import { Trash2, X, ChevronDown, UploadCloud, Package } from "lucide-react";
+import { toast } from "sonner";
+import { ProductVariant, ProductVariantOption } from "@/types/products";
+import { useCatalogNames } from "@/hooks/products_hooks/useProductCatalogOptions";
+import { buildVariantRows, isColorAttribute, parsePriceInput, toPriceInput } from "@/utils/productRules";
+import { DiscountSummary } from "../shared/DiscountSummary";
 
 interface VariantsManagerProps {
-    productId?: string | null;
-    isQuickEdit?: boolean;
+    options: ProductVariantOption[];
+    variants: ProductVariant[];
+    onChange: (options: ProductVariantOption[], variants: ProductVariant[]) => void;
 }
 
+// Attribute names the builder offered before the Attributes page was connected.
 const DEFAULT_ATTRIBUTES = ["Color", "Storage", "Condition"];
 
-export function VariantsManager({ productId, isQuickEdit = false }: VariantsManagerProps) {
-    const [attributeOptions, setAttributeOptions] = React.useState<string[]>(DEFAULT_ATTRIBUTES);
-    const [rows, setRows] = React.useState([{ id: 1, name: "Storage", values: ["128GB"] }]);
+const newVariant = (title: string): ProductVariant => ({
+    id: `var-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    title,
+    sku: "",
+    maxRetailPrice: null,
+    sellingPrice: null,
+    inStock: true,
+});
 
-    const [openNameDropdownId, setOpenNameDropdownId] = React.useState<number | null>(null);
-    const [openValueDropdownId, setOpenValueDropdownId] = React.useState<number | null>(null);
+const PRICE_INPUT = "w-28 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none";
+
+export function VariantsManager({ options, variants, onChange }: VariantsManagerProps) {
+    const { attributeNames } = useCatalogNames();
+    const attributeOptions = React.useMemo(
+        () => Array.from(new Set([...DEFAULT_ATTRIBUTES, ...attributeNames])),
+        [attributeNames]
+    );
+
+    const [openNameDropdownId, setOpenNameDropdownId] = React.useState<string | null>(null);
+    const [openValueDropdownId, setOpenValueDropdownId] = React.useState<string | null>(null);
     const [searchQuery, setSearchQuery] = React.useState("");
-
     const builderRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
@@ -31,29 +52,62 @@ export function VariantsManager({ productId, isQuickEdit = false }: VariantsMana
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const addRow = () => setRows([...rows, { id: Date.now(), name: "", values: [] }]);
-    const removeRow = (id: number) => setRows(rows.filter(r => r.id !== id));
+    // Any change to the options regenerates the variant rows, keeping rows that still exist.
+    const commitOptions = (nextOptions: ProductVariantOption[]) => {
+        onChange(nextOptions, buildVariantRows(nextOptions, variants, newVariant));
+    };
 
-    const updateRowName = (id: number, name: string) => {
-        setRows(rows.map(r => r.id === id ? { ...r, name } : r));
+    const updateVariant = (id: string, updates: Partial<ProductVariant>) => {
+        onChange(options, variants.map((variant) => (variant.id === id ? { ...variant, ...updates } : variant)));
+    };
+
+    const addRow = () => commitOptions([...options, { id: `opt-${Date.now()}`, name: "", values: [], valueImages: {} }]);
+    const removeRow = (id: string) => commitOptions(options.filter((row) => row.id !== id));
+
+    const updateRowName = (id: string, name: string) => {
+        if (options.some((row) => row.id !== id && row.name === name)) {
+            toast.error(`${name} is already used in another row.`);
+            return;
+        }
+        commitOptions(options.map((row) => (row.id === id ? { ...row, name } : row)));
         setOpenNameDropdownId(null);
         setSearchQuery("");
     };
 
-    const addRowValue = (id: number, value: string) => {
-        setRows(rows.map(r => {
-            if (r.id === id && !r.values.includes(value)) {
-                return { ...r, values: [...r.values, value] };
+    const addRowValue = (id: string, value: string) => {
+        const trimmed = value.trim();
+        commitOptions(options.map((row) => {
+            if (row.id === id && trimmed && !row.values.includes(trimmed)) {
+                return { ...row, values: [...row.values, trimmed] };
             }
-            return r;
+            return row;
         }));
         setSearchQuery("");
         setOpenValueDropdownId(null);
     };
 
-    const removeRowValue = (id: number, valueToRemove: string) => {
-        setRows(rows.map(r => r.id === id ? { ...r, values: r.values.filter(v => v !== valueToRemove) } : r));
+    const removeRowValue = (id: string, valueToRemove: string) => {
+        commitOptions(options.map((row) => {
+            if (row.id !== id) return row;
+            const valueImages = { ...row.valueImages };
+            delete valueImages[valueToRemove];
+            return { ...row, values: row.values.filter((value) => value !== valueToRemove), valueImages };
+        }));
     };
+
+    const setValueImage = (id: string, value: string, image: string | null) => {
+        onChange(options.map((row) => {
+            if (row.id !== id) return row;
+            const valueImages = { ...row.valueImages };
+            if (image) valueImages[value] = image;
+            else delete valueImages[value];
+            return { ...row, valueImages };
+        }), variants);
+    };
+
+    // Variant images are offered only for colour attributes, one per colour value.
+    const colorRows = options.filter((row) => isColorAttribute(row.name) && row.values.length > 0);
+    const allInStock = variants.length > 0 && variants.every((variant) => variant.inStock);
 
     return (
         <div className="flex flex-col gap-8">
@@ -64,7 +118,7 @@ export function VariantsManager({ productId, isQuickEdit = false }: VariantsMana
                     <div className="col-span-1 text-center">Action</div>
                 </div>
 
-                {rows.map((row) => (
+                {options.map((row) => (
                     <div key={row.id} className="grid grid-cols-12 gap-4 items-start">
                         {/* ATTRIBUTE NAME */}
                         <div className="col-span-5 relative">
@@ -106,7 +160,6 @@ export function VariantsManager({ productId, isQuickEdit = false }: VariantsMana
                         </div>
 
                         <div className="col-span-1 flex justify-center pt-2">
-                            {/* FIX: Added type="button" */}
                             <button type="button" onClick={() => removeRow(row.id)} className="text-red-400 hover:text-red-600 transition-colors">
                                 <Trash2 className="h-5 w-5" />
                             </button>
@@ -115,64 +168,112 @@ export function VariantsManager({ productId, isQuickEdit = false }: VariantsMana
                 ))}
 
                 <div className="mt-2">
-                    {/* FIX: Added type="button" */}
                     <button type="button" onClick={addRow} className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-emerald-800">
                         Add Another Option
                     </button>
                 </div>
             </div>
 
-            {/* VARIANT IMAGE */}
-            <div className="flex flex-col gap-2">
-                <h3 className="text-sm font-semibold text-brand-text">Variant Image</h3>
-                <div className="flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-brand-subtext/30 bg-brand-bg/50 transition-colors hover:border-emerald-500/50 hover:bg-emerald-50/50">
-                    <UploadCloud className="mb-2 h-6 w-6 text-brand-subtext" />
-                    <span className="text-sm font-medium text-brand-text">Upload images for variants</span>
+            {/* VARIANT IMAGE (colour attributes only) */}
+            {colorRows.length > 0 && (
+                <div className="flex flex-col gap-3">
+                    <h3 className="text-sm font-semibold text-brand-text">Variant Image</h3>
+                    {colorRows.map((row) => (
+                        <div key={row.id} className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+                            {row.values.map((value) => {
+                                const image = row.valueImages[value];
+                                return (
+                                    <div key={value} className="flex flex-col items-center gap-1.5">
+                                        {image ? (
+                                            <div className="relative h-24 w-full overflow-hidden rounded-lg border border-brand-subtext/20 bg-brand-bg">
+                                                <Image src={image} alt={value} fill sizes="160px" className="object-contain p-1" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setValueImage(row.id, value, null)}
+                                                    className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white shadow hover:bg-red-600 transition-colors"
+                                                    title="Remove image"
+                                                >
+                                                    <X className="h-3 w-3" />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={() => { setValueImage(row.id, value, "/phone.png"); toast.success("Image uploaded successfully."); }}
+                                                className="flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-brand-subtext/30 bg-brand-bg/50 transition-colors hover:border-emerald-500/50 hover:bg-emerald-50/50"
+                                            >
+                                                <UploadCloud className="h-5 w-5 text-brand-subtext" />
+                                            </button>
+                                        )}
+                                        <span className="text-xs font-semibold text-brand-text">{value}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </div>
-            </div>
+            )}
 
             {/* VARIANT STOCK TABLE */}
             <div className="border-t border-brand-subtext/20 pt-6">
-                <label className="flex cursor-pointer items-center gap-2 mb-4">
-                    <input type="checkbox" className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600" />
-                    <span className="text-sm font-medium text-brand-text">Select All</span>
-                </label>
+                {variants.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 p-12 text-center">
+                        <Package className="h-8 w-8 text-brand-subtext/60" />
+                        <h3 className="text-sm font-bold text-brand-text">No variants yet</h3>
+                        <p className="text-xs text-brand-subtext">Choose an attribute and add its values above to generate variants.</p>
+                    </div>
+                ) : (
+                    <>
+                        <label className="flex cursor-pointer items-center gap-2 mb-4" title="Mark every variant in stock">
+                            <input
+                                type="checkbox"
+                                checked={allInStock}
+                                onChange={(e) => onChange(options, variants.map((variant) => ({ ...variant, inStock: e.target.checked })))}
+                                className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600"
+                            />
+                            <span className="text-sm font-medium text-brand-text">Select All</span>
+                        </label>
 
-                <div className="overflow-x-auto pb-4 custom-scrollbar">
-                    <table className="w-full min-w-[900px] border-separate border-spacing-y-3 text-sm">
-                        <thead>
-                            <tr className="text-left text-xs font-bold text-brand-subtext uppercase tracking-wider bg-brand-bg/40">
-                                <th className="px-4 py-3 rounded-l-xl">VARIANT TITLE</th>
-                                <th className="px-4 py-3">SKU</th>
-                                <th className="px-4 py-3">MAX RETAIL PRICE</th>
-                                <th className="px-4 py-3">DISCOUNT(%)</th>
-                                <th className="px-4 py-3">DISCOUNT FIXED</th>
-                                <th className="px-4 py-3">IN STOCK</th>
-                                <th className="px-4 py-3 rounded-r-xl"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr className="bg-white shadow-sm outline outline-1 outline-brand-subtext/20">
-                                <td className="px-4 py-3">
-                                    <span className="font-medium text-brand-text">128GB</span>
-                                </td>
-                                <td className="px-4 py-3">
-                                    <input type="text" className="w-32 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none" />
-                                </td>
-                                <td className="px-4 py-3"><input type="number" className="w-28 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none" /></td>
-                                <td className="px-4 py-3"><input type="number" className="w-28 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none" /></td>
-                                <td className="px-4 py-3"><input type="number" className="w-28 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none" /></td>
-                                <td className="px-4 py-3">
-                                    <input type="checkbox" className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600" />
-                                </td>
-                                <td className="px-4 py-3 text-right">
-                                    {/* FIX: Added type="button" */}
-                                    <button type="button" className="rounded-md bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700">Save</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <div className="overflow-x-auto pb-4 custom-scrollbar">
+                            <table className="w-full min-w-[900px] border-separate border-spacing-y-3 text-sm">
+                                <thead>
+                                    <tr className="text-left text-xs font-bold text-brand-subtext uppercase tracking-wider bg-brand-bg/40">
+                                        <th className="px-4 py-3 rounded-l-xl">VARIANT TITLE</th>
+                                        <th className="px-4 py-3">SKU</th>
+                                        <th className="px-4 py-3">MAX RETAIL PRICE</th>
+                                        <th className="px-4 py-3">SELLING PRICE</th>
+                                        <th className="px-4 py-3">DISCOUNT (AUTO)</th>
+                                        <th className="px-4 py-3 rounded-r-xl">IN STOCK</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {variants.map((variant) => (
+                                        <tr key={variant.id} className="bg-white shadow-sm outline outline-1 outline-brand-subtext/20">
+                                            <td className="px-4 py-3">
+                                                <span className="font-medium text-brand-text">{variant.title}</span>
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <input type="text" value={variant.sku} onChange={(e) => updateVariant(variant.id, { sku: e.target.value })} className="w-32 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none" />
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <input type="number" value={toPriceInput(variant.maxRetailPrice)} onChange={(e) => updateVariant(variant.id, { maxRetailPrice: parsePriceInput(e.target.value) })} className={PRICE_INPUT} />
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <input type="number" value={toPriceInput(variant.sellingPrice)} onChange={(e) => updateVariant(variant.id, { sellingPrice: parsePriceInput(e.target.value) })} className={PRICE_INPUT} />
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <DiscountSummary maxRetailPrice={variant.maxRetailPrice} sellingPrice={variant.sellingPrice} compact />
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <input type="checkbox" checked={variant.inStock} onChange={(e) => updateVariant(variant.id, { inStock: e.target.checked })} className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600" />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

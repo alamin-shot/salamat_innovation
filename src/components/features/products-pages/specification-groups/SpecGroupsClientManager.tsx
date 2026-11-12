@@ -1,11 +1,11 @@
 "use client";
 import * as React from "react";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useProductsManager } from "@/hooks/products_hooks/useProductsManager";
 import { SpecGroupsTable } from "./SpecGroupsTable";
-import { SpecGroupModal } from "./SpecGroupModal";
+import { SpecGroupDrawer } from "./SpecGroupDrawer";
 
 export function SpecGroupsClientManager() {
-    const { activeModal, activeId, openView, closeView } = useCommandParams();
+    const manager = useProductsManager("specification_groups");
 
     return (
         <div className="flex flex-col w-full h-full p-4">
@@ -17,22 +17,18 @@ export function SpecGroupsClientManager() {
 
                 <button
                     type="button"
-                    onClick={() => openView("modal", "add")}
+                    onClick={() => manager.openDrawer("modal", "add")}
                     className="rounded-lg bg-emerald-600 px-4 py-2 text-xs sm:text-sm font-bold text-white transition-colors hover:bg-emerald-700 shadow-sm"
                 >
                     Add Specification Groups
                 </button>
             </div>
 
-            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1">
-                <SpecGroupsTable />
+            <div className={`rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+                <SpecGroupsTable manager={manager} />
             </div>
 
-            <SpecGroupModal
-                isOpen={activeModal === "add" || activeModal === "edit"}
-                groupId={activeId}
-                onClose={closeView}
-            />
+            <SpecGroupDrawer manager={manager} />
         </div>
     );
 }

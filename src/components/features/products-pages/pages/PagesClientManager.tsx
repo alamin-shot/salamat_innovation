@@ -1,11 +1,11 @@
 "use client";
 import * as React from "react";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useProductsManager } from "@/hooks/products_hooks/useProductsManager";
 import { PagesTable } from "./PagesTable";
-import { PageEditModal } from "./PageEditModal";
+import { PageEditDrawer } from "./PageEditDrawer";
 
 export function PagesClientManager() {
-    const { activeModal, activeId, closeView } = useCommandParams();
+    const manager = useProductsManager("pages");
 
     return (
         <div className="flex flex-col w-full h-full p-4">
@@ -16,15 +16,11 @@ export function PagesClientManager() {
                 </div>
             </div>
 
-            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1">
-                <PagesTable />
+            <div className={`rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+                <PagesTable manager={manager} />
             </div>
 
-            <PageEditModal
-                isOpen={activeModal === "edit"}
-                pageId={activeId}
-                onClose={closeView}
-            />
+            <PageEditDrawer manager={manager} />
         </div>
     );
 }

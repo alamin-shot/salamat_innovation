@@ -20,8 +20,8 @@ export const useGenericEntityStore = create<GenericEntityStore>()(
             entities: {
                 // Initialize with some dummy data for the first modules to verify UI
                 "care": [
-                    { id: "1", name: "TEKZO Care 1 Year for Android (Flat Display)", value: 4.99 },
-                    { id: "2", name: "TEKZO Care 1 Year for Apple Device", value: 9.99 }
+                    { id: "1", title: "TEKZO Care 1 Year for Android (Flat Display)", value: 4.99, status: "Active" },
+                    { id: "2", title: "TEKZO Care 1 Year for Apple Device", value: 9.99, status: "Active" }
                 ],
                 "popup-dialog": [
                     { id: "1", name: "Tech Drop", image: null, mobileImage: null, url: "https://tekzo.com/offer", status: "Inactive" }
@@ -70,6 +70,25 @@ export const useGenericEntityStore = create<GenericEntityStore>()(
                 };
             })
         }),
-        { name: "erp-generic-entities-v1" }
+        {
+            name: "erp-generic-entities-v1",
+            version: 1,
+            // v0 -> v1: Care records were seeded under `name`, but the Care page reads `title`.
+            // Existing browsers keep their saved data; only the missing `title`/`status` are filled in.
+            migrate: (persistedState) => {
+                const saved = persistedState as GenericEntityStore;
+                const savedCare = saved?.entities?.["care"];
+                if (!Array.isArray(savedCare)) {
+                    return saved;
+                }
+                const care = savedCare.map((item) => {
+                    if (item.title || !item.name) {
+                        return item;
+                    }
+                    return { ...item, title: item.name, status: item.status || "Active" };
+                });
+                return { ...saved, entities: { ...saved.entities, care } };
+            }
+        }
     )
 );

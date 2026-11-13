@@ -5,7 +5,8 @@ import { PageContainerProps } from "@/types/layout";
 
 export function PageContainer({ title, breadcrumbs, action, children }: PageContainerProps) {
     return (
-        <div className="flex h-full flex-col gap-2 animate-in fade-in duration-500">
+        // min-h-full, never h-full: <main> is the only vertical scroller (see SectionPageShell).
+        <div className="flex min-h-full flex-col gap-2 animate-in fade-in duration-500">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                 <div className="flex flex-col gap-1.5">
                     <h1 className="text-2xl font-bold tracking-tight text-brand-text">

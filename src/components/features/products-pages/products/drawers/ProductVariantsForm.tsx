@@ -1,47 +1,76 @@
 "use client";
 import * as React from "react";
-import { Save } from "lucide-react";
 import { toast } from "sonner";
-import { Product, ProductVariant, ProductVariantOption } from "@/types/products";
-import { hasVariantPriceAboveMrp } from "@/utils/productRules";
+import { Product, ProductVariant, ProductVariantEdit, ProductVariantOption, UnsavedChangesHandle, VariantRowSaveConfig } from "@/types/products";
+import { areVariantOptionsEqual, hasVariantPriceAboveMrp, mergeVariantDrafts } from "@/utils/productRules";
+import { useVariantDrafts } from "@/hooks/products_hooks/useVariantDrafts";
 import { VariantsManager } from "../VariantsManager";
+import { VariantSaveBar } from "../variants/VariantSaveBar";
 
 interface ProductVariantsFormProps {
     product: Product;
+    /** Save All: the attribute builder plus every row. */
     onSubmit: (options: ProductVariantOption[], variants: ProductVariant[]) => void;
+    /** Row Save: one existing variant's inline fields. */
+    onSaveVariant: (variantId: string, edit: ProductVariantEdit) => void;
+    ref?: React.Ref<UnsavedChangesHandle>;
 }
 
-export function ProductVariantsForm({ product, onSubmit }: ProductVariantsFormProps) {
+const PRICE_ABOVE_MRP = "A variant's Selling Price is higher than its MRP.";
+
+export function ProductVariantsForm({ product, onSubmit, onSaveVariant, ref }: ProductVariantsFormProps) {
     const [options, setOptions] = React.useState<ProductVariantOption[]>(product.variantOptions);
     const [variants, setVariants] = React.useState<ProductVariant[]>(product.variants);
+    const drafts = useVariantDrafts();
 
-    const handleSave = () => {
-        if (hasVariantPriceAboveMrp(variants)) {
-            toast.error("A variant's Selling Price is higher than its MRP.");
+    // Rows show the latest saved values (a row Save updates the store); rows the builder just created have none yet.
+    const savedById = React.useMemo(() => new Map(product.variants.map((variant) => [variant.id, variant])), [product.variants]);
+    const rows = React.useMemo(() => variants.map((variant) => savedById.get(variant.id) ?? variant), [variants, savedById]);
+
+    const isBuilderDirty = !areVariantOptionsEqual(options, product.variantOptions)
+        || rows.length !== product.variants.length
+        || rows.some((row) => !savedById.has(row.id));
+
+    React.useImperativeHandle(ref, () => ({
+        hasUnsavedChanges: () => isBuilderDirty || Object.keys(drafts.getState().drafts).length > 0,
+    }), [isBuilderDirty, drafts]);
+
+    const handleRowSave = React.useCallback((variant: ProductVariant, edit: ProductVariantEdit) => {
+        if (hasVariantPriceAboveMrp([edit])) {
+            toast.error(`${variant.title}: Selling Price is higher than its MRP.`);
             return;
         }
-        onSubmit(options, variants);
+        onSaveVariant(variant.id, edit);
+        drafts.getState().discardVariant(variant.id);
+    }, [onSaveVariant, drafts]);
+
+    const rowSave = React.useMemo<VariantRowSaveConfig>(
+        () => ({ isBlocked: isBuilderDirty, onSave: handleRowSave }),
+        [isBuilderDirty, handleRowSave]
+    );
+
+    const handleSaveAll = () => {
+        const merged = mergeVariantDrafts(rows, drafts.getState().drafts);
+        if (hasVariantPriceAboveMrp(merged)) {
+            toast.error(PRICE_ABOVE_MRP);
+            return;
+        }
+        onSubmit(options, merged);
     };
 
     return (
         <div className="flex w-full flex-col gap-6 pb-32">
             <VariantsManager
                 options={options}
-                variants={variants}
+                variants={rows}
+                drafts={drafts}
+                rowSave={rowSave}
                 onChange={(nextOptions, nextVariants) => {
                     setOptions(nextOptions);
                     setVariants(nextVariants);
                 }}
             />
-            <div className="flex justify-end border-t border-brand-subtext/10 pt-4">
-                <button
-                    type="button"
-                    onClick={handleSave}
-                    className="flex items-center gap-2 rounded-md bg-emerald-600 px-6 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-emerald-700"
-                >
-                    <Save className="h-4 w-4" /> Save Variants
-                </button>
-            </div>
+            <VariantSaveBar drafts={drafts} isBuilderDirty={isBuilderDirty} onSaveAll={handleSaveAll} />
         </div>
     );
 }

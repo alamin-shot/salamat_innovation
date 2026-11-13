@@ -4,7 +4,8 @@ import { toast } from "sonner";
 import { Drawer } from "@/components/ui/Drawer";
 import { useProductsManager } from "@/hooks/products_hooks/useProductsManager";
 import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
-import { ProductInput, ProductVariant, ProductVariantOption } from "@/types/products";
+import { useUnsavedChangesGuard } from "@/hooks/products_hooks/useUnsavedChangesGuard";
+import { ProductInput, ProductVariant, ProductVariantEdit, ProductVariantOption } from "@/types/products";
 import { ProductTable } from "@/components/features/products-pages/products/ProductTable";
 import { ProductMasterForm } from "@/components/features/products-pages/products/ProductMasterForm";
 import { SpecificationsForm } from "@/components/features/products-pages/products/SpecificationsForm";
@@ -12,6 +13,7 @@ import { ProductPreviewContent } from "@/components/features/products-pages/prod
 import { ProductVariantsForm } from "./drawers/ProductVariantsForm";
 import { ProductCareForm } from "./drawers/ProductCareForm";
 import { ProductQuickViewDrawer } from "./drawers/ProductQuickViewDrawer";
+import { UnsavedChangesConfirm } from "../shared/UnsavedChangesConfirm";
 
 const URL_DRAWERS = ["add-product", "edit", "preview", "specs", "variants", "care"];
 
@@ -22,6 +24,8 @@ export function ProductsClientManager() {
     // Keep the drawer content in place while it slides out.
     const drawerMode = useRetainedValue(manager.drawerMode, isOpen);
     const product = useRetainedValue(manager.drawerMode === "add-product" ? null : manager.activeRecord, isOpen);
+    // Only the Variants form registers with the guard; the other drawers close straight away.
+    const { formRef, run: guardClose, isConfirmOpen, confirm, cancel } = useUnsavedChangesGuard();
 
     const getDrawerTitle = () => {
         switch (drawerMode) {
@@ -53,6 +57,12 @@ export function ProductsClientManager() {
         manager.closeDrawer();
     };
 
+    const handleSaveVariant = (variantId: string, edit: ProductVariantEdit) => {
+        if (!product) return;
+        manager.store.updateProductVariant(product.id, variantId, edit);
+        toast.success("Variant saved.");
+    };
+
     const handleSaveCare = (carePlanId: string | null) => {
         if (!product) return;
         manager.store.setProductCarePlan(product.id, carePlanId);
@@ -74,7 +84,7 @@ export function ProductsClientManager() {
                 );
             case "preview": return <ProductPreviewContent product={product} />;
             case "specs": return <SpecificationsForm key={product?.id || "new"} productId={product?.id ?? null} />;
-            case "variants": return product ? <ProductVariantsForm key={product.id} product={product} onSubmit={handleSaveVariants} /> : null;
+            case "variants": return product ? <ProductVariantsForm key={product.id} ref={formRef} product={product} onSubmit={handleSaveVariants} onSaveVariant={handleSaveVariant} /> : null;
             case "care": return product ? <ProductCareForm key={product.id} product={product} onSubmit={handleSaveCare} /> : null;
             default: return null;
         }
@@ -86,13 +96,14 @@ export function ProductsClientManager() {
             <Drawer
                 title={getDrawerTitle()}
                 isOpen={isOpen}
-                onClose={manager.closeDrawer}
+                onClose={() => guardClose(manager.closeDrawer)}
                 // All product drawers fill the content area beside the sidebar.
                 width="w-full max-w-none lg:w-[calc(100vw-280px)]"
             >
                 {renderDrawerContent()}
             </Drawer>
             <ProductQuickViewDrawer manager={manager} />
+            <UnsavedChangesConfirm isOpen={isConfirmOpen} onConfirm={confirm} onCancel={cancel} />
         </div>
     );
 }

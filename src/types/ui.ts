@@ -9,3 +9,29 @@ export interface DrawerProps {
     drawerStyle?: React.CSSProperties;
     className?: string;
 }
+/** Inclusive calendar range as YYYY-MM-DD strings; null means open-ended. */
+export interface DateRangeValue {
+    from: string | null;
+    to: string | null;
+}
+
+export interface SectionFilterOption {
+    label: string;
+    value: string;
+}
+
+/** One dropdown chip of a SectionFilterBar; "" means "All". */
+export interface SectionFilterChip {
+    key: string;
+    label: string;
+    options: SectionFilterOption[];
+    value: string;
+    onChange: (value: string) => void;
+}
+
+/** Optional date-range chip of a SectionFilterBar. */
+export interface SectionDateFilter {
+    label: string;
+    value: DateRangeValue;
+    onChange: (value: DateRangeValue) => void;
+}

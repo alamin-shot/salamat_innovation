@@ -3,15 +3,19 @@ import * as React from "react";
 import Image from "next/image";
 import { Trash2, X, ChevronDown, UploadCloud, Package } from "lucide-react";
 import { toast } from "sonner";
-import { ProductVariant, ProductVariantOption } from "@/types/products";
+import { ProductVariant, ProductVariantOption, VariantDraftStore, VariantRowSaveConfig } from "@/types/products";
 import { useCatalogNames } from "@/hooks/products_hooks/useProductCatalogOptions";
-import { buildVariantRows, isColorAttribute, parsePriceInput, toPriceInput } from "@/utils/productRules";
-import { DiscountSummary } from "../shared/DiscountSummary";
+import { buildVariantRows, isColorAttribute } from "@/utils/productRules";
+import { VariantInlineTable } from "./variants/VariantInlineTable";
 
 interface VariantsManagerProps {
     options: ProductVariantOption[];
+    /** Saved values of each row; inline edits are kept in `drafts` until saved. */
     variants: ProductVariant[];
     onChange: (options: ProductVariantOption[], variants: ProductVariant[]) => void;
+    drafts: VariantDraftStore;
+    /** Shows a Save button on each row. Omit where the parent form saves everything. */
+    rowSave?: VariantRowSaveConfig;
 }
 
 // Attribute names the builder offered before the Attributes page was connected.
@@ -24,11 +28,10 @@ const newVariant = (title: string): ProductVariant => ({
     maxRetailPrice: null,
     sellingPrice: null,
     inStock: true,
+    isPrebook: false,
 });
 
-const PRICE_INPUT = "w-28 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none";
-
-export function VariantsManager({ options, variants, onChange }: VariantsManagerProps) {
+export function VariantsManager({ options, variants, onChange, drafts, rowSave }: VariantsManagerProps) {
     const { attributeNames } = useCatalogNames();
     const attributeOptions = React.useMemo(
         () => Array.from(new Set([...DEFAULT_ATTRIBUTES, ...attributeNames])),
@@ -54,11 +57,10 @@ export function VariantsManager({ options, variants, onChange }: VariantsManager
 
     // Any change to the options regenerates the variant rows, keeping rows that still exist.
     const commitOptions = (nextOptions: ProductVariantOption[]) => {
-        onChange(nextOptions, buildVariantRows(nextOptions, variants, newVariant));
-    };
-
-    const updateVariant = (id: string, updates: Partial<ProductVariant>) => {
-        onChange(options, variants.map((variant) => (variant.id === id ? { ...variant, ...updates } : variant)));
+        const nextVariants = buildVariantRows(nextOptions, variants, newVariant);
+        // Edits of rows that no longer exist would otherwise count as unsaved forever.
+        drafts.getState().pruneDrafts(nextVariants.map((variant) => variant.id));
+        onChange(nextOptions, nextVariants);
     };
 
     const addRow = () => commitOptions([...options, { id: `opt-${Date.now()}`, name: "", values: [], valueImages: {} }]);
@@ -107,7 +109,6 @@ export function VariantsManager({ options, variants, onChange }: VariantsManager
 
     // Variant images are offered only for colour attributes, one per colour value.
     const colorRows = options.filter((row) => isColorAttribute(row.name) && row.values.length > 0);
-    const allInStock = variants.length > 0 && variants.every((variant) => variant.inStock);
 
     return (
         <div className="flex flex-col gap-8">
@@ -223,56 +224,7 @@ export function VariantsManager({ options, variants, onChange }: VariantsManager
                         <p className="text-xs text-brand-subtext">Choose an attribute and add its values above to generate variants.</p>
                     </div>
                 ) : (
-                    <>
-                        <label className="flex cursor-pointer items-center gap-2 mb-4" title="Mark every variant in stock">
-                            <input
-                                type="checkbox"
-                                checked={allInStock}
-                                onChange={(e) => onChange(options, variants.map((variant) => ({ ...variant, inStock: e.target.checked })))}
-                                className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600"
-                            />
-                            <span className="text-sm font-medium text-brand-text">Select All</span>
-                        </label>
-
-                        <div className="overflow-x-auto pb-4 custom-scrollbar">
-                            <table className="w-full min-w-[900px] border-separate border-spacing-y-3 text-sm">
-                                <thead>
-                                    <tr className="text-left text-xs font-bold text-brand-subtext uppercase tracking-wider bg-brand-bg/40">
-                                        <th className="px-4 py-3 rounded-l-xl">VARIANT TITLE</th>
-                                        <th className="px-4 py-3">SKU</th>
-                                        <th className="px-4 py-3">MAX RETAIL PRICE</th>
-                                        <th className="px-4 py-3">SELLING PRICE</th>
-                                        <th className="px-4 py-3">DISCOUNT (AUTO)</th>
-                                        <th className="px-4 py-3 rounded-r-xl">IN STOCK</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {variants.map((variant) => (
-                                        <tr key={variant.id} className="bg-white shadow-sm outline outline-1 outline-brand-subtext/20">
-                                            <td className="px-4 py-3">
-                                                <span className="font-medium text-brand-text">{variant.title}</span>
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <input type="text" value={variant.sku} onChange={(e) => updateVariant(variant.id, { sku: e.target.value })} className="w-32 rounded-md border border-brand-subtext/30 bg-white px-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none" />
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <input type="number" value={toPriceInput(variant.maxRetailPrice)} onChange={(e) => updateVariant(variant.id, { maxRetailPrice: parsePriceInput(e.target.value) })} className={PRICE_INPUT} />
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <input type="number" value={toPriceInput(variant.sellingPrice)} onChange={(e) => updateVariant(variant.id, { sellingPrice: parsePriceInput(e.target.value) })} className={PRICE_INPUT} />
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <DiscountSummary maxRetailPrice={variant.maxRetailPrice} sellingPrice={variant.sellingPrice} compact />
-                                            </td>
-                                            <td className="px-4 py-3">
-                                                <input type="checkbox" checked={variant.inStock} onChange={(e) => updateVariant(variant.id, { inStock: e.target.checked })} className="h-4 w-4 rounded border-brand-subtext/40 text-emerald-600 focus:ring-emerald-600" />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </>
+                    <VariantInlineTable options={options} rows={variants} drafts={drafts} rowSave={rowSave} />
                 )}
             </div>
         </div>

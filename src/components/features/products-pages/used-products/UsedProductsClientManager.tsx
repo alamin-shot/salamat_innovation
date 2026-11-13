@@ -9,6 +9,7 @@ import { UsedProductTable } from "@/components/features/products-pages/used-prod
 import { UsedProductMasterForm } from "@/components/features/products-pages/used-products/UsedProductMasterForm";
 import { UsedProductPreviewContent } from "./UsedProductPreviewContent";
 import { UsedQuickViewDrawer } from "./drawers/UsedQuickViewDrawer";
+import { SectionPageShell } from "@/components/layout/SectionPageShell";
 
 export function UsedProductsClientManager() {
     const manager = useProductsManager("used_products");
@@ -40,24 +41,25 @@ export function UsedProductsClientManager() {
 
     return (
         <>
-            <div className="flex flex-col w-full h-full p-4">
-                <div className="flex items-center justify-between mb-6">
-                    <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Used Products</h1>
-                        <p className="text-xs sm:text-sm text-brand-subtext">Manage pre-owned inventory, serial numbers, and pricing</p>
+            <SectionPageShell
+                isPending={manager.isPending}
+                header={
+                    <div className="flex items-center justify-between mb-6">
+                        <div>
+                            <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Used Products</h1>
+                            <p className="text-xs sm:text-sm text-brand-subtext">Manage pre-owned inventory, serial numbers, and pricing</p>
+                        </div>
+                        <button
+                            onClick={() => manager.openDrawer("drawer", "add-used")}
+                            className="rounded-lg bg-emerald-600 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-sm transition-colors hover:bg-emerald-700"
+                        >
+                            + Add Used Product
+                        </button>
                     </div>
-                    <button
-                        onClick={() => manager.openDrawer("drawer", "add-used")}
-                        className="rounded-lg bg-emerald-600 px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-sm transition-colors hover:bg-emerald-700"
-                    >
-                        + Add Used Product
-                    </button>
-                </div>
-
-                <div className={`rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
-                    <UsedProductTable manager={manager} />
-                </div>
-            </div>
+                }
+            >
+                <UsedProductTable manager={manager} />
+            </SectionPageShell>
 
             <Drawer
                 title={getDrawerTitle()}

@@ -59,6 +59,7 @@ import {
 	Shield,
 	Award,
 	MessageCircle,
+	SlidersHorizontal,
 } from 'lucide-react';
 
 const nav = (
@@ -104,6 +105,7 @@ export const NAVIGATION_DATA: NavSection[] = [
 		['Attributes', Layers],
 		['Specification Groups', FolderKanban],
 		['Warranty Care Text', ShieldCheck],
+		['Price Ranges', SlidersHorizontal],
 	]),
 	nav('Barcodes', [
 		['Barcode List', Barcode],

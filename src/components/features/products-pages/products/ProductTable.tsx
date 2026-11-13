@@ -51,31 +51,29 @@ export function ProductTable({ manager }: ProductTableProps) {
 
     return (
         <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-brand-subtext/20 bg-white">
-                <div className="w-full overflow-x-auto custom-scrollbar">
-                    <ProductsFilterBar manager={manager} />
-                </div>
-
-                <div className="w-full lg:w-auto flex lg:justify-end shrink-0 px-4 pb-3 pt-0 lg:px-4 lg:py-3">
-                    <ColumnsVisibilityDropdown
-                        columns={[
-                            { key: "name", label: "Name" },
-                            { key: "category", label: "Category" },
-                            { key: "brand", label: "Brand" },
-                            { key: "status", label: "Status" },
-                            { key: "ecommerce", label: "Ecommerce" },
-                            { key: "tags", label: "Tags" },
-                            { key: "variants", label: "Variants" },
-                            { key: "specs", label: "Specs" },
-                            { key: "care", label: "Care" },
-                            { key: "warranty", label: "Warranty" },
-                            { key: "createdAt", label: "Created By / At" }
-                        ]}
-                        visibleColumns={visibleColumns}
-                        onToggleColumn={handleToggleColumn}
-                        onReset={handleResetColumns}
-                    />
-                </div>
+            <div className="border-b border-brand-subtext/20 bg-white">
+                <ProductsFilterBar manager={manager}
+                    actions={
+                        <ColumnsVisibilityDropdown
+                            columns={[
+                                { key: "name", label: "Name" },
+                                { key: "category", label: "Category" },
+                                { key: "brand", label: "Brand" },
+                                { key: "status", label: "Status" },
+                                { key: "ecommerce", label: "Ecommerce" },
+                                { key: "tags", label: "Tags" },
+                                { key: "variants", label: "Variants" },
+                                { key: "specs", label: "Specs" },
+                                { key: "care", label: "Care" },
+                                { key: "warranty", label: "Warranty" },
+                                { key: "createdAt", label: "Created By / At" }
+                            ]}
+                            visibleColumns={visibleColumns}
+                            onToggleColumn={handleToggleColumn}
+                            onReset={handleResetColumns}
+                        />
+                    }
+                />
             </div>
 
             <div className="overflow-x-auto mt-0">

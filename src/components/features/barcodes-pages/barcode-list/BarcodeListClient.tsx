@@ -1,17 +1,30 @@
 "use client";
 import * as React from "react";
+import { useBarcodesManager } from "@/hooks/barcode_hooks/useBarcodesManager";
 import { BarcodeListTable } from "./BarcodeListTable";
+import { BarcodeDetailsDrawer } from "../shared/BarcodeDetailsDrawer";
+import { BarcodeEditDrawer } from "../shared/BarcodeEditDrawer";
+import { SectionPageShell } from "@/components/layout/SectionPageShell";
 
 export function BarcodeListClient() {
-    return (
-        <div className="flex flex-col w-full h-full p-4">
-            <div className="mb-6">
-                <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Barcode List</h1>
-            </div>
+    const manager = useBarcodesManager("list");
 
-            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 flex flex-col">
-                <BarcodeListTable />
-            </div>
-        </div>
+    return (
+        <>
+            <SectionPageShell
+                isPending={manager.isPending}
+                cardClassName="flex flex-col"
+                header={
+                    <div className="mb-6">
+                        <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Barcode List</h1>
+                    </div>
+                }
+            >
+                <BarcodeListTable manager={manager} />
+            </SectionPageShell>
+
+            <BarcodeDetailsDrawer manager={manager} />
+            <BarcodeEditDrawer manager={manager} />
+        </>
     );
 }

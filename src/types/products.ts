@@ -1,6 +1,8 @@
 // LAYER 1: Products section type definitions.
 // Field names mirror the existing table/form components so Phase 2 can swap
 // their inline mock data for the store without changing any rendered design.
+import type { RefObject } from "react";
+import type { StoreApi } from "zustand";
 
 // ── Navigation & view unions ────────────────────────────────────────────────
 export type ProductsTabKey =
@@ -11,7 +13,8 @@ export type ProductsTabKey =
     | "pages"
     | "attributes"
     | "specification_groups"
-    | "warranty_care_text";
+    | "warranty_care_text"
+    | "price_ranges";
 
 /** Values the Products pages already write to `?drawer=` / `?modal=`. */
 export type ProductsDrawerMode =
@@ -58,6 +61,58 @@ export interface WarrantyCareText extends AuditStamp {
     status: RecordStatus;
 }
 
+// ── Price Ranges (storefront price filter chips) ────────────────────────────
+export interface PriceRange extends AuditStamp {
+    id: string;
+    /** Shown on the storefront chip, e.g. "Budget Friendly". */
+    label: string;
+    /** BDT, whole taka, >= 0. */
+    minPrice: number;
+    /** BDT; null means "and above". */
+    maxPrice: number | null;
+    status: RecordStatus;
+    /** Mocked until the backend supplies the live count. */
+    productCount: number;
+}
+
+/** Another range sharing part of a range's span. Edges may touch: 0–500 and 500–1000 do not overlap. */
+export interface PriceRangeOverlap {
+    rangeId: string;
+    label: string;
+    from: number;
+    /** null = the shared part is open-ended. */
+    to: number | null;
+}
+
+/** A price stretch that no Active range covers. */
+export interface PriceRangeGap {
+    from: number;
+    to: number;
+}
+
+/** Where the Active ranges leave holes in the storefront filter. */
+export interface PriceRangeCoverage {
+    gaps: PriceRangeGap[];
+    /** Prices from here up are not covered (no open-ended range); null when covered. */
+    uncoveredFrom: number | null;
+}
+
+export type PriceRangeBounds = Pick<PriceRange, "minPrice" | "maxPrice">;
+
+/** Raw drawer form values, before validation. */
+export interface PriceRangeDraft {
+    label: string;
+    minText: string;
+    maxText: string;
+    isOpenEnded: boolean;
+}
+
+export type PriceRangeValidationError = "label_required" | "min_invalid" | "max_invalid" | "max_not_above_min";
+
+export type PriceRangeValidation =
+    | { ok: true; value: Pick<PriceRange, "label" | "minPrice" | "maxPrice"> }
+    | { ok: false; error: PriceRangeValidationError };
+
 // ── Products ────────────────────────────────────────────────────────────────
 export interface ProductWarrantyDetails {
     purchasePoint: string;
@@ -90,6 +145,47 @@ export interface ProductVariant {
     maxRetailPrice: number | null;
     sellingPrice: number | null;
     inStock: boolean;
+    /** Open for pre-booking. Never true together with `inStock`. */
+    isPrebook: boolean;
+}
+
+/** The fields a variant row edits inline and saves. */
+export type ProductVariantEdit = Pick<ProductVariant, "sku" | "maxRetailPrice" | "sellingPrice" | "inStock" | "isPrebook">;
+
+/**
+ * Unsaved row edits of one variants table, keyed by variant id.
+ * A row has an entry only while its values differ from the saved ones.
+ */
+export interface VariantDraftState {
+    drafts: Record<string, ProductVariantEdit>;
+    editVariant: (baseline: ProductVariant, changes: Partial<ProductVariantEdit>) => void;
+    setAllInStock: (baselines: ProductVariant[], inStock: boolean) => void;
+    discardVariant: (id: string) => void;
+    /** Drops drafts of rows that no longer exist after the attribute builder changed. */
+    pruneDrafts: (keepIds: string[]) => void;
+}
+
+export type VariantDraftStore = StoreApi<VariantDraftState>;
+
+/** Row-level Save. Omitted where the parent form saves everything (Add/Edit Product). */
+export interface VariantRowSaveConfig {
+    /** True while attribute-builder changes are unsaved; only Save All can save then. */
+    isBlocked: boolean;
+    onSave: (variant: ProductVariant, edit: ProductVariantEdit) => void;
+}
+
+/** Lets a drawer ask its form whether closing would lose edits. */
+export interface UnsavedChangesHandle {
+    hasUnsavedChanges: () => boolean;
+}
+
+export interface UnsavedChangesGuard {
+    formRef: RefObject<UnsavedChangesHandle | null>;
+    /** Runs `action` now, or after the user confirms discarding unsaved changes. */
+    run: (action: () => void) => void;
+    isConfirmOpen: boolean;
+    confirm: () => void;
+    cancel: () => void;
 }
 
 export interface Product extends AuditStamp {
@@ -205,6 +301,7 @@ export interface ProductsRecordMap {
     attributes: ProductAttribute;
     specification_groups: SpecGroup;
     warranty_care_text: WarrantyCareText;
+    price_ranges: PriceRange;
 }
 
 export type ProductsRow = ProductsRecordMap[ProductsTabKey];
@@ -213,7 +310,7 @@ export type ProductsRow = ProductsRecordMap[ProductsTabKey];
 export type ProductsStatusTab = Exclude<ProductsTabKey, "attributes" | "specification_groups">;
 
 /** Tabs whose rows carry an Ecommerce on/off flag. */
-export type ProductsEcommerceTab = Exclude<ProductsStatusTab, "warranty_care_text">;
+export type ProductsEcommerceTab = Exclude<ProductsStatusTab, "warranty_care_text" | "price_ranges">;
 
 // ── Inputs (id and audit columns are stamped by the store) ──────────────────
 export type ProductInput = Omit<Product, "id" | AuditKeys>;
@@ -224,6 +321,7 @@ export type ProductPageInput = Omit<ProductPage, "id" | AuditKeys>;
 export type ProductAttributeInput = Omit<ProductAttribute, "id" | AuditKeys>;
 export type SpecGroupInput = Omit<SpecGroup, "id" | AuditKeys>;
 export type WarrantyCareTextInput = Omit<WarrantyCareText, "id" | AuditKeys>;
+export type PriceRangeInput = Omit<PriceRange, "id" | AuditKeys>;
 
 // ── Derived values ──────────────────────────────────────────────────────────
 export type DiscountState = "incomplete" | "none" | "discounted" | "selling_above_mrp";
@@ -279,6 +377,7 @@ export interface ProductsState {
     attributes: ProductAttribute[];
     specGroups: SpecGroup[];
     warrantyCareTexts: WarrantyCareText[];
+    priceRanges: PriceRange[];
 
     // Status & Ecommerce (shared by every table that shows them)
     setRecordStatus: (tab: ProductsStatusTab, id: string, status: RecordStatus) => void;
@@ -293,6 +392,7 @@ export interface ProductsState {
     updateProductWarranty: (id: string, updates: Partial<ProductWarrantyDetails>) => void;
     setProductCarePlan: (id: string, carePlanId: string | null) => void;
     saveProductVariants: (id: string, options: ProductVariantOption[], variants: ProductVariant[]) => void;
+    updateProductVariant: (productId: string, variantId: string, edit: ProductVariantEdit) => void;
     addProductVideos: (id: string, videos: ProductVideoInput[]) => void;
     removeProductVideo: (id: string, videoId: string) => void;
 
@@ -330,4 +430,9 @@ export interface ProductsState {
     updateWarrantyCareText: (id: string, updates: Partial<WarrantyCareTextInput>) => void;
     /** Texts still selected on a product are kept; only unused ones are removed. */
     deleteWarrantyCareTexts: (ids: string[]) => void;
+
+    // Price ranges
+    addPriceRange: (input: PriceRangeInput) => void;
+    updatePriceRange: (id: string, updates: Partial<PriceRangeInput>) => void;
+    deletePriceRanges: (ids: string[]) => void;
 }

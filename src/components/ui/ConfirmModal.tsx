@@ -7,9 +7,11 @@ interface ConfirmModalProps {
     message: string;
     onConfirm: () => void;
     onCancel: () => void;
+    /** Defaults to the delete wording every existing caller uses. */
+    confirmLabel?: string;
 }
 
-export function ConfirmModal({ isOpen, title, message, onConfirm, onCancel }: ConfirmModalProps) {
+export function ConfirmModal({ isOpen, title, message, onConfirm, onCancel, confirmLabel = "Delete Permanently" }: ConfirmModalProps) {
     if (!isOpen) return null;
 
     return (
@@ -22,7 +24,7 @@ export function ConfirmModal({ isOpen, title, message, onConfirm, onCancel }: Co
                 <p className="mb-6 text-sm text-gray-600">{message}</p>
                 <div className="flex justify-end gap-3">
                     <Button variant="outline" onClick={onCancel} className="px-5 text-gray-600">Cancel</Button>
-                    <Button variant="destructive" onClick={onConfirm} className="px-5">Delete Permanently</Button>
+                    <Button variant="destructive" onClick={onConfirm} className="px-5">{confirmLabel}</Button>
                 </div>
             </div>
         </div>

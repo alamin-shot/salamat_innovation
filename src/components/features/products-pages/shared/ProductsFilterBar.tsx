@@ -1,36 +1,43 @@
 import * as React from "react";
-import { FilterBar } from "@/components/ui/FilterBar";
-import { FilterDropdown } from "@/components/ui/FilterDropdown";
+import { SectionFilterBar } from "@/components/ui/SectionFilterBar";
 import { ProductsManager } from "@/hooks/products_hooks/useProductsManager";
 import { ProductsTabKey } from "@/types/products";
 
 type FilterBarManager = Pick<
     ProductsManager<ProductsTabKey>,
-    "searchQuery" | "setSearchQuery" | "filters" | "filterFields" | "activeFilterCount" | "setFilter" | "clearFilters"
+    "searchQuery" | "setSearchQuery" | "filters" | "filterFields" | "activeFilterCount" | "setFilter" | "clearFilters" | "activeTabData"
 >;
 
 interface ProductsFilterBarProps {
     manager: FilterBarManager;
+    /** Right-hand slot, e.g. the Columns dropdown. */
+    actions?: React.ReactNode;
 }
 
-/** Search + filter dropdowns for every Products section table; all state lives in useProductsManager. */
-export function ProductsFilterBar({ manager }: ProductsFilterBarProps) {
+/** Search + filter chips for every Products section table; all state lives in useProductsManager. */
+export function ProductsFilterBar({ manager, actions }: ProductsFilterBarProps) {
+    const { filterFields, filters, setFilter } = manager;
+
+    const chips = React.useMemo(
+        () => filterFields.map((field) => ({
+            key: field.key,
+            label: field.label,
+            options: field.options,
+            value: filters[field.key] ?? "",
+            onChange: (value: string) => setFilter(field.key, value),
+        })),
+        [filterFields, filters, setFilter],
+    );
+
     return (
-        <FilterBar
+        <SectionFilterBar
             searchQuery={manager.searchQuery}
             onSearchChange={manager.setSearchQuery}
+            filters={chips}
             activeFilterCount={manager.activeFilterCount}
-            onClearFilters={manager.clearFilters}
-        >
-            {manager.filterFields.map((field) => (
-                <FilterDropdown
-                    key={field.key}
-                    label={field.label}
-                    options={field.options}
-                    selectedValue={manager.filters[field.key] ?? ""}
-                    onSelect={(value) => manager.setFilter(field.key, value)}
-                />
-            ))}
-        </FilterBar>
+            onClearAll={manager.clearFilters}
+            resultCount={manager.activeTabData.length}
+            actions={actions}
+        />
     );
 }

@@ -9,8 +9,7 @@ export default function CreateBarcodePage() {
                 <Loader />
             </div>
         }>
-            <CreateBarcodeClient />;
-
+            <CreateBarcodeClient />
         </Suspense>
     )
 }

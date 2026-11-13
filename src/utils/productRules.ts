@@ -1,4 +1,4 @@
-import { DiscountResult } from "@/types/products";
+import { DiscountResult, Product, ProductVariant, ProductVariantEdit, ProductVariantOption } from "@/types/products";
 
 const NO_DISCOUNT: Omit<DiscountResult, "state"> = { amount: 0, percent: 0 };
 
@@ -100,4 +100,88 @@ export function buildVariantRows<T extends VariantRowShape>(options: VariantOpti
 /** True when any variant is priced above its MRP. */
 export function hasVariantPriceAboveMrp(variants: { maxRetailPrice: number | null; sellingPrice: number | null }[]): boolean {
     return variants.some((variant) => computeDiscount(variant.maxRetailPrice, variant.sellingPrice).state === "selling_above_mrp");
+}
+
+// ── Inline variant editing ──────────────────────────────────────────────────
+
+/** The editable fields of a saved variant. */
+export function pickVariantEdit(variant: ProductVariant): ProductVariantEdit {
+    return {
+        sku: variant.sku,
+        maxRetailPrice: variant.maxRetailPrice,
+        sellingPrice: variant.sellingPrice,
+        inStock: variant.inStock,
+        isPrebook: variant.isPrebook,
+    };
+}
+
+/** Applies `changes`. In Stock and Prebook are exclusive: switching one on switches the other off. */
+export function applyVariantEdit(current: ProductVariantEdit, changes: Partial<ProductVariantEdit>): ProductVariantEdit {
+    const next = { ...current, ...changes };
+    if (changes.isPrebook === true) {
+        next.inStock = false;
+    }
+    if (changes.inStock === true) {
+        next.isPrebook = false;
+    }
+    return next;
+}
+
+export function isSameVariantEdit(a: ProductVariantEdit, b: ProductVariantEdit): boolean {
+    return a.sku === b.sku
+        && a.maxRetailPrice === b.maxRetailPrice
+        && a.sellingPrice === b.sellingPrice
+        && a.inStock === b.inStock
+        && a.isPrebook === b.isPrebook;
+}
+
+/** Rows with their unsaved edits applied. */
+export function mergeVariantDrafts(rows: ProductVariant[], drafts: Record<string, ProductVariantEdit>): ProductVariant[] {
+    return rows.map((row) => {
+        const draft = drafts[row.id];
+        if (draft) {
+            return { ...row, ...draft };
+        }
+        return row;
+    });
+}
+
+/** Same attributes, values (in order) and colour images. */
+export function areVariantOptionsEqual(a: ProductVariantOption[], b: ProductVariantOption[]): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+    return a.every((option, index) => {
+        const other = b[index];
+        const imageKeys = Object.keys(option.valueImages);
+        return option.id === other.id
+            && option.name === other.name
+            && option.values.length === other.values.length
+            && option.values.every((value, i) => value === other.values[i])
+            && imageKeys.length === Object.keys(other.valueImages).length
+            && imageKeys.every((key) => option.valueImages[key] === other.valueImages[key]);
+    });
+}
+
+/**
+ * Image of the variant's colour value, e.g. "Gold" in "128GB / Gold".
+ * Titles list values in builder order (see buildVariantRows), so the colour is
+ * found by the colour option's position among the options that have values.
+ */
+export function variantSwatchImage(options: ProductVariantOption[], title: string): string | null {
+    const validOptions = options.filter((option) => option.name && option.values.length > 0);
+    const colorIndex = validOptions.findIndex((option) => isColorAttribute(option.name));
+    if (colorIndex < 0) {
+        return null;
+    }
+    const value = title.split(" / ")[colorIndex];
+    return value ? validOptions[colorIndex].valueImages[value] ?? null : null;
+}
+
+/** Fills fields added after a product was saved in the browser (persist migration). */
+export function withVariantDefaults(product: Product): Product {
+    return {
+        ...product,
+        variants: product.variants.map((variant) => ({ ...variant, isPrebook: variant.isPrebook ?? false })),
+    };
 }

@@ -4,6 +4,7 @@ import {
     AuditStamp,
     Brand,
     Category,
+    PriceRange,
     Product,
     ProductAttribute,
     ProductPage,
@@ -14,12 +15,13 @@ import {
     WarrantyCareText,
 } from "@/types/products";
 import { MAX_PRODUCT_VIDEOS, PRODUCTS_AUDIT_ACTOR } from "@/constants/products";
-import { formatAuditDate } from "@/utils/productRules";
+import { formatAuditDate, withVariantDefaults } from "@/utils/productRules";
 import {
     INITIAL_ATTRIBUTES,
     INITIAL_BRANDS,
     INITIAL_CATEGORIES,
     INITIAL_PAGES,
+    INITIAL_PRICE_RANGES,
     INITIAL_PRODUCTS,
     INITIAL_SPEC_GROUPS,
     INITIAL_USED_PRODUCTS,
@@ -72,6 +74,7 @@ export const useGlobalProductsStore = create<ProductsState>()(
             attributes: INITIAL_ATTRIBUTES as ProductAttribute[],
             specGroups: INITIAL_SPEC_GROUPS as SpecGroup[],
             warrantyCareTexts: INITIAL_WARRANTY_CARE_TEXTS as WarrantyCareText[],
+            priceRanges: INITIAL_PRICE_RANGES as PriceRange[],
 
             // ── Status & Ecommerce ──────────────────────────────────────────
             setRecordStatus: (tab, id, status) => set((state) => {
@@ -88,6 +91,8 @@ export const useGlobalProductsStore = create<ProductsState>()(
                         return { pages: patchRow(state.pages, id, (row) => ({ ...row, status })) };
                     case "warranty_care_text":
                         return { warrantyCareTexts: patchRow(state.warrantyCareTexts, id, (row) => ({ ...row, status })) };
+                    case "price_ranges":
+                        return { priceRanges: patchRow(state.priceRanges, id, (row) => ({ ...row, status })) };
                 }
             }),
 
@@ -142,6 +147,13 @@ export const useGlobalProductsStore = create<ProductsState>()(
                     variantOptions: options,
                     variants,
                     variantsCount: variants.length,
+                })),
+            })),
+
+            updateProductVariant: (productId, variantId, edit) => set((state) => ({
+                products: patchRow(state.products, productId, (row) => ({
+                    ...row,
+                    variants: row.variants.map((variant) => (variant.id === variantId ? { ...variant, ...edit } : variant)),
                 })),
             })),
 
@@ -262,7 +274,30 @@ export const useGlobalProductsStore = create<ProductsState>()(
                 return { warrantyCareTexts: removeRows(state.warrantyCareTexts, removableIds) };
             }),
 
+            // ── Price ranges ────────────────────────────────────────────────
+            // Overlaps only warn in the UI, so nothing here blocks a save.
+            addPriceRange: (input) => set((state) => {
+                const record: PriceRange = { ...input, id: newId("pr"), ...stampCreated() };
+                return { priceRanges: [record, ...state.priceRanges] };
+            }),
+
+            updatePriceRange: (id, updates) => set((state) => ({
+                priceRanges: patchRow(state.priceRanges, id, (row) => ({ ...row, ...updates })),
+            })),
+
+            deletePriceRanges: (ids) => set((state) => ({
+                priceRanges: removeRows(state.priceRanges, ids),
+            })),
+
         }),
-        { name: "erp-products-storage-v2" }
+        {
+            name: "erp-products-storage-v2",
+            // v1 added ProductVariant.isPrebook; older saved variants get `false` instead of losing the saved catalogue.
+            version: 1,
+            migrate: (persistedState) => {
+                const state = persistedState as ProductsState;
+                return { ...state, products: (state.products ?? INITIAL_PRODUCTS).map(withVariantDefaults) };
+            },
+        }
     )
 );

@@ -46,28 +46,27 @@ export function UsedProductTable({ manager }: UsedProductTableProps) {
 
     return (
         <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-brand-subtext/20 bg-white">
-                <div className="w-full overflow-x-auto custom-scrollbar">
-                    <ProductsFilterBar manager={manager} />
-                </div>
-                <div className="w-full lg:w-auto flex lg:justify-end shrink-0 px-4 pb-3 pt-0 lg:px-4 lg:py-3">
-                    <ColumnsVisibilityDropdown
-                        columns={[
-                            { key: "name", label: "Product Name" },
-                            { key: "variant", label: "Variant" },
-                            { key: "price", label: "Price" },
-                            { key: "serialNumber", label: "Serial Number" },
-                            { key: "carePlan", label: "Care Plan" },
-                            { key: "isSold", label: "Is Sold" },
-                            { key: "status", label: "Status" },
-                            { key: "ecommerce", label: "Ecommerce" },
-                            { key: "audit", label: "Created By / At" },
-                        ]}
-                        visibleColumns={visibleColumns}
-                        onToggleColumn={handleToggleColumn}
-                        onReset={handleResetColumns}
-                    />
-                </div>
+            <div className="border-b border-brand-subtext/20 bg-white">
+                <ProductsFilterBar manager={manager}
+                    actions={
+                        <ColumnsVisibilityDropdown
+                            columns={[
+                                { key: "name", label: "Product Name" },
+                                { key: "variant", label: "Variant" },
+                                { key: "price", label: "Price" },
+                                { key: "serialNumber", label: "Serial Number" },
+                                { key: "carePlan", label: "Care Plan" },
+                                { key: "isSold", label: "Is Sold" },
+                                { key: "status", label: "Status" },
+                                { key: "ecommerce", label: "Ecommerce" },
+                                { key: "audit", label: "Created By / At" },
+                            ]}
+                            visibleColumns={visibleColumns}
+                            onToggleColumn={handleToggleColumn}
+                            onReset={handleResetColumns}
+                        />
+                    }
+                />
             </div>
 
             <div className="overflow-x-auto mt-0">

@@ -2,6 +2,7 @@ import {
     AuditStamp,
     Brand,
     Category,
+    PriceRange,
     Product,
     ProductAttribute,
     ProductPage,
@@ -31,6 +32,17 @@ export const INITIAL_WARRANTY_CARE_TEXTS: WarrantyCareText[] = [
     { id: "wct-1", text: "1 Year Official Brand Warranty", status: "Active", ...audit("05-10-2026", "Admin") },
 ];
 
+// ── Price ranges (storefront price filter chips) ────────────────────────────
+// Mock bands; productCount is mocked until the backend supplies live counts.
+// The Active bands touch edge to edge, so the seed has no overlaps or gaps.
+export const INITIAL_PRICE_RANGES: PriceRange[] = [
+    { id: "pr-1", label: "Budget Friendly", minPrice: 0, maxPrice: 15000, status: "Active", productCount: 12, ...audit("01-11-2026", "Admin") },
+    { id: "pr-2", label: "Mid Range", minPrice: 15000, maxPrice: 40000, status: "Active", productCount: 18, ...audit("01-11-2026", "Admin") },
+    { id: "pr-3", label: "Upper Mid Range", minPrice: 40000, maxPrice: 80000, status: "Active", productCount: 9, ...audit("02-11-2026", "Alamin Rifat") },
+    { id: "pr-4", label: "Premium Elite", minPrice: 80000, maxPrice: null, status: "Active", productCount: 6, ...audit("02-11-2026", "Admin") },
+    { id: "pr-5", label: "Flagship Deals", minPrice: 120000, maxPrice: 200000, status: "Inactive", productCount: 3, ...audit("05-11-2026", "Alamin Rifat") },
+];
+
 // ── Products ────────────────────────────────────────────────────────────────
 // Same values the Warranty Details view displayed for every product.
 const defaultWarranty = (): ProductWarrantyDetails => ({
@@ -46,7 +58,7 @@ const defaultVariantOptions = (): ProductVariantOption[] => [
 ];
 
 const defaultVariants = (): ProductVariant[] => [
-    { id: "var-1", title: "128GB", sku: "", maxRetailPrice: null, sellingPrice: null, inStock: false },
+    { id: "var-1", title: "128GB", sku: "", maxRetailPrice: null, sellingPrice: null, inStock: false, isPrebook: false },
 ];
 
 const productDefaults = () => ({

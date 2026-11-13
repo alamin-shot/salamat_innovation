@@ -7,7 +7,8 @@ import { RichTextEditor } from "@/components/ui/forms/RichTextEditor";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Product, ProductInput, ProductVariant, ProductVariantOption, ProductVideo } from "@/types/products";
 import { useCatalogNames, useWarrantyCareTextOptions } from "@/hooks/products_hooks/useProductCatalogOptions";
-import { hasVariantPriceAboveMrp, parsePriceInput, toPriceInput } from "@/utils/productRules";
+import { hasVariantPriceAboveMrp, mergeVariantDrafts, parsePriceInput, toPriceInput } from "@/utils/productRules";
+import { useVariantDrafts } from "@/hooks/products_hooks/useVariantDrafts";
 import { VariantsManager } from "./VariantsManager";
 import { ProductVideoUploader } from "./ProductVideoUploader";
 import { AuditFooter } from "../shared/AuditCells";
@@ -24,7 +25,7 @@ const SWITCH_TRACK = "h-5 w-9 rounded-full bg-brand-subtext/30 peer-checked:bg-e
 
 // Starting rows for a new product, the same the Variants builder showed before.
 const NEW_PRODUCT_OPTIONS: ProductVariantOption[] = [{ id: "opt-1", name: "Storage", values: ["128GB"], valueImages: {} }];
-const NEW_PRODUCT_VARIANTS: ProductVariant[] = [{ id: "var-1", title: "128GB", sku: "", maxRetailPrice: null, sellingPrice: null, inStock: false }];
+const NEW_PRODUCT_VARIANTS: ProductVariant[] = [{ id: "var-1", title: "128GB", sku: "", maxRetailPrice: null, sellingPrice: null, inStock: false, isPrebook: false }];
 
 /** Adds the current value to a dropdown list when it is not one of the managed options. */
 const withCurrent = (names: string[], current: string) => (current && !names.includes(current) ? [current, ...names] : names);
@@ -62,6 +63,8 @@ export function ProductMasterForm({ product, onCancel, onSubmit }: ProductMaster
     // Variants
     const [variantOptions, setVariantOptions] = React.useState<ProductVariantOption[]>(product?.variantOptions ?? NEW_PRODUCT_OPTIONS);
     const [variants, setVariants] = React.useState<ProductVariant[]>(product?.variants ?? NEW_PRODUCT_VARIANTS);
+    // Inline row edits; this form saves them with everything else on submit.
+    const variantDrafts = useVariantDrafts();
 
     // The selected text stays listed even if it has since been deactivated.
     const selectedText = findText(warrantyCareTextId || null);
@@ -96,7 +99,8 @@ export function ProductMasterForm({ product, onCancel, onSubmit }: ProductMaster
             toast.error("Please choose a warranty care text or switch it off.");
             return;
         }
-        if (hasVariantPriceAboveMrp(variants)) {
+        const finalVariants = mergeVariantDrafts(variants, variantDrafts.getState().drafts);
+        if (hasVariantPriceAboveMrp(finalVariants)) {
             toast.error("A variant's Selling Price is higher than its MRP.");
             return;
         }
@@ -119,8 +123,8 @@ export function ProductMasterForm({ product, onCancel, onSubmit }: ProductMaster
                 serviceWarranty: hasServiceWarranty ? serviceWarranty.trim() : "",
             },
             variantOptions,
-            variants,
-            variantsCount: variants.length,
+            variants: finalVariants,
+            variantsCount: finalVariants.length,
             // Fields managed from the table and quick views keep their saved values.
             status: product?.status ?? "Active",
             ecommerce: product?.ecommerce ?? false,
@@ -334,6 +338,7 @@ export function ProductMasterForm({ product, onCancel, onSubmit }: ProductMaster
                             <VariantsManager
                                 options={variantOptions}
                                 variants={variants}
+                                drafts={variantDrafts}
                                 onChange={(nextOptions, nextVariants) => {
                                     setVariantOptions(nextOptions);
                                     setVariants(nextVariants);

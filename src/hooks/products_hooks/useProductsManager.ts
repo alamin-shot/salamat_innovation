@@ -40,6 +40,7 @@ const ROW_SELECTORS: RowSelectorMap = {
     attributes: (state) => state.attributes,
     specification_groups: (state) => state.specGroups,
     warranty_care_text: (state) => state.warrantyCareTexts,
+    price_ranges: (state) => state.priceRanges,
 };
 
 // Same fields the existing tables search on.
@@ -52,6 +53,7 @@ const SEARCH_TEXT: SearchTextMap = {
     attributes: (row) => [row.name, ...row.values.map((value) => value.label)],
     specification_groups: (row) => [row.name, ...row.subGroups],
     warranty_care_text: (row) => [row.text],
+    price_ranges: (row) => [row.label],
 };
 
 // ── Filter dropdowns per tab ────────────────────────────────────────────────
@@ -142,6 +144,7 @@ const FILTER_DEFS: FilterDefMap = {
         { key: "specName", label: "Specification", getValue: (row) => orNone(row.name) },
     ],
     warranty_care_text: [statusFilter()],
+    price_ranges: [statusFilter()],
 };
 
 function buildFilterOptions<T>(def: FilterDef<T>, rows: T[], selected: string | undefined): ProductsFilterOption[] {
@@ -165,7 +168,7 @@ function buildFilterOptions<T>(def: FilterDef<T>, rows: T[], selected: string | 
     return options;
 }
 
-const STATUS_TABS: ProductsStatusTab[] =["products", "used_products", "categories", "brands", "pages", "warranty_care_text"];
+const STATUS_TABS: ProductsStatusTab[] =["products", "used_products", "categories", "brands", "pages", "warranty_care_text", "price_ranges"];
 const ECOMMERCE_TABS: ProductsEcommerceTab[] = ["products", "used_products", "categories", "brands", "pages"];
 
 const isStatusTab = (tab: ProductsTabKey): tab is ProductsStatusTab =>
@@ -183,6 +186,7 @@ const DELETE_ROWS: IdsActionMap = {
     attributes: (state, ids) => state.deleteAttributes(ids),
     specification_groups: (state, ids) => state.deleteSpecGroups(ids),
     warranty_care_text: (state, ids) => state.deleteWarrantyCareTexts(ids),
+    price_ranges: (state, ids) => state.deletePriceRanges(ids),
 };
 
 // ── Helpers ─────────────────────────────────────────────────────────────────

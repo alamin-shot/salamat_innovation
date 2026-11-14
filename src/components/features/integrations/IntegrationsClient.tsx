@@ -2,27 +2,16 @@
 import React from "react";
 import { AlertTriangle, Plug, PlugZap, Webhook } from "lucide-react";
 import { UniversalHubShell } from "@/components/layout/hub/UniversalHubShell";
-import { useIntegrationManager } from "@/hooks/integrations_hooks/useIntegrationManager";
-import { getIntegrationHubGroups, INTEGRATION_SPOKE_TABS, IntegrationSpokeKey } from "@/hooks/integrations_hooks/integrationHubFactory";
-import { HubKpi, HubTabState } from "@/types/hub";
-import { HUB_HOME } from "@/constants/hub";
-import { IntegrationSpokeView } from "./components/IntegrationSpokeView";
-import { WebhookDrawer } from "./drawers/WebhookDrawer";
+import { useGlobalIntegrationsStore } from "@/store/useGlobalIntegrationsStore";
+import { getIntegrationHubGroups, IntegrationSpokeKey } from "@/hooks/integrations_hooks/integrationHubFactory";
+import { HubKpi } from "@/types/hub";
 
-/** Integrations hub on the shared shell (natural page scroll). The manager keeps owning `?tab=`. */
-export function IntegrationsClient() {
-    const manager = useIntegrationManager();
-    const { connections, webhooks } = manager.store;
+/** Integrations hub KPIs and spoke cards with live counts. */
+export function useIntegrationsOverview() {
+    const connections = useGlobalIntegrationsStore((state) => state.connections);
+    const webhooks = useGlobalIntegrationsStore((state) => state.webhooks);
 
-    // The manager's own router resets search / selection / page on every tab change.
-    const activeTab = INTEGRATION_SPOKE_TABS.find((tab) => tab === manager.activeTab) ?? HUB_HOME;
-    const hub: HubTabState<IntegrationSpokeKey> = {
-        activeTab,
-        isPending: manager.isPending,
-        openTab: (tab) => manager.handleRouteChange("tab", tab),
-    };
-
-    const { kpis, groups } = React.useMemo(() => {
+    return React.useMemo(() => {
         const byCategory = (category: IntegrationSpokeKey) => connections.filter((connection) => connection.category === category).length;
         const connected = connections.filter((connection) => connection.status === "Connected").length;
         const warnings = connections.filter((connection) => connection.status === "Sync_Warning").length;
@@ -43,19 +32,10 @@ export function IntegrationsClient() {
         });
         return { kpis, groups };
     }, [connections, webhooks]);
+}
 
-    return (
-        <>
-            <UniversalHubShell
-                title="Integrations & API"
-                subtitle="Manage channels, logistics, and developer webhooks."
-                icon={Plug}
-                groups={groups}
-                kpis={kpis}
-                hub={hub}
-                renderSpoke={() => <IntegrationSpokeView manager={manager} />}
-            />
-            <WebhookDrawer manager={manager} />
-        </>
-    );
+/** Integrations hub portal (natural page scroll); each card opens its full-page spoke. */
+export function IntegrationsClient() {
+    const { kpis, groups } = useIntegrationsOverview();
+    return <UniversalHubShell title="Integrations & API" subtitle="Manage channels, logistics, and developer webhooks." icon={Plug} groups={groups} kpis={kpis} />;
 }

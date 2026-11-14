@@ -1,6 +1,17 @@
-import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
+import { Suspense } from "react";
+import { Metadata } from "next";
+import { Loader } from "@/components/shared/loader/Loader";
+import { SettingsSpokePage } from "@/components/features/settings/SettingsSpokePage";
 
-// Now a tab of the Settings hub; old links land on it.
-export default async function StoreFinancialsSettingsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/settings", searchParams, { tab: "store_financials" });
+export const metadata: Metadata = {
+    title: "Store & Financials · Settings | Salamat Innovation ERP",
+};
+
+/** Full-page Settings spoke (back link to the Settings hub inside). */
+export default function StoreFinancialsPage() {
+    return (
+        <Suspense fallback={<div className="flex h-[50vh] items-center justify-center"><Loader /></div>}>
+            <SettingsSpokePage spoke="store_financials" />
+        </Suspense>
+    );
 }

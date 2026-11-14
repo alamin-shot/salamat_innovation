@@ -1,9 +1,10 @@
-"use client";
 import { useState, useCallback } from "react";
-import { useSellDeviceStore, SellDeviceRequest, SellDeviceStatus } from "@/store/useSellDeviceStore";
+import { useSellDeviceStore } from "@/store/useSellDeviceStore";
+import { SellDeviceRequest, SellDeviceStatus } from "@/types/sellDevice";
 import { toast } from "sonner";
 
-export type SellDeviceDrawerState = "none" | "view_edit";
+/** view_edit = status / note drawer; inspect = read-only inspection drawer. */
+export type SellDeviceDrawerState = "none" | "view_edit" | "inspect";
 
 export function useSellDeviceManager() {
     const store = useSellDeviceStore();
@@ -20,6 +21,11 @@ export function useSellDeviceManager() {
     const openDrawer = useCallback((id: string) => {
         setActiveRequestId(id);
         setActiveDrawer("view_edit");
+    }, []);
+
+    const openInspect = useCallback((id: string) => {
+        setActiveRequestId(id);
+        setActiveDrawer("inspect");
     }, []);
 
     const closeDrawer = useCallback(() => {
@@ -63,6 +69,7 @@ export function useSellDeviceManager() {
         setSelectedIds,
         getActiveRequest,
         openDrawer,
+        openInspect,
         closeDrawer,
         handleSubmit,
         handleDelete,

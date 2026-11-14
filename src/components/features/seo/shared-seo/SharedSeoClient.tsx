@@ -7,50 +7,20 @@ import { SharedSeoFormDrawer } from "./SharedSeoFormDrawer";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { SeoPlatform, SeoTabType } from "@/store/useSeoStore";
-import { FileText, Package, FolderTree, Tag, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
-export function SharedSeoClient({ platform }: { platform: SeoPlatform }) {
-    const manager = useSharedSeoManager(platform);
+/** One Page Metadata section as a full page (the section comes from the route). */
+export function SharedSeoClient({ platform, section }: { platform: SeoPlatform; section: SeoTabType }) {
+    const manager = useSharedSeoManager(platform, section);
     const form = useSharedSeoForm(platform, manager.currentTab, manager.activeEditRecord, manager.closeView);
 
-    const tabs: { id: SeoTabType; label: string; icon: typeof FileText }[] = [
-        { id: "pages", label: "Pages", icon: FileText },
-        { id: "products", label: "Products", icon: Package },
-        { id: "categories", label: "Categories", icon: FolderTree },
-        { id: "brands", label: "Brands", icon: Tag },
-    ];
-
     return (
-        // Page Metadata spoke of the SEO hub (the hub header shows the platform switch).
         <div className="flex flex-col w-full gap-2">
-            <div className="flex flex-col md:flex-row gap-2">
-                <div className="w-full md:w-64 shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 p-4 h-fit">
-                    <nav className="flex flex-col gap-1">
-                        {tabs.map((tab) => {
-                            const Icon = tab.icon;
-                            const isActive = manager.currentTab === tab.id;
-                            return (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => manager.setSection(tab.id)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-emerald-50 text-emerald-700" : "text-gray-600 hover:bg-gray-50"
-                                        }`}
-                                >
-                                    <Icon className={`h-5 w-5 ${isActive ? "text-emerald-600" : "text-gray-400"}`} />
-                                    {tab.label}
-                                </button>
-                            );
-                        })}
-                    </nav>
+            <div className="erp-card flex flex-col p-0 sm:p-0 overflow-hidden">
+                <div className="p-4 sm:p-6 border-b border-gray-100 flex flex-col gap-4">
+                    <SharedSeoToolbar manager={manager} />
                 </div>
-
-                <div className="flex-1 erp-card flex flex-col p-0 sm:p-0 overflow-hidden">
-                    <div className="p-4 sm:p-6 border-b border-gray-100 flex flex-col gap-4">
-                        <h2 className="text-lg font-bold text-gray-800 capitalize">{manager.currentTab}</h2>
-                        <SharedSeoToolbar manager={manager} />
-                    </div>
-                    <SharedSeoTable manager={manager} />
-                </div>
+                <SharedSeoTable manager={manager} />
             </div>
 
             <SharedSeoFormDrawer

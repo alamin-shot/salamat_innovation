@@ -16,7 +16,7 @@ export function MediaUploadDrawer({ isOpen, onClose, manager }: MediaUploadDrawe
             name: `Uploaded Asset ${Math.floor(Math.random() * 100)}`,
             url: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f",
             type: "image",
-            size: "1.4 MB"
+            sizeBytes: 1468006
         });
         onClose();
     };

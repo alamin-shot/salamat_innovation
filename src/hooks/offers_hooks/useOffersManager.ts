@@ -1,6 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
-import { useOffersStore, Offer } from "@/store/useOffersStore";
+import { useOffersStore } from "@/store/useOffersStore";
+import { Offer } from "@/types/offers";
 import { toast } from "sonner";
 
 export type OffersDrawerState = "none" | "add" | "edit";

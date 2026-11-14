@@ -1,9 +1,10 @@
 "use client";
 import { useSellDeviceManager } from "@/hooks/sell_device_hooks/useSellDeviceManager";
 import { SellDeviceDrawer } from "./SellDeviceDrawer";
+import { SellDeviceInspectDrawer } from "./SellDeviceInspectDrawer";
 import { Button } from "@/components/ui/Button";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
-import { Edit, Trash2, CheckCircle, XCircle, PhoneCall } from "lucide-react";
+import { Edit, Eye, Trash2, CheckCircle, XCircle, PhoneCall } from "lucide-react";
 
 export function SellDeviceClient() {
     const manager = useSellDeviceManager();
@@ -30,12 +31,12 @@ export function SellDeviceClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col w-full min-h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Sell Device Requests</h1>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden">
+            <div className="erp-card flex flex-col bg-white overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                     <input
                         type="text"
@@ -116,6 +117,9 @@ export function SellDeviceClient() {
                                                         </Button>
                                                     </>
                                                 )}
+                                                <Button variant="ghost" size="icon-sm" onClick={() => manager.openInspect(request.id)} title="View" className="text-emerald-600 hover:bg-emerald-50">
+                                                    <Eye className="h-4 w-4" />
+                                                </Button>
                                                 <Button variant="ghost" size="icon-sm" onClick={() => manager.openDrawer(request.id)} title="View & Edit Request">
                                                     <Edit className="h-4 w-4" />
                                                 </Button>
@@ -144,6 +148,7 @@ export function SellDeviceClient() {
             )}
 
             <SellDeviceDrawer manager={manager} />
+            <SellDeviceInspectDrawer manager={manager} />
         </div>
     );
 }

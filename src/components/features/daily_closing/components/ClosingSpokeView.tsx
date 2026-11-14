@@ -3,7 +3,7 @@ import { useClosingManager } from "@/hooks/daily_closing_hooks/useClosingManager
 import { EODReconciliationBar } from "./EODReconciliationBar";
 import { ClosingMasterTable } from "../tables/ClosingMasterTable";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, Printer, Trash2, Plus } from "lucide-react";
+import { Printer, Trash2, Plus } from "lucide-react";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { DailyBankTable } from "../tables/DailyBankTable";
 
@@ -14,20 +14,11 @@ interface SpokeProps {
 
 export function ClosingSpokeView({ manager, onPrint }: SpokeProps) {
 
-    const formatTitle = (str: string) => str.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
     return (
         <div className="flex flex-col h-full gap-4">
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <Button variant="outline" className="bg-white hover:bg-gray-50 text-gray-600 shadow-2xs border-gray-200" onClick={() => manager.handleRouteChange("tab", "hub")}>
-                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Back to Hub
-                    </Button>
-                    <h2 className="text-lg font-black text-gray-900 hidden sm:block">
-                        {manager.activeTab === "daily_closings" ? "Daily Closing Operations" : `${formatTitle(manager.activeTab)}`}
-                    </h2>
-                </div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-4">
 
                 {/* Header Action Buttons */}
                 <div className="flex items-center gap-2">

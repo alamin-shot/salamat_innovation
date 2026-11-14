@@ -26,7 +26,7 @@ export function OffersClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col w-full min-h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Offers</h1>
                 <Button variant="success" onClick={manager.openAddDrawer} className="h-9 px-4 gap-2">
@@ -34,7 +34,7 @@ export function OffersClient() {
                 </Button>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden">
+            <div className="erp-card flex flex-col bg-white overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                     <input
                         type="text"
@@ -92,10 +92,10 @@ export function OffersClient() {
                                         </td>
                                         <td className="p-4 text-right">
                                             <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Button variant="ghost" size="icon-sm" onClick={() => manager.openEditDrawer(offer.id)}>
+                                                <Button variant="ghost" size="icon-sm" onClick={() => manager.openEditDrawer(offer.id)} title="Edit">
                                                     <Edit className="h-4 w-4" />
                                                 </Button>
-                                                <Button variant="destructive-ghost" size="icon-sm" onClick={() => manager.handleDelete(offer.id)}>
+                                                <Button variant="destructive-ghost" size="icon-sm" onClick={() => manager.handleDelete(offer.id)} title="Delete">
                                                     <Trash2 className="h-4 w-4" />
                                                 </Button>
                                             </div>

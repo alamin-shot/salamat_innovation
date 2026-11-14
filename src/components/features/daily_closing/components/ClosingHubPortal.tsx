@@ -1,14 +1,16 @@
 "use client";
-import { useClosingManager, ClosingTabKey } from "@/hooks/daily_closing_hooks/useClosingManager";
+import Link from "next/link";
+import { useClosingManager } from "@/hooks/daily_closing_hooks/useClosingManager";
+import { ClosingSpokeKey } from "@/constants/hubRoutes";
 import { useGlobalClosingStore } from "@/store/useGlobalClosingStore";
-import { getHubCategories } from "@/hooks/daily_closing_hooks/closingHubFactory";
+import { closingSpokeHref, getHubCategories } from "@/hooks/daily_closing_hooks/closingHubFactory";
 
 export function ClosingHubPortal({ manager }: { manager: ReturnType<typeof useClosingManager> }) {
     const store = useGlobalClosingStore();
 
-    const getCount = (arr: any[]) => arr.filter(t => t.date === manager.activeDate).length;
+    const getCount = (arr: { date: string }[]) => arr.filter(t => t.date === manager.activeDate).length;
 
-    const dynamicCounts: Partial<Record<ClosingTabKey, number>> = {
+    const dynamicCounts: Partial<Record<ClosingSpokeKey, number>> = {
         daily_closing_balance: getCount(store.dailyClosingBalances),
         profit_loss: getCount(store.profitLoss),
         daily_bank: getCount(store.dailyBankRecords),
@@ -35,9 +37,9 @@ export function ClosingHubPortal({ manager }: { manager: ReturnType<typeof useCl
                         {cat.items.map((item) => {
                             const Icon = item.icon;
                             return (
-                                <button
+                                <Link
                                     key={item.id}
-                                    onClick={() => manager.handleRouteChange("tab", item.id)}
+                                    href={closingSpokeHref(item.id, manager.activeDate)}
                                     className="group erp-card bg-white p-5 border border-gray-200 hover:border-brand-primary/50 hover:shadow-md transition-all text-left flex items-start gap-4 focus:outline-none focus:ring-2 focus:ring-brand-primary"
                                 >
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 transition-transform group-hover:scale-105 ${item.color}`}>
@@ -58,7 +60,7 @@ export function ClosingHubPortal({ manager }: { manager: ReturnType<typeof useCl
                                             {item.desc}
                                         </span>
                                     </div>
-                                </button>
+                                </Link>
                             );
                         })}
                     </div>

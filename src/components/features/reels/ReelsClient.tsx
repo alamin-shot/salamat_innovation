@@ -2,6 +2,7 @@
 import { useReelsManager } from "@/hooks/reels_hooks/useReelsManager";
 import { ReelsTable } from "./ReelsTable";
 import { ReelsDrawer } from "./ReelsDrawer";
+import { ReelPreviewDrawer } from "./ReelPreviewDrawer";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { Button } from "@/components/ui/Button";
 import { Search, Plus, Columns } from "lucide-react";
@@ -11,12 +12,12 @@ export function ReelsClient() {
     const { table, openAddDrawer, handleBulkDelete } = manager;
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col w-full min-h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Reels Video</h1>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col p-0 overflow-hidden relative">
+            <div className="erp-card flex flex-col p-0 overflow-hidden relative">
 
                 {/* Toolbar */}
                 <div className="p-4 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -62,6 +63,7 @@ export function ReelsClient() {
             </div>
 
             <ReelsDrawer manager={manager} />
+            <ReelPreviewDrawer manager={manager} />
         </div>
     );
 }

@@ -1,15 +1,11 @@
 import * as React from "react";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { HubSpokeGroup } from "@/types/hub";
 import { HUB_TONE_CLASSES } from "@/constants/hub";
 
-interface HubPortalProps<TabKey extends string> {
-    groups: HubSpokeGroup<TabKey>[];
-    onOpen: (tab: TabKey) => void;
-}
-
-/** The hub's landing view: one card per spoke, grouped. */
-export function HubPortal<TabKey extends string>({ groups, onOpen }: HubPortalProps<TabKey>) {
+/** The hub's landing view: one card per spoke, grouped. Each card links to the spoke's full page. */
+export function HubPortal<SpokeKey extends string>({ groups }: { groups: HubSpokeGroup<SpokeKey>[] }) {
     return (
         <div className="flex flex-col gap-8">
             {groups.map((group) => (
@@ -22,10 +18,9 @@ export function HubPortal<TabKey extends string>({ groups, onOpen }: HubPortalPr
                         {group.spokes.map((spoke) => {
                             const Icon = spoke.icon;
                             return (
-                                <button
+                                <Link
                                     key={spoke.id}
-                                    type="button"
-                                    onClick={() => onOpen(spoke.id)}
+                                    href={spoke.href}
                                     className="group flex items-start gap-4 rounded-xl border border-brand-subtext/15 bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
                                 >
                                     <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition-transform group-hover:scale-105 ${HUB_TONE_CLASSES[spoke.tone]}`}>
@@ -41,7 +36,7 @@ export function HubPortal<TabKey extends string>({ groups, onOpen }: HubPortalPr
                                         <span className="text-xs leading-relaxed text-brand-subtext">{spoke.description}</span>
                                     </div>
                                     <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-brand-subtext transition-transform group-hover:translate-x-0.5 group-hover:text-brand-primary" />
-                                </button>
+                                </Link>
                             );
                         })}
                     </div>

@@ -1,6 +1,4 @@
-import { OperationsError, OperationsShop, OperationsTabKey } from "@/types/operations";
-
-export const OPERATIONS_TABS = ["stock_transfers", "damage_products", "assets", "cash_transfers"] as const satisfies readonly OperationsTabKey[];
+import { OperationsError, OperationsShop } from "@/types/operations";
 
 /** Shops offered in the Operations forms (every name used by the current records and dropdowns). */
 export const OPERATIONS_SHOPS = [

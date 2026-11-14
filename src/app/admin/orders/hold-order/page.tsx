@@ -1,6 +1,6 @@
 import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-// Moved into the Orders hub; old links land on the matching tab.
-export default async function HoldOrdersRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/orders", searchParams, { tab: "orders", status: "Hold" });
+// Old address; the page is now a full-page spoke.
+export default async function HoldOrderRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/orders/all-orders", searchParams, {status: "Hold"});
 }

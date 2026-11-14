@@ -1,6 +1,6 @@
 import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-// Moved into the Orders hub; old links land on the matching tab.
+// Old address; the page is now a full-page spoke.
 export default async function OnwayOrdersRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/orders", searchParams, { tab: "orders", status: "Onway" });
+    return redirectToHub("/admin/orders/all-orders", searchParams, {status: "Onway"});
 }

@@ -1,6 +1,6 @@
 import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-// Moved into the Operations hub; old links land on the matching tab.
+// Old address; the page is now a full-page spoke.
 export default async function AssetsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/operations", searchParams, { tab: "assets" });
+    return redirectToHub("/admin/operations/assets", searchParams, {});
 }

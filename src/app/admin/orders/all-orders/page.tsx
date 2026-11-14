@@ -1,6 +1,17 @@
-import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
+import { Suspense } from "react";
+import { Metadata } from "next";
+import { Loader } from "@/components/shared/loader/Loader";
+import { OrdersSpokePage } from "@/components/features/orders-hub/OrdersSpokePage";
 
-// Moved into the Orders hub; old links land on the matching tab.
-export default async function AllOrdersRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/orders", searchParams, { tab: "orders" });
+export const metadata: Metadata = {
+    title: "Orders · Orders | Salamat Innovation ERP",
+};
+
+/** Full-page Orders spoke (back link to the Orders hub inside). */
+export default function OrdersPage() {
+    return (
+        <Suspense fallback={<div className="flex h-[50vh] items-center justify-center"><Loader /></div>}>
+            <OrdersSpokePage spoke="orders" />
+        </Suspense>
+    );
 }

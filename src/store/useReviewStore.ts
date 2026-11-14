@@ -1,69 +1,56 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { Review, ReviewError, ReviewState, NewReviewInput } from "@/types/reviews";
+import { INITIAL_REVIEWS } from "@/mocks/reviews.mock";
 
-export type ReviewStatus = "Pending" | "Approved" | "Rejected";
+// LAYER 2: Reviews cache (future /api/reviews).
 
-export interface Review {
-    id: string;
-    productName: string;
-    customerName: string;
-    rating: number;
-    comment: string;
-    reply: string | null;
-    status: ReviewStatus;
-    createdAt: string;
+function validate(input: NewReviewInput): ReviewError | null {
+    if (!input.productName.trim()) return "product_required";
+    if (!input.customerName.trim()) return "customer_required";
+    if (!Number.isInteger(input.rating) || input.rating < 1 || input.rating > 5) return "rating_invalid";
+    if (!input.comment.trim()) return "comment_required";
+    return null;
 }
 
-interface ReviewStore {
-    reviews: Review[];
-    addReview: (review: Omit<Review, "id" | "createdAt">) => void;
-    updateReview: (id: string, updatedData: Partial<Review>) => void;
-    deleteReview: (id: string) => void;
-    bulkDeleteReviews: (ids: string[]) => void;
-    updateStatus: (id: string, status: ReviewStatus) => void;
-}
-
-export const useReviewStore = create<ReviewStore>()(
+export const useReviewStore = create<ReviewState>()(
     persist(
         (set) => ({
-            reviews: [
-                {
-                    id: "1",
-                    productName: "Samsung Galaxy S24 Ultra",
-                    customerName: "Rahim Uddin",
-                    rating: 5,
-                    comment: "Excellent phone! The camera is mind-blowing and delivery was super fast.",
-                    reply: "Thank you for the amazing feedback, Rahim! Enjoy your new device.",
-                    status: "Approved",
-                    createdAt: "2026-10-25T10:30:00.000Z"
-                },
-                {
-                    id: "2",
-                    productName: "Apple MagSafe Charger",
-                    customerName: "Sarah Ahmed",
-                    rating: 2,
-                    comment: "The charger gets a bit too warm for my liking. Not sure if this is normal.",
-                    reply: null,
-                    status: "Pending",
-                    createdAt: "2026-10-29T14:15:00.000Z"
-                }
-            ],
-            addReview: (reviewData) => set((state) => ({
-                reviews: [...state.reviews, { ...reviewData, id: Date.now().toString(), createdAt: new Date().toISOString() }]
-            })),
+            reviews: INITIAL_REVIEWS,
+            addReview: (input) => {
+                const error = validate(input);
+                if (error) return { ok: false, error };
+                const review: Review = { ...input, comment: input.comment.trim(), reply: null, id: Date.now().toString(), createdAt: new Date().toISOString() };
+                set((state) => ({ reviews: [review, ...state.reviews] }));
+                return { ok: true, review };
+            },
             updateReview: (id, updatedData) => set((state) => ({
-                reviews: state.reviews.map(review => review.id === id ? { ...review, ...updatedData } : review)
+                reviews: state.reviews.map((review) => (review.id === id ? { ...review, ...updatedData } : review)),
             })),
             deleteReview: (id) => set((state) => ({
-                reviews: state.reviews.filter(review => review.id !== id)
+                reviews: state.reviews.filter((review) => review.id !== id),
             })),
             bulkDeleteReviews: (ids) => set((state) => ({
-                reviews: state.reviews.filter(review => !ids.includes(review.id))
+                reviews: state.reviews.filter((review) => !ids.includes(review.id)),
             })),
             updateStatus: (id, status) => set((state) => ({
-                reviews: state.reviews.map(review => review.id === id ? { ...review, status } : review)
-            }))
+                reviews: state.reviews.map((review) => (review.id === id ? { ...review, status } : review)),
+            })),
         }),
-        { name: "erp-reviews-storage-v1" }
+        {
+            name: "erp-reviews-storage-v1",
+            version: 1,
+            // version 1: product / customer links and customer photos (empty for existing reviews).
+            migrate: (persisted) => {
+                const state = persisted as { reviews?: Partial<Review>[] };
+                const reviews = (state.reviews ?? INITIAL_REVIEWS).map((review) => ({
+                    productId: null,
+                    customerId: null,
+                    photos: [],
+                    ...review,
+                })) as Review[];
+                return { reviews } as ReviewState;
+            },
+        }
     )
 );

@@ -1,25 +1,25 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import { ReviewManagerType } from "@/hooks/review_hooks/useReviewManager";
-import { ReviewStatus } from "@/store/useReviewStore";
+import { Review, ReviewStatus } from "@/types/reviews";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Star } from "lucide-react";
 
+const STATUSES: ReviewStatus[] = ["Pending", "Approved", "Rejected"];
+
 export function ReviewDrawer({ manager }: { manager: ReviewManagerType }) {
-    const isEditing = manager.activeDrawer === "edit";
     const activeReview = manager.getActiveReview();
+    if (!activeReview) return null;
+    // Remounts per review / opening so reply and status start from the saved review.
+    return <ReviewDrawerBody key={`${activeReview.id}-${manager.activeDrawer}`} manager={manager} activeReview={activeReview} />;
+}
 
-    const [reply, setReply] = useState("");
-    const [status, setStatus] = useState<ReviewStatus>("Pending");
-
-    useEffect(() => {
-        if (isEditing && activeReview) {
-            setReply(activeReview.reply || "");
-            setStatus(activeReview.status);
-        }
-    }, [isEditing, activeReview]);
+function ReviewDrawerBody({ manager, activeReview }: { manager: ReviewManagerType; activeReview: Review }) {
+    const [reply, setReply] = useState(activeReview.reply || "");
+    const [status, setStatus] = useState<ReviewStatus>(activeReview.status);
 
     const handleSubmit = () => {
         manager.handleSubmit({
@@ -28,12 +28,10 @@ export function ReviewDrawer({ manager }: { manager: ReviewManagerType }) {
         });
     };
 
-    if (!activeReview) return null;
-
     return (
         <Drawer
             title="Review Details & Reply"
-            isOpen={manager.activeDrawer !== "none"}
+            isOpen={manager.activeDrawer === "edit"}
             onClose={manager.closeDrawer}
             width="w-full sm:w-[calc(100vw-260px)] md:w-[600px]"
         >
@@ -66,9 +64,18 @@ export function ReviewDrawer({ manager }: { manager: ReviewManagerType }) {
                         <div>
                             <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Comment</span>
                             <p className="text-sm text-gray-700 mt-1 bg-white p-3 rounded border border-gray-100 italic">
-                                "{activeReview.comment}"
+                                &ldquo;{activeReview.comment}&rdquo;
                             </p>
                         </div>
+                        {activeReview.photos.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {activeReview.photos.map((src, index) => (
+                                    <a key={index} href={src} target="_blank" rel="noreferrer" className="relative block h-16 w-16 overflow-hidden rounded-md border border-gray-200">
+                                        <Image src={src} alt={`Customer photo ${index + 1}`} fill unoptimized className="object-cover" />
+                                    </a>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <hr className="border-gray-100" />
@@ -89,8 +96,8 @@ export function ReviewDrawer({ manager }: { manager: ReviewManagerType }) {
                         <label className="erp-label">Visibility Status <span className="text-red-500">*</span></label>
                         <CustomSelect
                             value={status}
-                            options={["Pending", "Approved", "Rejected"]}
-                            onChange={(val) => setStatus(val as ReviewStatus)}
+                            options={STATUSES}
+                            onChange={(val) => setStatus(STATUSES.find((option) => option === val) ?? status)}
                         />
                     </div>
 

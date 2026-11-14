@@ -1,9 +1,12 @@
 "use client";
 import { useReviewManager } from "@/hooks/review_hooks/useReviewManager";
+import Image from "next/image";
 import { ReviewDrawer } from "./ReviewDrawer";
+import { AddReviewDrawer } from "./AddReviewDrawer";
+import { ReviewSummaryPanel } from "./ReviewSummaryPanel";
 import { Button } from "@/components/ui/Button";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
-import { Edit, Trash2, CheckCircle, XCircle, Star, MessageSquare } from "lucide-react";
+import { BadgeCheck, Edit, Plus, Trash2, CheckCircle, XCircle, Star, MessageSquare } from "lucide-react";
 
 export function ReviewClient() {
     const manager = useReviewManager();
@@ -33,16 +36,23 @@ export function ReviewClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col w-full min-h-full gap-2 p-4">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-900">Product Reviews</h1>
+                <Button variant="success" onClick={manager.openAddDrawer} className="h-9 gap-2 px-4">
+                    <Plus className="h-4 w-4" /> Add Review
+                </Button>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden">
+            <ReviewSummaryPanel summary={manager.summary} />
+
+            <div className="erp-card flex flex-col bg-white overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                     <input
                         type="text"
                         placeholder="Search by product or customer..."
+                        value={manager.searchQuery}
+                        onChange={(e) => manager.setSearchQuery(e.target.value)}
                         className="erp-input max-w-xs"
                     />
                 </div>
@@ -86,10 +96,27 @@ export function ReviewClient() {
                                             />
                                         </td>
                                         <td className="p-4 align-top font-medium text-gray-900 line-clamp-2">{review.productName}</td>
-                                        <td className="p-4 align-top text-gray-600">{review.customerName}</td>
+                                        <td className="p-4 align-top text-gray-600">
+                                            <div>{review.customerName}</div>
+                                            {review.isVerifiedBuyer && (
+                                                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700" title="Sales shows this customer bought this product">
+                                                    <BadgeCheck className="h-3.5 w-3.5" /> Verified buyer
+                                                </span>
+                                            )}
+                                        </td>
                                         <td className="p-4 align-top">{renderStars(review.rating)}</td>
                                         <td className="p-4 align-top">
                                             <p className="text-sm text-gray-700 line-clamp-2">{review.comment}</p>
+                                            {review.photos.length > 0 && (
+                                                <div className="mt-2 flex items-center gap-1.5">
+                                                    {review.photos.slice(0, 3).map((src, index) => (
+                                                        <span key={index} className="relative block h-10 w-10 overflow-hidden rounded border border-gray-200">
+                                                            <Image src={src} alt={`Photo ${index + 1}`} fill unoptimized className="object-cover" />
+                                                        </span>
+                                                    ))}
+                                                    {review.photos.length > 3 && <span className="text-xs font-semibold text-gray-500">+{review.photos.length - 3}</span>}
+                                                </div>
+                                            )}
                                             {review.reply && (
                                                 <div className="mt-1 flex items-start gap-1.5 text-xs text-brand-primary bg-brand-primary/5 p-2 rounded">
                                                     <MessageSquare className="h-3.5 w-3.5 shrink-0 mt-0.5" />
@@ -145,6 +172,7 @@ export function ReviewClient() {
             )}
 
             <ReviewDrawer manager={manager} />
+            <AddReviewDrawer manager={manager} />
         </div>
     );
 }

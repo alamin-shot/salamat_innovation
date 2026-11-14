@@ -1,17 +1,14 @@
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { useGlobalIntegrationsStore } from "@/store/useGlobalIntegrationsStore";
 import { IntegrationTabKey, IntegrationDrawerMode } from "@/types/integrations";
-import { useMemo, useState, useTransition } from "react";
+import { IntegrationSpokeKey } from "@/constants/hubRoutes";
+import { useMemo, useState } from "react";
 
-export function useIntegrationManager() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const [isPending, startTransition] = useTransition();
+/** `spoke` comes from the full-page route (/admin/integrations/<slug>); the hub page passes none. */
+export function useIntegrationManager(spoke?: IntegrationSpokeKey) {
     const store = useGlobalIntegrationsStore();
 
-    // Tab routing state
-    const activeTab = (searchParams.get("tab") as IntegrationTabKey) || "hub";
+    const activeTab: IntegrationTabKey = spoke ?? "hub";
 
     // Table & Control state
     const [searchQuery, setSearchQuery] = useState("");
@@ -23,16 +20,6 @@ export function useIntegrationManager() {
     const [drawerMode, setDrawerMode] = useState<IntegrationDrawerMode>("none");
     const [activeRecord, setActiveRecord] = useState<any>(null);
 
-    const handleRouteChange = (key: string, value: string) => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set(key, value);
-        startTransition(() => {
-            router.push(`?${params.toString()}`);
-            setSelectedIds([]);
-            setSearchQuery("");
-            setCurrentPage(1);
-        });
-    };
 
     // Filtered data pipeline for webhooks or connection logs
     const activeTabData = useMemo(() => {
@@ -66,8 +53,6 @@ export function useIntegrationManager() {
 
     return {
         activeTab,
-        handleRouteChange,
-        isPending,
         searchQuery,
         setSearchQuery,
         selectedIds,

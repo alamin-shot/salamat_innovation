@@ -1,6 +1,6 @@
 import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-// Moved into the News & Vlog hub; old links land on the News tab.
+// Old address; the page is now a full-page spoke.
 export default async function NewsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/news-vlog", searchParams, { tab: "news" });
+    return redirectToHub("/admin/news-vlog/news", searchParams, {});
 }

@@ -1,3 +1,4 @@
+import { OPERATIONS_HUB, OPERATIONS_SPOKE_SLUGS, spokeHref } from "@/constants/hubRoutes";
 import { AlertTriangle, ArrowRightLeft, Banknote, Package } from "lucide-react";
 import { HubSpokeGroup } from "@/types/hub";
 import { OperationsTabKey } from "@/types/operations";
@@ -9,16 +10,16 @@ export function getOperationsHubGroups(counts: Record<OperationsTabKey, number>)
             title: "Inventory Movement",
             description: "Move serialised stock between shops and write off damaged units.",
             spokes: [
-                { id: "stock_transfers", label: "Stock Transfers", description: "Shop-to-shop serial transfers with approval", icon: ArrowRightLeft, tone: "blue", count: counts.stock_transfers },
-                { id: "damage_products", label: "Damage Products", description: "Damaged-unit write-offs awaiting approval", icon: AlertTriangle, tone: "rose", count: counts.damage_products },
+                { id: "stock_transfers", href: spokeHref(OPERATIONS_HUB, OPERATIONS_SPOKE_SLUGS.stock_transfers), label: "Stock Transfers", description: "Shop-to-shop serial transfers with approval", icon: ArrowRightLeft, tone: "blue", count: counts.stock_transfers },
+                { id: "damage_products", href: spokeHref(OPERATIONS_HUB, OPERATIONS_SPOKE_SLUGS.damage_products), label: "Damage Products", description: "Damaged-unit write-offs awaiting approval", icon: AlertTriangle, tone: "rose", count: counts.damage_products },
             ],
         },
         {
             title: "Company Resources",
             description: "Fixed assets in custody and cash moved between shops.",
             spokes: [
-                { id: "assets", label: "Assets", description: "Asset ledger, custody, depreciation and categories", icon: Package, tone: "indigo", count: counts.assets },
-                { id: "cash_transfers", label: "Cash Transfers", description: "Shop-to-shop cash movements with approval", icon: Banknote, tone: "emerald", count: counts.cash_transfers },
+                { id: "assets", href: spokeHref(OPERATIONS_HUB, OPERATIONS_SPOKE_SLUGS.assets), label: "Assets", description: "Asset ledger, custody, depreciation and categories", icon: Package, tone: "indigo", count: counts.assets },
+                { id: "cash_transfers", href: spokeHref(OPERATIONS_HUB, OPERATIONS_SPOKE_SLUGS.cash_transfers), label: "Cash Transfers", description: "Shop-to-shop cash movements with approval", icon: Banknote, tone: "emerald", count: counts.cash_transfers },
             ],
         },
     ];

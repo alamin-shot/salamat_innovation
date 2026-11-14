@@ -14,7 +14,7 @@ export function CreateFolderDrawer({ isOpen, onClose, manager }: CreateFolderDra
     const [folderName, setFolderName] = useState("");
 
     const handleCreate = () => {
-        manager.handleCreateFolder(folderName);
+        if (!manager.handleCreateFolder(folderName)) return;
         setFolderName("");
         onClose();
     };

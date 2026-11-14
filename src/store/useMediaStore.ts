@@ -1,77 +1,76 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { MediaFile, MediaFolder, MediaState } from "@/types/media";
+import { INITIAL_MEDIA_FILES, INITIAL_MEDIA_FOLDERS, UNFILED_FOLDER_ID } from "@/mocks/media.mock";
+import { descendantIds, parseSizeLabel } from "@/utils/mediaRules";
 
-export interface MediaFolder {
-    id: string;
-    name: string;
-    parentId: string | null; // null means root
-}
+// LAYER 2: Media cache (future /api/media). Which folder is open is URL state, not stored here.
 
-export interface MediaFile {
-    id: string;
-    name: string;
-    url: string;
-    type: "image" | "pdf" | "video";
-    size: string;
-    folderId: string | null; // null means root
-    createdAt: string;
-}
+/** Mock master PIN until the NestJS auth service verifies PINs. */
+const MOCK_MASTER_PIN = "1234";
 
-interface MediaStore {
-    folders: MediaFolder[];
-    files: MediaFile[];
-    currentFolderId: string | null; // null = root view
-
-    // Actions
-    navigateToFolder: (folderId: string | null) => void;
-    createFolder: (name: string) => void;
-    uploadFile: (file: { name: string; url: string; type: "image" | "pdf" | "video"; size: string; folderId?: string | null }) => void;
-    deleteFile: (id: string) => void;
-    deleteFolder: (id: string) => void;
-    bulkDeleteFiles: (ids: string[]) => void;
-}
-
-export const useMediaStore = create<MediaStore>()(
+export const useMediaStore = create<MediaState>()(
     persist(
-        (set) => ({
-            folders: [
-                { id: "f_voltme", name: "VOLTME", parentId: null },
-                { id: "f_salamat", name: "Salamat Innovation", parentId: null },
-                { id: "f_tekzo", name: "TEKZO", parentId: null },
-                { id: "f_demo", name: "Demo", parentId: null },
-                { id: "f_sub_demo_1", name: "Motorola Edge 70 Fusion", parentId: "f_demo" },
-            ],
-            files: [
-                { id: "m_1", name: "Professional LinkedIn Headshot (1)", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", type: "image", size: "1.2 MB", folderId: null, createdAt: "2026-10-29" },
-                { id: "m_2", name: "Authorization PDF Document", url: "#", type: "pdf", size: "450 KB", folderId: null, createdAt: "2026-10-29" },
-                { id: "m_3", name: "Honor X6e Black", url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9", type: "image", size: "2.1 MB", folderId: null, createdAt: "2026-10-29" },
-                { id: "m_4", name: "Demo Subfile Asset", url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30", type: "image", size: "1.8 MB", folderId: "f_sub_demo_1", createdAt: "2026-10-29" },
-            ],
-            currentFolderId: null,
+        (set, get) => ({
+            folders: INITIAL_MEDIA_FOLDERS,
+            files: INITIAL_MEDIA_FILES,
+            masterPin: MOCK_MASTER_PIN,
 
-            navigateToFolder: (folderId) => set({ currentFolderId: folderId }),
-
-            createFolder: (name) => set((state) => ({
-                folders: [...state.folders, { id: `f_${Date.now()}`, name, parentId: state.currentFolderId }]
-            })),
+            createFolder: (name, parentId) => {
+                const trimmed = name.trim();
+                if (!trimmed) return { ok: false, error: "name_required" };
+                const taken = get().folders.some((folder) => folder.parentId === parentId && folder.name.toLowerCase() === trimmed.toLowerCase());
+                if (taken) return { ok: false, error: "name_taken" };
+                const folder: MediaFolder = { id: `f_${Date.now()}`, name: trimmed, parentId, isLocked: false };
+                set((state) => ({ folders: [...state.folders, folder] }));
+                return { ok: true, folder };
+            },
 
             uploadFile: (fileData) => set((state) => ({
-                files: [...state.files, { ...fileData, id: `m_${Date.now()}`, folderId: state.currentFolderId, createdAt: new Date().toISOString().split('T')[0] }]
+                files: [...state.files, { ...fileData, id: `m_${Date.now()}`, createdAt: new Date().toISOString().split("T")[0] }],
             })),
 
-            deleteFile: (id) => set((state) => ({
-                files: state.files.filter(f => f.id !== id)
+            deleteFile: (id) => set((state) => ({ files: state.files.filter((file) => file.id !== id) })),
+
+            bulkDeleteFiles: (ids) => set((state) => ({ files: state.files.filter((file) => !ids.includes(file.id)) })),
+
+            deleteFolder: (id) => set((state) => {
+                const removed = descendantIds(state.folders, id);
+                return {
+                    folders: state.folders.filter((folder) => !removed.includes(folder.id)),
+                    files: state.files.filter((file) => !removed.includes(file.folderId)),
+                };
+            }),
+
+            setFolderLock: (id, isLocked) => set((state) => ({
+                folders: state.folders.map((folder) => (folder.id === id ? { ...folder, isLocked } : folder)),
             })),
 
-            deleteFolder: (id) => set((state) => ({
-                folders: state.folders.filter(f => f.id !== id && f.parentId !== id),
-                files: state.files.filter(f => f.folderId !== id)
-            })),
-
-            bulkDeleteFiles: (ids) => set((state) => ({
-                files: state.files.filter(f => !ids.includes(f.id))
-            }))
+            verifyPin: (pin) => pin === get().masterPin,
         }),
-        { name: "erp-media-storage-v1" }
+        {
+            name: "erp-media-storage-v1",
+            version: 1,
+            // Saved state never includes the PIN (it comes from code), nor the open folder.
+            partialize: (state) => ({ folders: state.folders, files: state.files }),
+            // version 1: folder locks, an "Unfiled" folder for loose files, numeric file sizes.
+            migrate: (persisted) => {
+                type OldFile = Omit<MediaFile, "sizeBytes" | "folderId"> & { size?: string; sizeBytes?: number; folderId: string | null };
+                const state = persisted as { folders?: (Omit<MediaFolder, "isLocked"> & { isLocked?: boolean })[]; files?: OldFile[] };
+                const folders: MediaFolder[] = (state.folders ?? INITIAL_MEDIA_FOLDERS).map((folder) => ({ ...folder, isLocked: folder.isLocked ?? false }));
+                if (!folders.some((folder) => folder.id === UNFILED_FOLDER_ID)) folders.push({ id: UNFILED_FOLDER_ID, name: "Unfiled", parentId: null, isLocked: false });
+                const source: OldFile[] = state.files ?? INITIAL_MEDIA_FILES;
+                const files: MediaFile[] = source.map((file) => ({
+                    id: file.id,
+                    name: file.name,
+                    url: file.url,
+                    type: file.type,
+                    sizeBytes: file.sizeBytes ?? parseSizeLabel(file.size ?? ""),
+                    folderId: file.folderId ?? UNFILED_FOLDER_ID,
+                    createdAt: file.createdAt,
+                }));
+                return { folders, files } as MediaState;
+            },
+        }
     )
 );

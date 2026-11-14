@@ -1,21 +1,23 @@
-"use client";
 import { useState, useCallback } from "react";
-import { useReelsStore, ReelRecord } from "@/store/useReelsStore";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
 import { toast } from "sonner";
+import { useReelsStore } from "@/store/useReelsStore";
+import { ReelInput, ReelRecord } from "@/types/reels";
+import { useListControls } from "@/hooks/shared_hooks/useTableManager";
 
-export type ReelsDrawerType = "none" | "add" | "edit";
+export type ReelsDrawerType = "none" | "add" | "edit" | "view";
+
+const matches = (reel: ReelRecord, query: string) => reel.productName.toLowerCase().includes(query.toLowerCase());
 
 export function useReelsManager() {
-    const store = useReelsStore();
+    const reels = useReelsStore((state) => state.reels);
+    const addReel = useReelsStore((state) => state.addReel);
+    const updateReel = useReelsStore((state) => state.updateReel);
+    const deleteReel = useReelsStore((state) => state.deleteReel);
+    const deleteMultipleReels = useReelsStore((state) => state.deleteMultipleReels);
 
-    // 1. Initialize standard table orchestrator
-    const table = useTableManager(
-        store.reels,
-        (reel, query) => reel.productName.toLowerCase().includes(query.toLowerCase())
-    );
+    // Live store rows (a copy would miss reels added after the page opened).
+    const table = useListControls(reels, matches);
 
-    // 2. Drawer Routing State
     const [activeDrawer, setActiveDrawer] = useState<ReelsDrawerType>("none");
     const [activeReelId, setActiveReelId] = useState<string | null>(null);
 
@@ -29,54 +31,58 @@ export function useReelsManager() {
         setActiveDrawer("edit");
     }, []);
 
-    const closeDrawer = useCallback(() => {
-        setActiveDrawer("none");
-        setTimeout(() => setActiveReelId(null), 300); // Wait for transition
+    const openViewDrawer = useCallback((id: string) => {
+        setActiveReelId(id);
+        setActiveDrawer("view");
     }, []);
+
+    // The id is kept so the drawer still shows its reel while sliding out.
+    const closeDrawer = useCallback(() => setActiveDrawer("none"), []);
 
     const getActiveReel = useCallback((): ReelRecord | undefined => {
         if (!activeReelId) return undefined;
-        return store.reels.find(r => r.id === activeReelId);
-    }, [activeReelId, store.reels]);
+        return reels.find((reel) => reel.id === activeReelId);
+    }, [activeReelId, reels]);
 
-    // 3. Action Handlers (Keeps UI stateless)
     const handleDelete = useCallback((id: string) => {
         if (confirm("Are you sure you want to delete this reel?")) {
-            store.deleteReel(id);
+            deleteReel(id);
             toast.success("Reel deleted successfully");
         }
-    }, [store]);
+    }, [deleteReel]);
 
+    const { selectedIds, setSelectedIds } = table;
     const handleBulkDelete = useCallback(() => {
-        if (table.selectedIds.length === 0) return;
-        if (confirm(`Delete ${table.selectedIds.length} selected reels?`)) {
-            store.deleteMultipleReels(table.selectedIds);
-            table.setSelectedIds([]); // Clear selection after action
+        if (selectedIds.length === 0) return;
+        if (confirm(`Delete ${selectedIds.length} selected reels?`)) {
+            deleteMultipleReels(selectedIds);
+            setSelectedIds([]);
             toast.success("Selected reels deleted");
         }
-    }, [store, table]);
+    }, [selectedIds, setSelectedIds, deleteMultipleReels]);
 
-    const handleFormSubmit = useCallback((data: Omit<ReelRecord, "id">) => {
+    const handleFormSubmit = useCallback((data: ReelInput) => {
         if (activeDrawer === "add") {
-            store.addReel(data);
+            addReel(data);
             toast.success("Reel added successfully");
         } else if (activeDrawer === "edit" && activeReelId) {
-            store.updateReel(activeReelId, data);
+            updateReel(activeReelId, data);
             toast.success("Reel updated successfully");
         }
         closeDrawer();
-    }, [activeDrawer, activeReelId, store, closeDrawer]);
+    }, [activeDrawer, activeReelId, addReel, updateReel, closeDrawer]);
 
     return {
         table,
         activeDrawer,
         openAddDrawer,
         openEditDrawer,
+        openViewDrawer,
         closeDrawer,
         getActiveReel,
         handleDelete,
         handleBulkDelete,
-        handleFormSubmit
+        handleFormSubmit,
     };
 }
 

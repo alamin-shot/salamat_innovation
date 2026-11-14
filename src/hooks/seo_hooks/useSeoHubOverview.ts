@@ -1,3 +1,4 @@
+import { SEO_HUB, SEO_SPOKE_SLUGS, spokeHref } from "@/constants/hubRoutes";
 import { useMemo } from "react";
 import { FileText, Globe, Map as SitemapIcon, Share2 } from "lucide-react";
 import { useSeoStore } from "@/store/useSeoStore";
@@ -30,16 +31,16 @@ export function useSeoHubOverview(platform: SeoPlatform): { kpis: HubKpi[]; grou
                 title: "Search Appearance",
                 description: "How the storefront appears in Google results.",
                 spokes: [
-                    { id: "site_settings", label: "Site Settings", description: "Site name, canonical domain, title template and verification", icon: Globe, tone: "emerald" },
-                    { id: "page_metadata", label: "Page Metadata", description: "Meta title, description and tags per page, product, category and brand", icon: FileText, tone: "blue", count: platformRecords.length },
+                    { id: "site_settings", href: spokeHref(SEO_HUB, SEO_SPOKE_SLUGS.site_settings, { platform }), label: "Site Settings", description: "Site name, canonical domain, title template and verification", icon: Globe, tone: "emerald" },
+                    { id: "page_metadata", href: spokeHref(SEO_HUB, SEO_SPOKE_SLUGS.page_metadata, { platform }), label: "Page Metadata", description: "Meta title, description and tags per page, product, category and brand", icon: FileText, tone: "blue", count: platformRecords.length },
                 ],
             },
             {
                 title: "Sharing & Crawling",
                 description: "Social previews and what search engines may crawl.",
                 spokes: [
-                    { id: "social_tags", label: "Social Tags", description: "OpenGraph and X / Twitter defaults for shared links", icon: Share2, tone: "violet" },
-                    { id: "sitemap_robots", label: "Sitemap & Robots", description: "System-generated sitemap and robots.txt", icon: SitemapIcon, tone: "teal", count: sitemap.entries.length },
+                    { id: "social_tags", href: spokeHref(SEO_HUB, SEO_SPOKE_SLUGS.social_tags, { platform }), label: "Social Tags", description: "OpenGraph and X / Twitter defaults for shared links", icon: Share2, tone: "violet" },
+                    { id: "sitemap_robots", href: spokeHref(SEO_HUB, SEO_SPOKE_SLUGS.sitemap_robots, { platform }), label: "Sitemap & Robots", description: "System-generated sitemap and robots.txt", icon: SitemapIcon, tone: "teal", count: sitemap.entries.length },
                 ],
             },
         ];

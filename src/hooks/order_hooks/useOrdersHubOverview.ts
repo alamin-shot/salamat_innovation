@@ -1,3 +1,4 @@
+import { ORDERS_HUB, ORDERS_SPOKE_SLUGS, spokeHref } from "@/constants/hubRoutes";
 import { useMemo } from "react";
 import { CheckCheck, ClipboardCheck, ListChecks, Settings2, ShoppingCart, Truck, Clock } from "lucide-react";
 import { useOrderStore } from "@/store/useOrderStore";
@@ -27,15 +28,15 @@ export function useOrdersHubOverview(): { kpis: HubKpi[]; groups: HubSpokeGroup<
                 title: "Order Confirmation",
                 description: "Log phone, WhatsApp and Messenger orders against a customer profile.",
                 spokes: [
-                    { id: "order_list", label: "Order List", description: "Confirmed customer orders, linked by phone number", icon: ListChecks, tone: "violet", count: confirmations.length },
-                    { id: "order_options", label: "Order Options", description: "Dropdown values the order form offers", icon: Settings2, tone: "slate", count: options.length },
+                    { id: "order_list", href: spokeHref(ORDERS_HUB, ORDERS_SPOKE_SLUGS.order_list), label: "Order List", description: "Confirmed customer orders, linked by phone number", icon: ListChecks, tone: "violet", count: confirmations.length },
+                    { id: "order_options", href: spokeHref(ORDERS_HUB, ORDERS_SPOKE_SLUGS.order_options), label: "Order Options", description: "Dropdown values the order form offers", icon: Settings2, tone: "slate", count: options.length },
                 ],
             },
             {
                 title: "Storefront Orders",
                 description: "Every online order through its workflow: pending to complete.",
                 spokes: [
-                    { id: "orders", label: "Orders", description: "All orders with status filters, invoices and payments", icon: ShoppingCart, tone: "blue", count: orders.length },
+                    { id: "orders", href: spokeHref(ORDERS_HUB, ORDERS_SPOKE_SLUGS.orders), label: "Orders", description: "All orders with status filters, invoices and payments", icon: ShoppingCart, tone: "blue", count: orders.length },
                 ],
             },
         ];

@@ -1,33 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { SellDeviceRequest, SellDeviceState } from "@/types/sellDevice";
 
-export type SellDeviceStatus = "Pending" | "Contacted" | "Approved" | "Rejected";
+// LAYER 2: Sell Device Requests cache.
 
-export interface SellDeviceRequest {
-    id: string;
-    requestId: string;
-    customerName: string;
-    phone: string;
-    deviceBrand: string;
-    deviceModel: string;
-    ramStorage: string;
-    condition: string;
-    expectedPrice: number;
-    adminNote: string | null;
-    status: SellDeviceStatus;
-    createdAt: string;
-}
-
-interface SellDeviceStore {
-    requests: SellDeviceRequest[];
-    addRequest: (request: Omit<SellDeviceRequest, "id" | "requestId" | "createdAt">) => void;
-    updateRequest: (id: string, updatedData: Partial<SellDeviceRequest>) => void;
-    deleteRequest: (id: string) => void;
-    bulkDeleteRequests: (ids: string[]) => void;
-    updateStatus: (id: string, status: SellDeviceStatus) => void;
-}
-
-export const useSellDeviceStore = create<SellDeviceStore>()(
+export const useSellDeviceStore = create<SellDeviceState>()(
     persist(
         (set) => ({
             requests: [
@@ -43,6 +20,7 @@ export const useSellDeviceStore = create<SellDeviceStore>()(
                     expectedPrice: 55000,
                     adminNote: "Called customer, offered 50k. Waiting for reply.",
                     status: "Contacted",
+                    photos: [],
                     createdAt: "2026-10-28T14:30:00.000Z"
                 },
                 {
@@ -57,6 +35,7 @@ export const useSellDeviceStore = create<SellDeviceStore>()(
                     expectedPrice: 65000,
                     adminNote: null,
                     status: "Pending",
+                    photos: [],
                     createdAt: "2026-10-29T10:15:00.000Z"
                 }
             ],
@@ -81,6 +60,14 @@ export const useSellDeviceStore = create<SellDeviceStore>()(
                 requests: state.requests.map(req => req.id === id ? { ...req, status } : req)
             }))
         }),
-        { name: "erp-selldevice-storage-v1" }
+        {
+            name: "erp-selldevice-storage-v1",
+            version: 1,
+            // version 1: condition photos (empty for existing requests).
+            migrate: (persisted) => {
+                const state = persisted as { requests?: (Omit<SellDeviceRequest, "photos"> & { photos?: string[] })[] };
+                return { requests: (state.requests ?? []).map((request) => ({ ...request, photos: request.photos ?? [] })) } as SellDeviceState;
+            },
+        }
     )
 );

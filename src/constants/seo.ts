@@ -1,6 +1,4 @@
-import { SeoConfigError, SeoHubTabKey, SeoPlatform, SeoPlatformConfig, SitemapChangeFrequency, SitemapSource } from "@/types/seo";
-
-export const SEO_HUB_TABS = ["site_settings", "page_metadata", "social_tags", "sitemap_robots"] as const satisfies readonly SeoHubTabKey[];
+import { SeoConfigError, SeoPlatform, SeoPlatformConfig, SitemapChangeFrequency, SitemapSource } from "@/types/seo";
 
 export const SEO_PLATFORMS = ["salamat", "tekzo"] as const satisfies readonly SeoPlatform[];
 

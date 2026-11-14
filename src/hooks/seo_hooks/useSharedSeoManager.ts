@@ -1,33 +1,18 @@
 "use client";
-import { useState, useMemo, useCallback } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { useListControls } from "@/hooks/shared_hooks/useTableManager";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { useSeoStore, SeoRecord, SeoPlatform, SeoTabType } from "@/store/useSeoStore";
 
-const SEO_SECTIONS: readonly SeoTabType[] = ["pages", "products", "categories", "brands"];
-
 const matchesRecord = (item: SeoRecord, query: string): boolean =>
     item.name.toLowerCase().includes(query.toLowerCase()) || item.slug.toLowerCase().includes(query.toLowerCase());
 
-export function useSharedSeoManager(platform: SeoPlatform) {
+/** One Page Metadata section (from its route /admin/seo/page-metadata/<section>) for one storefront. */
+export function useSharedSeoManager(platform: SeoPlatform, section: SeoTabType) {
     const { activeDrawer, activeId, openView, closeView } = useCommandParams();
     const { records, deleteRecord, updateRecord, bulkDeleteRecords } = useSeoStore();
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    // Pages / Products / Categories / Brands live in `?section=` (the SEO hub owns `?tab=`).
-    const requestedSection = searchParams.get("section");
-    const currentTab: SeoTabType = SEO_SECTIONS.find((section) => section === requestedSection) ?? "pages";
-
-    const setSection = useCallback((section: SeoTabType) => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("section", section);
-        ["drawer", "id", "page", "search"].forEach((key) => params.delete(key));
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    }, [pathname, router, searchParams]);
+    const currentTab: SeoTabType = section;
 
     // Strict useMemo prevents infinite render loops when route changes
     const filteredRecords = useMemo(() => {
@@ -74,7 +59,6 @@ export function useSharedSeoManager(platform: SeoPlatform) {
     return {
         platform,
         currentTab,
-        setSection,
         table,
         activeDrawer,
         activeEditRecord,

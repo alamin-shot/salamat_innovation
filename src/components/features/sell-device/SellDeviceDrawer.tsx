@@ -1,24 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SellDeviceManagerType } from "@/hooks/sell_device_hooks/useSellDeviceManager";
-import { SellDeviceStatus } from "@/store/useSellDeviceStore";
+import { SellDeviceRequest, SellDeviceStatus } from "@/types/sellDevice";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 
+const STATUSES: SellDeviceStatus[] = ["Pending", "Contacted", "Approved", "Rejected"];
+
 export function SellDeviceDrawer({ manager }: { manager: SellDeviceManagerType }) {
-    const isEditing = manager.activeDrawer === "view_edit";
     const activeRequest = manager.getActiveRequest();
+    if (!activeRequest) return null;
+    // Remounts per request so the note / status start from that request.
+    return <SellDeviceDrawerBody key={`${activeRequest.id}-${manager.activeDrawer}`} manager={manager} activeRequest={activeRequest} />;
+}
 
-    const [adminNote, setAdminNote] = useState("");
-    const [status, setStatus] = useState<SellDeviceStatus>("Pending");
-
-    useEffect(() => {
-        if (isEditing && activeRequest) {
-            setAdminNote(activeRequest.adminNote || "");
-            setStatus(activeRequest.status);
-        }
-    }, [isEditing, activeRequest]);
+function SellDeviceDrawerBody({ manager, activeRequest }: { manager: SellDeviceManagerType; activeRequest: SellDeviceRequest }) {
+    const [adminNote, setAdminNote] = useState(activeRequest.adminNote || "");
+    const [status, setStatus] = useState<SellDeviceStatus>(activeRequest.status);
 
     const handleSubmit = () => {
         manager.handleSubmit({
@@ -27,12 +26,10 @@ export function SellDeviceDrawer({ manager }: { manager: SellDeviceManagerType }
         });
     };
 
-    if (!activeRequest) return null;
-
     return (
         <Drawer
             title={`Device Evaluation: ${activeRequest.requestId}`}
-            isOpen={manager.activeDrawer !== "none"}
+            isOpen={manager.activeDrawer === "view_edit"}
             onClose={manager.closeDrawer}
             width="w-full sm:w-[calc(100vw-260px)] md:w-[700px]"
         >
@@ -97,8 +94,8 @@ export function SellDeviceDrawer({ manager }: { manager: SellDeviceManagerType }
                         <label className="erp-label">Status <span className="text-red-500">*</span></label>
                         <CustomSelect
                             value={status}
-                            options={["Pending", "Contacted", "Approved", "Rejected"]}
-                            onChange={(val) => setStatus(val as SellDeviceStatus)}
+                            options={STATUSES}
+                            onChange={(val) => setStatus(STATUSES.find((option) => option === val) ?? status)}
                         />
                     </div>
 

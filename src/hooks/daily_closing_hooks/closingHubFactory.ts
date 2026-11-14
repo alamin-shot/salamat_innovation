@@ -1,11 +1,11 @@
-import { ClosingTabKey } from "./useClosingManager";
+import { ClosingSpokeKey, CLOSING_SPOKE_SLUGS, DAILY_CLOSING_HUB, spokeHref } from "@/constants/hubRoutes";
 import {
     Calculator, ShoppingCart, ArrowDownRight, ArrowUpRight,
     RefreshCcw, Package, Wallet, Banknote, ShieldAlert, LucideIcon, Landmark // Added Landmark
 } from "lucide-react";
 
 export interface HubItem {
-    id: ClosingTabKey;
+    id: ClosingSpokeKey;
     label: string;
     icon: LucideIcon;
     desc: string;
@@ -18,7 +18,10 @@ export interface HubCategory {
     items: HubItem[];
 }
 
-export function getHubCategories(counts: Partial<Record<ClosingTabKey, number>>): HubCategory[] {
+/** Full-page spoke link for a closing item, carrying the selected closing date. */
+export const closingSpokeHref = (id: ClosingSpokeKey, date: string) => spokeHref(DAILY_CLOSING_HUB, CLOSING_SPOKE_SLUGS[id], { date });
+
+export function getHubCategories(counts: Partial<Record<ClosingSpokeKey, number>>): HubCategory[] {
     return [
         {
             title: "Reconciliation Engine",

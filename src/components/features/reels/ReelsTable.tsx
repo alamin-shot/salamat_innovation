@@ -3,10 +3,10 @@ import { ReelsManagerType } from "@/hooks/reels_hooks/useReelsManager";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Pagination } from "@/components/ui/Pagination";
 import { Button } from "@/components/ui/Button";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 
 export function ReelsTable({ manager }: { manager: ReelsManagerType }) {
-    const { table, openEditDrawer, handleDelete } = manager;
+    const { table, openEditDrawer, openViewDrawer, handleDelete } = manager;
 
     return (
         <div className="overflow-x-auto flex-1 min-h-[400px] flex flex-col">
@@ -56,6 +56,15 @@ export function ReelsTable({ manager }: { manager: ReelsManagerType }) {
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon-sm"
+                                        className="text-emerald-600 hover:bg-emerald-50"
+                                        title="View"
+                                        onClick={() => openViewDrawer(reel.id)}
+                                    >
+                                        <Eye className="h-4 w-4" />
+                                    </Button>
                                     <Button
                                         variant="ghost"
                                         size="icon-sm"

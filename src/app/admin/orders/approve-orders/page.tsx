@@ -1,6 +1,6 @@
 import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-// Moved into the Orders hub; old links land on the matching tab.
+// Old address; the page is now a full-page spoke.
 export default async function ApproveOrdersRedirect({ searchParams }: { searchParams: PageSearchParams }) {
-    return redirectToHub("/admin/orders", searchParams, { tab: "orders", status: "Approved" });
+    return redirectToHub("/admin/orders/all-orders", searchParams, {status: "Approved"});
 }

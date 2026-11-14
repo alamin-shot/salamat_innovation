@@ -1,20 +1,23 @@
 import { useState, useMemo, useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ClosingSpokeKey } from "@/constants/hubRoutes";
 import { useGlobalClosingStore } from "@/store/useGlobalClosingStore";
 import { ClosingTransaction, TenderMatrix } from "@/types/daily_closing";
 
-export type ClosingTabKey = "hub" | "daily_closings" | "daily_closing_balance" | "profit_loss" | "sale" | "purchase" | "sale_return" | "purchase_return" | "expense" | "withdrawal" | "deposit" | "stock" | "balance_sheet" | "daily_bank";;
+export type ClosingTabKey = "hub" | ClosingSpokeKey;
 export type DrawerMode = "none" | "transaction" | "denomination" | "edit" | "bank_form";;
 
-export function useClosingManager() {
+/** `spoke` comes from the full-page route (/admin/daily-closing/<slug>); the hub page passes none. */
+export function useClosingManager(spoke?: ClosingSpokeKey) {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const store = useGlobalClosingStore();
     const [drawerMode, setDrawerMode] = useState<DrawerMode>("none"); const [activeRecord, setActiveRecord] = useState<ClosingTransaction | null>(null);
     // --- CONCURRENT ROUTING STATE ---
     const [isPending, startTransition] = useTransition();
     const activeDate = searchParams.get("date") || "2026-11-06";
-    const activeTab = (searchParams.get("tab") as ClosingTabKey) || "hub";
+    const activeTab: ClosingTabKey = spoke ?? "hub";
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const perPage = 10;
@@ -28,14 +31,14 @@ export function useClosingManager() {
     };
 
 
-    const handleRouteChange = (key: "date" | "tab", value: string) => {
+    /** Changing the closing date keeps you on the current page (hub or spoke). */
+    const handleRouteChange = (key: "date", value: string) => {
         startTransition(() => {
-            if (key === "tab") setSelectedIds([]); // Clear table selections when switching spokes
-
+            setSelectedIds([]);
             const params = new URLSearchParams(searchParams.toString());
             params.set(key, value);
-            if (key === "date") params.set("tab", "hub");
-            router.push(`?${params.toString()}`, { scroll: false });
+            params.delete("tab");
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
         });
     };
 

@@ -1,5 +1,5 @@
 "use client";
-import { ArrowLeft, Search, Clock, ShieldAlert, CheckCircle2 } from "lucide-react";
+import { Search, Clock, ShieldAlert, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DeveloperApiSpoke } from "../tables/DeveloperApiSpoke";
 import { IntegrationConnection } from "@/types/integrations";
@@ -21,9 +21,6 @@ export function IntegrationSpokeView({ manager }: { manager: any }) {
         <div className="flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm animate-in slide-in-from-right-4 duration-300">
             <div className="px-4 py-3 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50/50 rounded-t-xl">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => manager.handleRouteChange("tab", "hub")} className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-brand-primary transition-all shadow-sm">
-                        <ArrowLeft className="w-4 h-4" />
-                    </button>
                     <h2 className="text-base font-black text-gray-900">{titleMap[manager.activeTab as string] || "Integrations"}</h2>
                 </div>
 

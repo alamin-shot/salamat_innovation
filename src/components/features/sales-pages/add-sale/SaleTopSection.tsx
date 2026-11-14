@@ -3,6 +3,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/Button";
 import { useAddSaleManager } from "@/hooks/sales_hooks/useAddSaleManager";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { SALE_SELLERS } from "@/constants/sales";
 
 type Manager = ReturnType<typeof useAddSaleManager>;
 
@@ -13,14 +14,14 @@ export function SaleTopSection({ manager }: { manager: Manager }) {
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-500">Customer Info</label>
                     <div className="flex gap-2">
-                        <CustomSelect value={manager.customer} onChange={manager.setCustomer} options={["Md Shakhiur Rahman Tamal", "Mainul Hasan", "Bina"]} placeholder="Choose Customer" />
-                        <Button variant="success" className="shrink-0 text-[12px] px-3">Add Customer</Button>
+                        <CustomSelect value={manager.customer} onChange={manager.setCustomer} options={manager.customerOptions} placeholder="Choose Customer" />
+                        <Button variant="success" onClick={manager.openAddCustomer} className="shrink-0 text-[12px] px-3">Add Customer</Button>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-500">Seller</label>
-                    <CustomSelect value={manager.seller} onChange={manager.setSeller} options={["AV", "Alamin Rifat", "Md Siyam Hosen"]} placeholder="Choose a Seller" />
+                    <CustomSelect value={manager.seller} onChange={manager.setSeller} options={[...SALE_SELLERS]} placeholder="Choose a Seller" />
                 </div>
             </div>
 

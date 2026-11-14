@@ -1,5 +1,6 @@
-import { AllOrdersClient } from "@/components/features/orders/all-orders/AllOrdersClient";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function AllOrdersPage() {
-    return <AllOrdersClient />;
+// Moved into the Orders hub; old links land on the matching tab.
+export default async function AllOrdersRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/orders", searchParams, { tab: "orders" });
 }

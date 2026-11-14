@@ -1,19 +1,6 @@
-import { Suspense } from "react";
-import { Loader } from "@/components/shared/loader/Loader";
-import { NewsClient } from "@/components/features/news/NewsClient";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export const metadata = {
-    title: "News | Salamat Innovation ERP",
-};
-
-export default function NewsPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <NewsClient />
-        </Suspense>
-    );
+// Moved into the News & Vlog hub; old links land on the News tab.
+export default async function NewsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/news-vlog", searchParams, { tab: "news" });
 }

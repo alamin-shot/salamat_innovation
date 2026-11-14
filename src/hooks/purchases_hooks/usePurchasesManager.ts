@@ -1,69 +1,75 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useListControls } from "@/hooks/shared_hooks/useTableManager";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useGlobalPurchasesStore } from "@/store/useGlobalPurchasesStore";
+import { PurchaseListTotal, PurchaseRow } from "@/types/purchases";
+import { computePurchaseTotals, countItems, sumTaka } from "@/utils/purchaseMath";
 
-export interface PurchaseItem {
-    id: string;
-    supplier: string;
-    supplierInitials: string;
-    badgeColor: string;
-    warehouse: string;
-    date: string;
-    invoiceNumber: string;
-    totalItem: number;
-    totalAmount: number;
-    createdBy: string;
-}
+const DEFAULT_COLUMNS = {
+    supplier: true,
+    warehouse: true,
+    date: true,
+    invoiceNumber: true,
+    totalItem: true,
+    totalAmount: true,
+    createdBy: true,
+};
 
-const MOCK_PURCHASES: PurchaseItem[] = [
-    { id: "1", supplier: "Rasel Raj", supplierInitials: "RR", badgeColor: "bg-emerald-600", warehouse: "A-Block", date: "2026-10-11", invoiceNumber: "PP-001603", totalItem: 1, totalAmount: 82000.00, createdBy: "Md Zihadul Islam Sazzad" },
-    { id: "2", supplier: "Bina Ambix", supplierInitials: "B", badgeColor: "bg-emerald-700", warehouse: "A-Block", date: "2026-10-10", invoiceNumber: "PP-001602", totalItem: 1, totalAmount: 60000.00, createdBy: "Md Zihadul Islam Sazzad" },
-    { id: "3", supplier: "Gadget Opia", supplierInitials: "GO", badgeColor: "bg-gray-900", warehouse: "A-Block", date: "2026-10-10", invoiceNumber: "PP-001601", totalItem: 1, totalAmount: 13000.00, createdBy: "Md Zihadul Islam Sazzad" },
-    { id: "4", supplier: "huge Collection", supplierInitials: "HC", badgeColor: "bg-emerald-500", warehouse: "A-Block", date: "2026-10-09", invoiceNumber: "PP-001599", totalItem: 1, totalAmount: 47400.00, createdBy: "Md Zihadul Islam Sazzad" },
-    { id: "5", supplier: "Cell Tech BD", supplierInitials: "CB", badgeColor: "bg-emerald-600", warehouse: "A-Block", date: "2026-10-09", invoiceNumber: "PP-001598", totalItem: 1, totalAmount: 23000.00, createdBy: "Md Zihadul Islam Sazzad" },
-];
+const matchesPurchase = (item: PurchaseRow, query: string): boolean => {
+    const q = query.toLowerCase();
+    return item.supplier.toLowerCase().includes(q) || item.invoiceNumber.toLowerCase().includes(q);
+};
 
 export function usePurchasesManager() {
     const { openView } = useCommandParams();
+    const purchases = useGlobalPurchasesStore((state) => state.purchases);
+    const deletePurchases = useGlobalPurchasesStore((state) => state.deletePurchases);
 
-    const table = useTableManager(MOCK_PURCHASES, (item, query) =>
-        item.supplier.toLowerCase().includes(query.toLowerCase()) ||
-        item.invoiceNumber.toLowerCase().includes(query.toLowerCase())
+    // Item count and amount are always derived from the invoice lines (Subtotal - Discount + Tax + Shipping).
+    const rows = useMemo<PurchaseRow[]>(
+        () => purchases.map((purchase) => ({
+            ...purchase,
+            totalItem: countItems(purchase.items),
+            totalAmount: computePurchaseTotals(purchase.items, purchase.costing).total,
+        })),
+        [purchases]
     );
 
-    const [cols, setCols] = useState({
-        supplier: true,
-        warehouse: true,
-        date: true,
-        invoiceNumber: true,
-        totalItem: true,
-        totalAmount: true,
-        createdBy: true,
-    });
+    const table = useListControls(rows, matchesPurchase);
+
+    /** Single footer Total over the rows currently listed (no Grand Total). */
+    const listTotal = useMemo<PurchaseListTotal>(() => ({
+        totalItem: table.filteredData.reduce((sum, row) => sum + row.totalItem, 0),
+        totalAmount: sumTaka(table.filteredData.map((row) => row.totalAmount)),
+    }), [table.filteredData]);
+
+    const [cols, setCols] = useState(DEFAULT_COLUMNS);
     const [showColumnsMenu, setShowColumnsMenu] = useState(false);
 
-    const toggleColumn = (key: keyof typeof cols) => setCols(prev => ({ ...prev, [key]: !prev[key] }));
-    const showAllColumns = () => setCols({ supplier: true, warehouse: true, date: true, invoiceNumber: true, totalItem: true, totalAmount: true, createdBy: true });
+    const toggleColumn = (key: keyof typeof cols) => setCols((prev) => ({ ...prev, [key]: !prev[key] }));
+    const showAllColumns = () => setCols(DEFAULT_COLUMNS);
 
-    // Correctly wired to URL drawers
     const handleView = (id: string) => openView("drawer", "view-purchase", id);
     const handleEdit = (id: string) => openView("drawer", "edit-purchase", id);
 
     const handleDelete = (id: string) => {
-        table.setData(prev => prev.filter(item => item.id !== id));
+        deletePurchases([id]);
+        table.setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id));
         toast.success("Purchase record deleted successfully");
     };
 
     const handleBulkDelete = () => {
-        table.setData(prev => prev.filter(item => !table.selectedIds.includes(item.id)));
+        const count = table.selectedIds.length;
+        deletePurchases(table.selectedIds);
         table.clearSelection();
-        toast.success(`${table.selectedIds.length} purchase records deleted`);
+        toast.success(`${count} purchase records deleted`);
     };
 
     return {
         table,
+        listTotal,
         cols,
         showColumnsMenu,
         setShowColumnsMenu,
@@ -72,6 +78,6 @@ export function usePurchasesManager() {
         handleView,
         handleEdit,
         handleDelete,
-        handleBulkDelete
+        handleBulkDelete,
     };
 }

@@ -1,15 +1,6 @@
-import { CashTransferClient } from "@/components/features/cash-transfer/CashTransferClient";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function CashTransfersPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <CashTransferClient />
-        </Suspense>
-    );
+// Moved into the Operations hub; old links land on the matching tab.
+export default async function CashTransfersRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/operations", searchParams, { tab: "cash_transfers" });
 }

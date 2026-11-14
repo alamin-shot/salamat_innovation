@@ -2,7 +2,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { useOrderStore, OrderStatus, OrderRecord } from "@/store/useOrderStore";
-import { useTableManager } from "../shared_hooks/useTableManager";
+import { useListControls } from "../shared_hooks/useTableManager";
 
 
 // Config interfaces that drive the entire UI
@@ -23,12 +23,12 @@ export interface OrderPageConfig {
 export function useOrderStatusManager(config: OrderPageConfig) {
     const store = useOrderStore();
 
-    // 1. Firmly filter orders BEFORE passing to useTableManager to prevent infinite render loops
+    // 1. Orders in this status, live from the store: a status change moves the row out immediately.
     const filteredOrders = useMemo(() => {
         return store.orders.filter(order => order.status === config.targetStatus);
     }, [store.orders, config.targetStatus]);
 
-    const table = useTableManager(
+    const table = useListControls(
         filteredOrders,
         (order, query) => {
             const lowerQuery = query.toLowerCase();
@@ -64,6 +64,18 @@ export function useOrderStatusManager(config: OrderPageConfig) {
         toast.success(`Order moved to ${newStatus}`);
     }, [store]);
 
+    // 4. Permanent delete (Rejected view) goes through a confirmation first.
+    const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+    const requestDelete = useCallback((id: string) => setPendingDeleteId(id), []);
+    const cancelDelete = useCallback(() => setPendingDeleteId(null), []);
+    const confirmDelete = useCallback(() => {
+        if (pendingDeleteId) {
+            store.bulkDeleteOrders([pendingDeleteId]);
+            toast.success("Order deleted permanently.");
+        }
+        setPendingDeleteId(null);
+    }, [pendingDeleteId, store]);
+
     return {
         config,
         table,
@@ -73,6 +85,10 @@ export function useOrderStatusManager(config: OrderPageConfig) {
         closeDrawer,
         getActiveOrder,
         changeStatus,
+        pendingDeleteId,
+        requestDelete,
+        cancelDelete,
+        confirmDelete,
     };
 }
 

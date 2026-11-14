@@ -1,23 +1,6 @@
-import { Suspense } from "react";
-import { AssetClient } from "@/components/features/assets/AssetClient";
-import { Metadata } from "next";
-import { Loader } from "@/components/shared/loader/Loader";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export const metadata: Metadata = {
-    title: "Asset Management | Salamat Innovation ERP",
-    description: "Track company assets, financial depreciation, warranties, and employee custody logs.",
-};
-
-export default function AssetsPage() {
-    return (
-        <Suspense
-            fallback={
-                <div className="w-full h-full min-h-[50vh] flex items-center justify-center">
-                    <Loader />
-                </div>
-            }
-        >
-            <AssetClient />
-        </Suspense>
-    );
+// Moved into the Operations hub; old links land on the matching tab.
+export default async function AssetsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/operations", searchParams, { tab: "assets" });
 }

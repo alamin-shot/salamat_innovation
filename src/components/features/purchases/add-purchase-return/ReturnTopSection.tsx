@@ -2,7 +2,6 @@
 import * as React from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { useAddPurchaseReturnManager } from "@/hooks/purchases_hooks/useAddPurchaseReturnManager";
-import { Button } from "@/components/ui/Button";
 
 // Extract the type directly from our custom hook for perfect TypeScript safety
 type Manager = ReturnType<typeof useAddPurchaseReturnManager>;
@@ -14,8 +13,8 @@ export function ReturnTopSection({ manager }: { manager: Manager }) {
             <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-600">Supplier</label>
-                    <div className="flex w-full items-center rounded border border-gray-100 bg-gray-50/50 px-3 py-2 text-[13px] text-gray-400 h-[38px]">
-                        Auto-filled upon searching invoice
+                    <div className={`flex w-full items-center rounded border border-gray-100 bg-gray-50/50 px-3 py-2 text-[13px] h-[38px] ${manager.supplier ? "font-medium text-gray-700" : "text-gray-400"}`}>
+                        {manager.supplier ?? "Auto-filled from the first scanned unit"}
                     </div>
                 </div>
 
@@ -38,17 +37,6 @@ export function ReturnTopSection({ manager }: { manager: Manager }) {
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] text-gray-600">Date <span className="text-red-500">*</span></label>
                     <input type="date" value={manager.date} onChange={(e) => manager.setDate(e.target.value)} className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-                </div>
-
-                <div className="flex flex-col gap-1.5 mt-1">
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={manager.toggleManualEntry}
-                        className="w-full"
-                    >
-                        Create Barcode
-                    </Button>
                 </div>
             </div>
         </div>

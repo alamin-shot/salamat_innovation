@@ -1,17 +1,6 @@
-import { NotificationSettingsView } from "@/components/features/settings/views/NotificationSettingsView";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function HRSettingsPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <NotificationSettingsView />
-        </Suspense>
-    );
+// Now a tab of the Settings hub; old links land on it.
+export default async function NotificationsSettingsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/settings", searchParams, { tab: "notifications" });
 }
-
-

@@ -1,8 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { INITIAL_PEOPLE } from "@/mocks/people.mock";
+import { findPersonByPhone } from "@/utils/peopleRules";
 
 export interface OrderItem {
     id: string;
+    /** People profile the order belongs to (resolved by phone). null only for legacy unmatched orders. */
+    customerId: string | null;
     customer: string;
     customerPhone: string;
     date: string;
@@ -38,6 +42,7 @@ export const useOrderListStore = create<OrderListState>()(
             orders: [
                 {
                     id: "1",
+                    customerId: "11",
                     customer: "Pronoy Roy",
                     customerPhone: "01715232149",
                     date: "18 Oct 2026",
@@ -59,6 +64,7 @@ export const useOrderListStore = create<OrderListState>()(
                 },
                 {
                     id: "2",
+                    customerId: "12",
                     customer: "ARIFUL ISLAM",
                     customerPhone: "01887476986",
                     date: "18 Oct 2026",
@@ -80,6 +86,7 @@ export const useOrderListStore = create<OrderListState>()(
                 },
                 {
                     id: "3",
+                    customerId: "13",
                     customer: "Tech Nest",
                     customerPhone: "01618461190",
                     date: "18 Oct 2026",
@@ -101,6 +108,7 @@ export const useOrderListStore = create<OrderListState>()(
                 },
                 {
                     id: "4",
+                    customerId: "14",
                     customer: "Mosharraf hosen Bhuiyan",
                     customerPhone: "01712394781",
                     date: "15 Oct 2026",
@@ -148,6 +156,18 @@ export const useOrderListStore = create<OrderListState>()(
         }),
         {
             name: "tekzo_order_list_store",
+            // v1 added customerId; orders saved before are linked to their People profile by phone.
+            version: 1,
+            migrate: (persistedState) => {
+                const state = persistedState as OrderListState;
+                return {
+                    ...state,
+                    orders: (state.orders ?? []).map((order) => ({
+                        ...order,
+                        customerId: order.customerId ?? findPersonByPhone(INITIAL_PEOPLE, order.customerPhone)?.id ?? null,
+                    })),
+                };
+            },
         }
     )
 );

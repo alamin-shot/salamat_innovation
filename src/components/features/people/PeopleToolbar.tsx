@@ -1,7 +1,8 @@
+import { PeopleManager } from "@/hooks/people_hooks/usePeopleManager";
 import { Search, Filter, Columns } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-export function PeopleToolbar({ manager }: { manager: any }) {
+export function PeopleToolbar({ manager }: { manager: PeopleManager }) {
     const { table, cols } = manager;
     const filterOptions = ["All", "Online Customer", "Offline Customer", "Supplier"];
 
@@ -78,14 +79,14 @@ export function PeopleToolbar({ manager }: { manager: any }) {
                             <div className="fixed inset-0 z-10" onClick={() => manager.setShowColumnsMenu(false)} />
                             <div className="absolute right-0 mt-2 w-52 max-h-80 overflow-y-auto z-20 rounded-lg border border-brand-subtext/20 bg-white p-2 shadow-xl animate-in fade-in zoom-in-95">
                                 <div className="flex flex-col gap-1.5 mb-2">
-                                    {Object.entries(cols).map(([key, isVisible]) => (
+                                    {(Object.keys(cols) as Array<keyof typeof cols>).map((key) => (
                                         <label
                                             key={key}
                                             className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-brand-bg rounded-md"
                                         >
                                             <input
                                                 type="checkbox"
-                                                checked={Boolean(isVisible)}
+                                                checked={cols[key]}
                                                 onChange={() => manager.toggleColumn(key)}
                                                 className="rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500"
                                             />
@@ -109,9 +110,12 @@ export function PeopleToolbar({ manager }: { manager: any }) {
                     )}
                 </div>
 
-                {/* Add People Drawer Button */}
-                <Button variant="success" size="sm" onClick={manager.handleCreate} className="h-9 px-4">
-                    Add People
+                {/* The button decides the type: customers and suppliers are separate profiles. */}
+                <Button variant="success" size="sm" onClick={() => manager.handleCreate("customer")} className="h-9 px-4">
+                    Add Customer
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => manager.handleCreate("supplier")} className="h-9 px-4 border-emerald-300 text-emerald-700 hover:bg-emerald-50">
+                    Add Supplier
                 </Button>
             </div>
         </div>

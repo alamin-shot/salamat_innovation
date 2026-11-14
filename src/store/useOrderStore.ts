@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type OrderStatus = "Pending" | "Confirmed" | "Approved" | "Processing" | "Onway" | "Complete" | "Rejected";
+/** "Hold" and "Return" were written by the Hold / Onway / Complete / Return pages through `as any`; now part of the schema. */
+export type OrderStatus = "Pending" | "Hold" | "Confirmed" | "Approved" | "Processing" | "Onway" | "Return" | "Complete" | "Rejected";
 export type PaymentStatus = "Pending" | "Partial" | "Paid";
 
 export interface OrderItem {

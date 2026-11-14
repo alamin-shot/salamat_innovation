@@ -23,7 +23,7 @@ export function GeneralSettingsView() {
     const handleSave = () => { store.updateGeneralConfig(formData); resetDraft(); };
 
     return (
-        <div className="flex flex-col h-full w-full bg-gray-50/50">
+        <div className="flex flex-col w-full rounded-xl border border-brand-subtext/15 bg-gray-50/50">
             {/* Header */}
             <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center gap-4 shrink-0">
                 <Link href="/admin/settings" className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-brand-primary hover:text-white transition-colors">
@@ -35,7 +35,7 @@ export function GeneralSettingsView() {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 pb-32">
+            <div className="p-4 sm:p-6 lg:p-8 pb-32">
                 <div className="max-w-4xl mx-auto flex flex-col gap-6">
 
                     {/* Maintenance Mode (Enterprise Upgrade) */}

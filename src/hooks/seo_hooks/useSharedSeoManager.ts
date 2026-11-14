@@ -1,30 +1,41 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useListControls } from "@/hooks/shared_hooks/useTableManager";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 import { useSeoStore, SeoRecord, SeoPlatform, SeoTabType } from "@/store/useSeoStore";
 
-export function useSharedSeoManager(platform: SeoPlatform) {
-    const { activeDrawer, activeId, activeTab, openView, closeView } = useCommandParams();
-    const { records, deleteRecord, updateRecord, bulkDeleteRecords } = useSeoStore();
+const SEO_SECTIONS: readonly SeoTabType[] = ["pages", "products", "categories", "brands"];
 
-    // Default to 'pages' if tab is missing
-    const currentTab = (activeTab as SeoTabType) || "pages";
+const matchesRecord = (item: SeoRecord, query: string): boolean =>
+    item.name.toLowerCase().includes(query.toLowerCase()) || item.slug.toLowerCase().includes(query.toLowerCase());
+
+export function useSharedSeoManager(platform: SeoPlatform) {
+    const { activeDrawer, activeId, openView, closeView } = useCommandParams();
+    const { records, deleteRecord, updateRecord, bulkDeleteRecords } = useSeoStore();
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    // Pages / Products / Categories / Brands live in `?section=` (the SEO hub owns `?tab=`).
+    const requestedSection = searchParams.get("section");
+    const currentTab: SeoTabType = SEO_SECTIONS.find((section) => section === requestedSection) ?? "pages";
+
+    const setSection = useCallback((section: SeoTabType) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("section", section);
+        ["drawer", "id", "page", "search"].forEach((key) => params.delete(key));
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    }, [pathname, router, searchParams]);
 
     // Strict useMemo prevents infinite render loops when route changes
     const filteredRecords = useMemo(() => {
         return records.filter((r) => r.platform === platform && r.type === currentTab);
     }, [records, platform, currentTab]);
 
-    const table = useTableManager<SeoRecord>(filteredRecords, (item, query) =>
-        item.name.toLowerCase().includes(query.toLowerCase()) ||
-        item.slug.toLowerCase().includes(query.toLowerCase())
-    );
-
-    useEffect(() => {
-        table.setData(filteredRecords);
-    }, [filteredRecords]);
+    // Live list: store changes show immediately, no copy to keep in sync.
+    const table = useListControls<SeoRecord>(filteredRecords, matchesRecord);
 
     const activeEditRecord = useMemo(() => {
         return filteredRecords.find((r) => r.id === activeId) || null;
@@ -63,6 +74,7 @@ export function useSharedSeoManager(platform: SeoPlatform) {
     return {
         platform,
         currentTab,
+        setSection,
         table,
         activeDrawer,
         activeEditRecord,

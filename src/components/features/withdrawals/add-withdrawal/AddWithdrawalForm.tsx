@@ -1,11 +1,11 @@
+import { useAddWithdrawalManager } from "@/hooks/finance_hooks/withdrawal_hooks/useAddWithdrawalManager";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Button } from "@/components/ui/Button";
 import { UploadCloud } from "lucide-react";
-import { useDirectorStore } from "@/hooks/finance_hooks/withdrawal_hooks/useDirectorStore";
+import { useDirectorOptions } from "@/hooks/people_hooks/director_profile_hooks/useDirectorSummaries";
 
-export function AddWithdrawalForm({ manager }: { manager: any }) {
-    const { directors } = useDirectorStore();
-    const directorNames = directors.map(d => d.name);
+export function AddWithdrawalForm({ manager }: { manager: ReturnType<typeof useAddWithdrawalManager> }) {
+    const directorOptions = useDirectorOptions();
 
     return (
         <div className="flex flex-col gap-2">
@@ -26,12 +26,12 @@ export function AddWithdrawalForm({ manager }: { manager: any }) {
                     <input type="number" placeholder="Amount" value={manager.amount} onChange={(e) => manager.setAmount(e.target.value === "" ? "" : Number(e.target.value))} className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] focus:border-emerald-500 focus:outline-none h-9" />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-medium text-gray-600">Category (Director) <span className="text-red-500">*</span></label>
+                    <label className="text-[13px] font-medium text-gray-600">Director <span className="text-red-500">*</span></label>
                     <CustomSelect
-                        value={manager.categoryDirectorName}
-                        onChange={manager.setCategoryDirectorName}
-                        options={directorNames}
-                        placeholder="Choose a category"
+                        value={manager.directorId}
+                        onChange={manager.setDirectorId}
+                        options={directorOptions}
+                        placeholder="Choose Director"
                     />
                 </div>
             </div>

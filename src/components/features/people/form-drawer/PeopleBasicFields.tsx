@@ -1,39 +1,16 @@
-import { ImagePlus } from "lucide-react";
+import Image from "next/image";
+import { ImagePlus, Lock } from "lucide-react";
+import { PeopleFormManager } from "@/hooks/people_hooks/usePeopleFormManager";
 
-export function PeopleBasicFields({ manager }: { manager: any }) {
+export function PeopleBasicFields({ manager }: { manager: PeopleFormManager }) {
     return (
         <div className="flex flex-col gap-2">
-            {/* Customer / Supplier Checkboxes */}
+            {/* Type comes from the button that opened the form (or the existing profile) and is never edited. */}
             <div className="flex items-center gap-3">
-                <label
-                    className={`flex items-center gap-2.5 rounded-lg border px-4 py-2.5 text-xs font-medium cursor-pointer transition-colors ${manager.isCustomer
-                        ? "border-emerald-500 bg-emerald-50/40 text-emerald-800"
-                        : "border-gray-200 bg-white text-gray-600"
-                        }`}
-                >
-                    <input
-                        type="checkbox"
-                        checked={manager.isCustomer}
-                        onChange={(e) => manager.setIsCustomer(e.target.checked)}
-                        className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <span>Customer</span>
-                </label>
-
-                <label
-                    className={`flex items-center gap-2.5 rounded-lg border px-4 py-2.5 text-xs font-medium cursor-pointer transition-colors ${manager.isSupplier
-                        ? "border-emerald-500 bg-emerald-50/40 text-emerald-800"
-                        : "border-gray-200 bg-white text-gray-600"
-                        }`}
-                >
-                    <input
-                        type="checkbox"
-                        checked={manager.isSupplier}
-                        onChange={(e) => manager.setIsSupplier(e.target.checked)}
-                        className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <span>Supplier</span>
-                </label>
+                <span className="flex items-center gap-2.5 rounded-lg border border-emerald-500 bg-emerald-50/40 px-4 py-2.5 text-xs font-medium text-emerald-800">
+                    <Lock className="h-3.5 w-3.5" />
+                    <span>{manager.type}</span>
+                </span>
             </div>
 
             {/* Row 1: Name, Business Name, Phone */}
@@ -51,7 +28,9 @@ export function PeopleBasicFields({ manager }: { manager: any }) {
                     />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-medium text-gray-600">Business Name</label>
+                    <label className="text-[13px] font-medium text-gray-600">
+                        Business Name {manager.isBusinessRequired && <span className="text-red-500">*</span>}
+                    </label>
                     <input
                         type="text"
                         placeholder="Business Name"
@@ -69,7 +48,9 @@ export function PeopleBasicFields({ manager }: { manager: any }) {
                         placeholder="Phone"
                         value={manager.phone}
                         onChange={(e) => manager.setPhone(e.target.value)}
-                        className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-700 focus:border-emerald-500 focus:outline-none"
+                        readOnly={manager.isEdit}
+                        title={manager.isEdit ? "The phone number identifies this profile and cannot be changed." : undefined}
+                        className={`w-full rounded-md border border-gray-200 px-3 py-2 text-[13px] text-gray-700 focus:border-emerald-500 focus:outline-none ${manager.isEdit ? "bg-gray-50 cursor-not-allowed" : "bg-white"}`}
                     />
                 </div>
             </div>
@@ -103,9 +84,11 @@ export function PeopleBasicFields({ manager }: { manager: any }) {
                 <div className="flex flex-col gap-2">
                     <label className="text-[13px] font-medium text-gray-600">Profile Picture</label>
                     <div className="flex items-center gap-4">
-                        <label className="flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 hover:border-emerald-400 transition-colors">
-                            <input type="file" accept="image/*" className="hidden" />
-                            <ImagePlus className="h-7 w-7 text-gray-300" />
+                        <label className="relative flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 hover:border-emerald-400 transition-colors">
+                            <input type="file" accept="image/*" className="hidden" onChange={(e) => { manager.handleImageUpload("avatar", e.target.files?.[0]); e.target.value = ""; }} />
+                            {manager.profilePicture
+                                ? <Image src={manager.profilePicture} alt="Profile picture" fill unoptimized className="object-cover" />
+                                : <ImagePlus className="h-7 w-7 text-gray-300" />}
                         </label>
                         <div className="flex flex-col text-[11px] text-gray-500">
                             <span>Recommended size 800×600</span>
@@ -117,9 +100,11 @@ export function PeopleBasicFields({ manager }: { manager: any }) {
                 <div className="flex flex-col gap-2">
                     <label className="text-[13px] font-medium text-gray-600">Business Logo</label>
                     <div className="flex items-center gap-4">
-                        <label className="flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 hover:border-emerald-400 transition-colors">
-                            <input type="file" accept="image/*" className="hidden" />
-                            <ImagePlus className="h-7 w-7 text-gray-300" />
+                        <label className="relative flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 hover:border-emerald-400 transition-colors">
+                            <input type="file" accept="image/*" className="hidden" onChange={(e) => { manager.handleImageUpload("logo", e.target.files?.[0]); e.target.value = ""; }} />
+                            {manager.businessLogo
+                                ? <Image src={manager.businessLogo} alt="Business logo" fill unoptimized className="object-cover" />
+                                : <ImagePlus className="h-7 w-7 text-gray-300" />}
                         </label>
                         <div className="flex flex-col text-[11px] text-gray-500">
                             <span>Recommended size 800×600</span>

@@ -1,16 +1,6 @@
-import { GeneralSettingsView } from "@/components/features/settings/views/GeneralSettingsView";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function GeneralSettingsPage() {
-
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <GeneralSettingsView />
-        </Suspense>
-    );
+// Now a tab of the Settings hub; old links land on it.
+export default async function GeneralSettingsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/settings", searchParams, { tab: "general" });
 }

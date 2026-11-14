@@ -16,7 +16,7 @@ export function SettingsDraftFooter({
     if (!isDirty) return null;
 
     return (
-        <div className="absolute bottom-0 left-0 right-0 z-30 bg-gray-900 text-white px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom-full duration-300">
+        <div className="sticky bottom-0 z-30 rounded-b-xl bg-gray-900 text-white px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom-full duration-300">
             <div className="flex flex-col">
                 <span className="text-sm font-bold">Unsaved Changes Detected</span>
                 <span className="text-xs text-gray-400">You have modified configurations on this page.</span>

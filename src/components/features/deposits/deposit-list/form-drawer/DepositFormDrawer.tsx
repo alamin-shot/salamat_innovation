@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { UploadCloud } from "lucide-react";
 import { useDepositFormManager } from "@/hooks/finance_hooks/deposit_hooks/useDepositFormManager";
-import { useDirectorStore } from "@/hooks/finance_hooks/withdrawal_hooks/useDirectorStore";
+import { useDirectorOptions } from "@/hooks/people_hooks/director_profile_hooks/useDirectorSummaries";
 import { Deposit } from "@/hooks/finance_hooks/deposit_hooks/useDepositStore";
 
 export function DepositFormDrawer({
@@ -16,14 +16,13 @@ export function DepositFormDrawer({
     onClose: () => void;
 }) {
     const manager = useDepositFormManager(initialRecord, onClose);
-    const { directors } = useDirectorStore();
-    const directorNames = directors.map(d => d.name);
+    const directorOptions = useDirectorOptions();
 
     if (!isOpen) return null;
 
     return (
-        <Drawer title="Edit Deposit" isOpen={isOpen} onClose={onClose} width="w-full max-w-none lg:w-[calc(100vw-280px)]">
-            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
+        <Drawer title="Edit Deposit" isOpen={isOpen} onClose={onClose} width="w-full sm:w-[calc(100vw-260px)]">
+            <div className="p-4 bg-gray-50/50 min-h-full pb-32">
                 <div className="flex flex-col gap-2 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100 max-w-4xl">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="flex flex-col gap-1.5">
@@ -44,10 +43,10 @@ export function DepositFormDrawer({
                         <div className="flex flex-col gap-1.5">
                             <label className="text-[13px] font-medium text-gray-600">Director <span className="text-red-500">*</span></label>
                             <CustomSelect
-                                value={manager.categoryDirectorName}
-                                onChange={manager.setCategoryDirectorName}
-                                options={directorNames}
-                                placeholder="Choose a Director"
+                                value={manager.directorId}
+                                onChange={manager.setDirectorId}
+                                options={directorOptions}
+                                placeholder="Choose Director"
                             />
                         </div>
                     </div>

@@ -1,106 +1,98 @@
-"use client";
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useListControls } from "@/hooks/shared_hooks/useTableManager";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
-import { usePaymentListStore, PaymentLog } from "./usePaymentListStore";
+import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
+import { useGlobalPaymentsStore } from "@/store/useGlobalPaymentsStore";
+import { PaymentListFilters, PaymentListRow } from "@/types/payments";
+import { SectionFilterOption } from "@/types/ui";
+import { EMPTY_PAYMENT_FILTERS } from "@/constants/payments";
+import { activePaymentFilterCount, matchesPaymentFilters, paymentPartyKey, toPaymentListRow } from "@/utils/paymentRules";
+import { toTimestamp } from "@/utils/dateRules";
 
+const matchesSearch = (row: PaymentListRow, query: string): boolean => {
+    const q = query.toLowerCase();
+    return [row.contact, row.number, row.businessName, row.invoiceRef ?? "", row.method].some((text) => text.toLowerCase().includes(q));
+};
+
+const COLUMNS = {
+    contact: true,
+    businessName: true,
+    businessLogo: true,
+    date: true,
+    invoiceNumber: true,
+    type: true,
+    debit: true,
+    credit: true,
+};
+
+/** Payment List: every Payment record (the ledger's only payment source), filtered by type, party, date and amount. */
 export function usePaymentListManager() {
     const { activeDrawer, activeId, openView, closeView } = useCommandParams();
-    const { logs, deleteLog, bulkDeleteLogs } = usePaymentListStore();
+    const payments = useGlobalPaymentsStore((state) => state.payments);
+    const deletePayments = useGlobalPaymentsStore((state) => state.deletePayments);
 
-    const [retainedVoucherId, setRetainedVoucherId] = useState<string | null>(null);
+    const [filters, setFilters] = useState<PaymentListFilters>(EMPTY_PAYMENT_FILTERS);
 
-    useEffect(() => {
-        if (activeDrawer === "view-voucher" && activeId) {
-            setRetainedVoucherId(activeId);
-        }
-    }, [activeDrawer, activeId]);
-
-    const filterFn = useCallback((item: PaymentLog, query: string) => {
-        const lower = query.toLowerCase();
-        return (
-            item.contact.toLowerCase().includes(lower) ||
-            item.invoiceNumber.toLowerCase().includes(lower) ||
-            item.businessName.toLowerCase().includes(lower)
-        );
-    }, []);
-
-    const table = useTableManager<PaymentLog>(logs, filterFn);
-
-    useEffect(() => {
-        table.setData(logs);
-    }, [logs]);
-
-    const activeVoucherRecord = useMemo(
-        () => logs.find((l) => l.id === retainedVoucherId) || null,
-        [logs, retainedVoucherId]
+    const allRows = useMemo(
+        () => [...payments].sort((a, b) => toTimestamp(b.date) - toTimestamp(a.date)).map(toPaymentListRow),
+        [payments]
     );
+    const rows = useMemo(() => allRows.filter((row) => matchesPaymentFilters(row, filters)), [allRows, filters]);
+    const table = useListControls(rows, matchesSearch);
 
-    const [showColumnsMenu, setShowColumnsMenu] = useState(false);
-    const [cols, setCols] = useState({
-        contact: true,
-        businessName: true,
-        businessLogo: true,
-        date: true,
-        invoiceNumber: true,
-        type: true,
-        debit: true,
-        credit: true,
-    });
-
-    const toggleColumn = (key: keyof typeof cols) => {
-        setCols((prev) => ({ ...prev, [key]: !prev[key] }));
+    /** Any filter change starts again from page 1. */
+    const setFilter = <K extends keyof PaymentListFilters>(key: K, value: PaymentListFilters[K]) => {
+        setFilters((prev) => ({ ...prev, [key]: value }));
+        table.setCurrentPage(1);
     };
 
-    const showAllColumns = () => {
-        const allTrue = Object.keys(cols).reduce((acc, k) => ({ ...acc, [k]: true }), {} as typeof cols);
-        setCols(allTrue);
+    /** One option per party that has a payment (People profile, or the legacy name when unlinked). */
+    const partyOptions = useMemo<SectionFilterOption[]>(() => {
+        const seen = new Map<string, string>();
+        allRows.forEach((row) => { if (!seen.has(paymentPartyKey(row))) seen.set(paymentPartyKey(row), row.contact); });
+        return Array.from(seen, ([value, label]) => ({ value, label })).sort((a, b) => a.label.localeCompare(b.label));
+    }, [allRows]);
+
+    const isVoucherOpen = activeDrawer === "view-voucher" && !!activeId;
+    const voucherId = useRetainedValue(isVoucherOpen ? activeId : null, isVoucherOpen);
+    const activeVoucherRecord = allRows.find((row) => row.id === voucherId) ?? null;
+
+    const [cols, setCols] = useState(COLUMNS);
+    const toggleColumn = (key: string) => {
+        if (key in COLUMNS) setCols((prev) => ({ ...prev, [key]: !prev[key as keyof typeof COLUMNS] }));
     };
+    const showAllColumns = () => setCols(COLUMNS);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-
-    const paginatedData = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return table.filteredData.slice(start, start + itemsPerPage);
-    }, [table.filteredData, currentPage, itemsPerPage]);
-
-    // Drawer Trigger strictly for Voucher
-    const handleViewVoucher = (id: string) => openView("drawer", "view-voucher", id);
-
-    const handleDelete = (id: string) => {
-        deleteLog(id);
-        table.setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
+    const { setSelectedIds } = table;
+    const handleDelete = useCallback((id: string) => {
+        deletePayments([id]);
+        setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
         toast.success("Payment record deleted.");
-    };
+    }, [deletePayments, setSelectedIds]);
 
     const handleBulkDelete = () => {
         if (table.selectedIds.length === 0) return;
-        bulkDeleteLogs(table.selectedIds);
+        const count = table.selectedIds.length;
+        deletePayments(table.selectedIds);
         table.clearSelection();
-        toast.success("Selected payment records deleted.");
+        toast.success(`${count} payment record(s) deleted.`);
     };
 
     return {
-        activeDrawer,
-        closeView,
-        retainedVoucherId,
-        activeVoucherRecord,
-        table: {
-            ...table,
-            paginatedData,
-        },
+        table,
         cols,
-        showColumnsMenu,
-        setShowColumnsMenu,
         toggleColumn,
         showAllColumns,
-        currentPage,
-        setCurrentPage,
-        itemsPerPage,
-        setItemsPerPage,
-        handleViewVoucher,
+        filters,
+        setFilter,
+        clearFilters: () => { setFilters(EMPTY_PAYMENT_FILTERS); table.setSearchQuery(""); table.setCurrentPage(1); },
+        activeFilterCount: activePaymentFilterCount(filters),
+        partyOptions,
+        isVoucherOpen,
+        activeVoucherRecord,
+        handleViewVoucher: (id: string) => openView("drawer", "view-voucher", id),
+        closeView,
         handleDelete,
         handleBulkDelete,
     };

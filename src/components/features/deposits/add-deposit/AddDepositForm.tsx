@@ -1,11 +1,11 @@
+import { useAddDepositManager } from "@/hooks/finance_hooks/deposit_hooks/useAddDepositManager";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Button } from "@/components/ui/Button";
 import { UploadCloud } from "lucide-react";
-import { useDirectorStore } from "@/hooks/finance_hooks/withdrawal_hooks/useDirectorStore";
+import { useDirectorOptions } from "@/hooks/people_hooks/director_profile_hooks/useDirectorSummaries";
 
-export function AddDepositForm({ manager }: { manager: any }) {
-    const { directors } = useDirectorStore();
-    const directorNames = directors.map(d => d.name);
+export function AddDepositForm({ manager }: { manager: ReturnType<typeof useAddDepositManager> }) {
+    const directorOptions = useDirectorOptions();
 
     return (
         <div className="flex flex-col gap-2">
@@ -28,10 +28,10 @@ export function AddDepositForm({ manager }: { manager: any }) {
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">Director <span className="text-red-500">*</span></label>
                     <CustomSelect
-                        value={manager.categoryDirectorName}
-                        onChange={manager.setCategoryDirectorName}
-                        options={directorNames}
-                        placeholder="Choose a category"
+                        value={manager.directorId}
+                        onChange={manager.setDirectorId}
+                        options={directorOptions}
+                        placeholder="Choose Director"
                     />
                 </div>
             </div>

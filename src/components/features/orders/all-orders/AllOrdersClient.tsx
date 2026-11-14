@@ -15,10 +15,9 @@ export function AllOrdersClient() {
     const manager = useOrderManager();
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
-            <h1 className="text-xl font-bold text-gray-900">All Orders</h1>
-
-            <div className="flex-1 erp-card flex flex-col p-0 overflow-hidden">
+        // "All" view of the Orders spoke: the hub supplies the title and the page scrolls.
+        <div className="flex flex-col w-full gap-2">
+            <div className="erp-card flex flex-col p-0 overflow-hidden">
                 <div className="p-4 sm:p-6 border-b border-gray-100">
                     <AllOrdersToolbar manager={manager} />
                 </div>
@@ -42,7 +41,7 @@ export function AllOrdersClient() {
 
             {/* Drawers (To be implemented in Phase 3) */}
             <InvoiceDrawer manager={manager} />
-            <ReceivePaymentDrawer manager={manager} />
+            <ReceivePaymentDrawer key={`${manager.activeDrawer}-${manager.getActiveOrder()?.id ?? "none"}`} manager={manager} />
             <UpdateItemDrawer manager={manager} />
             <FraudCheckDrawer manager={manager} />
 

@@ -1,15 +1,23 @@
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { useOrderFormManager } from "@/hooks/order_confirmation_hooks/useOrderFormManager";
+import { OrderCustomerSection } from "./OrderCustomerSection";
 
-export function OrderFormFields({ manager }: { manager: any }) {
-    const customerOptions = ["Pronoy Roy", "ARIFUL ISLAM", "Tech Nest", "Mosharraf hosen Bhuiyan"];
+type Manager = ReturnType<typeof useOrderFormManager>;
+type OrderMedia = Manager["orderMedia"];
+type OrderChannel = Manager["onlineOffline"];
+
+const MEDIA_OPTIONS: OrderMedia[] = ["WhatsApp", "Messenger", "Phone Call", "-"];
+const CHANNEL_OPTIONS: OrderChannel[] = ["Online", "Offline"];
+const isMedia = (value: string): value is OrderMedia => MEDIA_OPTIONS.some((option) => option === value);
+const isChannel = (value: string): value is OrderChannel => CHANNEL_OPTIONS.some((option) => option === value);
+
+export function OrderFormFields({ manager }: { manager: Manager }) {
     const productOptions = ["Haylou Solar 5", "Galaxy F36 5G", "VOLTME Revo 20", "TOZO S7"];
-    const mediaOptions = ["WhatsApp", "Messenger", "Phone Call", "-"];
-    const onlineOfflineOptions = ["Online", "Offline"];
     const salesmanOptions = ["Jannat Ull Naeem Sarah", "Alamin Rifat"];
 
     return (
         <div className="flex flex-col gap-2">
-            {/* Row 1: Dates & Customer */}
+            {/* Row 1: Dates */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="flex flex-col gap-1.5">
                     <label className="text-[13px] font-medium text-gray-600">
@@ -31,18 +39,10 @@ export function OrderFormFields({ manager }: { manager: any }) {
                         className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-700 focus:border-emerald-500 focus:outline-none h-9"
                     />
                 </div>
-                <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-medium text-gray-600">
-                        Customer <span className="text-red-500">*</span>
-                    </label>
-                    <CustomSelect
-                        value={manager.customer}
-                        onChange={manager.setCustomer}
-                        options={customerOptions}
-                        placeholder="Choose a Customer"
-                    />
-                </div>
             </div>
+
+            {/* Row 1b: Customer, resolved from the phone number (no dropdown) */}
+            <OrderCustomerSection manager={manager} />
 
             {/* Row 2: Order Media & Address */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -50,19 +50,22 @@ export function OrderFormFields({ manager }: { manager: any }) {
                     <label className="text-[13px] font-medium text-gray-600">Order Media</label>
                     <CustomSelect
                         value={manager.orderMedia}
-                        onChange={manager.setOrderMedia}
-                        options={mediaOptions}
+                        onChange={(value) => { if (isMedia(value)) manager.setOrderMedia(value); }}
+                        options={MEDIA_OPTIONS}
                         placeholder="Choose media"
                     />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-medium text-gray-600">Address</label>
+                    <label className="text-[13px] font-medium text-gray-600">
+                        Address {manager.customerResolution.isAddressLocked && <span className="text-[11px] font-normal text-emerald-600">(from customer profile)</span>}
+                    </label>
                     <textarea
                         rows={2}
                         placeholder="Address"
-                        value={manager.address}
+                        value={manager.resolvedAddress}
+                        readOnly={manager.customerResolution.isAddressLocked}
                         onChange={(e) => manager.setAddress(e.target.value)}
-                        className="w-full rounded-md border border-gray-200 bg-white p-2.5 text-[13px] text-gray-700 focus:border-emerald-500 focus:outline-none resize-none"
+                        className={`w-full rounded-md border border-gray-200 p-2.5 text-[13px] text-gray-700 focus:border-emerald-500 focus:outline-none resize-none ${manager.customerResolution.isAddressLocked ? "bg-gray-50 cursor-not-allowed" : "bg-white"}`}
                     />
                 </div>
             </div>
@@ -105,8 +108,8 @@ export function OrderFormFields({ manager }: { manager: any }) {
                     <label className="text-[13px] font-medium text-gray-600">Online / Offline</label>
                     <CustomSelect
                         value={manager.onlineOffline}
-                        onChange={manager.setOnlineOffline}
-                        options={onlineOfflineOptions}
+                        onChange={(value) => { if (isChannel(value)) manager.setOnlineOffline(value); }}
+                        options={CHANNEL_OPTIONS}
                         placeholder="Select type"
                     />
                 </div>

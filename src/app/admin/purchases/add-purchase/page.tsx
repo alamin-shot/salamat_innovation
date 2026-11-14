@@ -9,7 +9,7 @@ export default function AddPurchasePage() {
                 <Loader />
             </div>
         }>
-            <AddPurchaseClient />;
+            <AddPurchaseClient />
 
         </Suspense>
     )

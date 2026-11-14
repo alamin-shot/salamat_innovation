@@ -8,12 +8,9 @@ export function OrderOptionsClient() {
     const manager = useOrderOptionsManager();
 
     return (
-        <div className="flex flex-col w-full h-full p-4 relative overflow-hidden">
-            <div className="mb-6">
-                <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Order Options</h1>
-            </div>
-
-            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 flex flex-col">
+        // Spoke of the Orders hub: the hub supplies the title and the page scrolls (no height lock).
+        <div className="flex flex-col w-full">
+            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex flex-col">
                 <OrderOptionsTable manager={manager} />
             </div>
 

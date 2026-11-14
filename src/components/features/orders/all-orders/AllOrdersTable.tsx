@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ShieldAlert, Edit, DollarSign, FileText, Trash2 } from "lucide-react";
 import { OrderStatus, PaymentStatus } from "@/store/useOrderStore";
 
-const ORDER_STATUSES: OrderStatus[] = ["Pending", "Confirmed", "Approved", "Processing", "Onway", "Complete", "Rejected"];
+const ORDER_STATUSES: OrderStatus[] = ["Pending", "Hold", "Confirmed", "Approved", "Processing", "Onway", "Return", "Complete", "Rejected"];
 const PAYMENT_STATUSES: PaymentStatus[] = ["Pending", "Partial", "Paid"];
 
 export function AllOrdersTable({ manager }: { manager: OrderManagerType }) {

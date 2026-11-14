@@ -13,7 +13,14 @@ export function SaleQueueSection({ manager }: { manager: Manager }) {
             <label className="text-[13px] text-gray-500">Product</label>
             <div className="relative mb-2">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                <input type="text" placeholder="Search Product By Code" className="w-full rounded border border-gray-200 bg-white py-2 pl-9 pr-4 text-[13px] text-gray-600 focus:outline-none focus:border-emerald-500" />
+                <input
+                    type="text"
+                    value={manager.scanQuery}
+                    onChange={(e) => manager.setScanQuery(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); manager.scan(); } }}
+                    placeholder="Scan or type a Serial/IMEI, then Enter (in-stock units only)"
+                    className="w-full rounded border border-gray-200 bg-white py-2 pl-9 pr-4 text-[13px] text-gray-600 focus:outline-none focus:border-emerald-500"
+                />
             </div>
 
             <div className="rounded border border-gray-200 overflow-hidden">

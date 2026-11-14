@@ -9,7 +9,7 @@ export default function AddSalesPage() {
                 <Loader />
             </div>
         }>
-            <AddSaleClient />;
+            <AddSaleClient />
 
         </Suspense>
     )

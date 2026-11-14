@@ -1,51 +1,37 @@
 import { Drawer } from "@/components/ui/Drawer";
+import { usePersonLifecycle } from "@/hooks/people_hooks/usePersonLifecycle";
+import { PersonRecord } from "@/types/people";
 import { PeopleProfileHeader } from "./PeopleProfileHeader";
 import { PeopleDetailTabs } from "./PeopleDetailTabs";
 
 export function ViewPeopleDrawer({
-    id,
     person,
     activeTab,
     onTabChange,
     isOpen,
     onClose,
 }: {
-    id: string | null;
-    person: any;
+    person: PersonRecord | null;
     activeTab: string;
     onTabChange: (tabId: string) => void;
     isOpen: boolean;
     onClose: () => void;
 }) {
-    const fallbackPerson = person || {
-        id: id || "1",
-        initials: "Y",
-        name: "Yasin",
-        email: "yasin8999@gmail.com",
-        phoneNumber: "+8801608797891",
-        businessName: "—",
-        status: "Active",
-        rating: "Unrated",
-        createdAt: "1 hour ago",
-    };
-
-    if (!id && !isOpen) return null;
+    const { lifecycle } = usePersonLifecycle(person?.id ?? null);
+    const title = person?.type === "Supplier" ? "Supplier Details" : "Customer Details";
 
     return (
-        <Drawer
-            title="Customer Details"
-            isOpen={isOpen}
-            onClose={onClose}
-            width="w-full max-w-none lg:w-[calc(100vw-280px)]"
-        >
-            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <PeopleProfileHeader person={fallbackPerson} />
-                <PeopleDetailTabs
-                    person={fallbackPerson}
-                    activeTab={activeTab}
-                    onTabChange={onTabChange}
-                />
-            </div>
+        <Drawer title={title} isOpen={isOpen} onClose={onClose} width="w-full sm:w-[calc(100vw-260px)]">
+            {person ? (
+                <div className="p-4 bg-gray-50/50 min-h-full pb-32">
+                    <PeopleProfileHeader person={person} lifecycle={lifecycle} />
+                    <PeopleDetailTabs person={person} lifecycle={lifecycle} activeTab={activeTab} onTabChange={onTabChange} />
+                </div>
+            ) : (
+                <div className="m-4 rounded-xl border-2 border-dashed border-gray-200 p-12 text-center text-sm text-gray-500">
+                    This profile no longer exists.
+                </div>
+            )}
         </Drawer>
     );
 }

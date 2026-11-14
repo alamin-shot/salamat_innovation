@@ -1,49 +1,29 @@
-"use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useWithdrawalStore, Withdrawal } from "./useWithdrawalStore";
-import { useDirectorStore } from "./useDirectorStore";
+import { useGlobalDirectorsStore } from "@/store/useGlobalDirectorsStore";
 
+/** Edit Withdrawal. Mount with `key={record.id}` so the fields start from that record. */
 export function useWithdrawalFormManager(initialRecord?: Withdrawal | null, onClose?: () => void) {
-    const { updateWithdrawal } = useWithdrawalStore();
-    const { directors } = useDirectorStore();
+    const updateWithdrawal = useWithdrawalStore((state) => state.updateWithdrawal);
+    const directors = useGlobalDirectorsStore((state) => state.directors);
 
-    const [title, setTitle] = useState("");
-    const [date, setDate] = useState("");
-    const [amount, setAmount] = useState<number | "">("");
-    const [categoryDirectorName, setCategoryDirectorName] = useState("");
-    const [note, setNote] = useState("");
-
-    useEffect(() => {
-        if (initialRecord) {
-            setTitle(initialRecord.title);
-            setDate(initialRecord.date);
-            setAmount(initialRecord.amount);
-
-            const dir = directors.find(d => d.id === initialRecord.directorId);
-            setCategoryDirectorName(dir?.name || "");
-
-            setNote(initialRecord.note);
-        }
-    }, [initialRecord, directors]);
+    const [title, setTitle] = useState(initialRecord?.title ?? "");
+    const [date, setDate] = useState(initialRecord?.date ?? "");
+    const [amount, setAmount] = useState<number | "">(initialRecord?.amount ?? "");
+    const [directorId, setDirectorId] = useState(initialRecord?.directorId ?? "");
+    const [note, setNote] = useState(initialRecord?.note ?? "");
 
     const handleSave = () => {
-        if (!title.trim() || !amount || !categoryDirectorName) return toast.error("Title, Amount, and Category are required.");
-
-        const selectedDirector = directors.find(d => d.name === categoryDirectorName);
-        if (!selectedDirector) return toast.error("Invalid Director selected.");
+        if (!title.trim() || !amount || !directorId) return toast.error("Title, Amount, and Director are required.");
+        if (!directors.some((director) => director.id === directorId)) return toast.error("Choose a director from the Directors list.");
 
         if (initialRecord) {
-            updateWithdrawal(initialRecord.id, {
-                title: title.trim(),
-                date,
-                amount: Number(amount),
-                directorId: selectedDirector.id,
-                note: note || "-"
-            });
+            updateWithdrawal(initialRecord.id, { title: title.trim(), date, amount: Number(amount), directorId, note: note || "-" });
             toast.success("Withdrawal updated successfully!");
         }
-        if (onClose) onClose();
+        onClose?.();
     };
-    return { title, setTitle, date, setDate, amount, setAmount, categoryDirectorName, setCategoryDirectorName, note, setNote, handleSave };
+
+    return { title, setTitle, date, setDate, amount, setAmount, directorId, setDirectorId, note, setNote, handleSave };
 }

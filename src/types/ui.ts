@@ -29,6 +29,19 @@ export interface SectionFilterChip {
     onChange: (value: string) => void;
 }
 
+/** Inclusive amount range; null = open-ended. */
+export interface AmountRangeValue {
+    min: number | null;
+    max: number | null;
+}
+
+/** Optional amount-range chip of a SectionFilterBar. */
+export interface SectionAmountFilter {
+    label: string;
+    value: AmountRangeValue;
+    onChange: (value: AmountRangeValue) => void;
+}
+
 /** Optional date-range chip of a SectionFilterBar. */
 export interface SectionDateFilter {
     label: string;

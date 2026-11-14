@@ -1,10 +1,10 @@
 "use client";
 import * as React from "react";
-import { Search, Trash2 } from "lucide-react";
-import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { useAddPurchaseManager } from "@/hooks/purchases_hooks/useAddPurchaseManager";
 import { CustomSelect } from "./CustomSelect";
 import { Button } from "@/components/ui/Button";
+import { PurchaseUnitSearchBar } from "../shared/PurchaseUnitSearchBar";
+import { PurchaseLineItemsTable } from "../shared/PurchaseLineItemsTable";
 
 type Manager = ReturnType<typeof useAddPurchaseManager>;
 
@@ -35,64 +35,22 @@ export function PurchaseQueueSection({ manager }: { manager: Manager }) {
                 </div>
             )}
 
-            <div className="relative mb-2">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Search className="h-4 w-4 text-gray-400" />
-                </div>
-                <input type="text" placeholder="Search Product By Code" className="w-full rounded border border-gray-200 bg-white py-2 pl-9 pr-4 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-            </div>
+            <PurchaseUnitSearchBar
+                query={manager.search.query}
+                onQueryChange={manager.search.setQuery}
+                results={manager.search.results}
+                onScan={manager.search.scan}
+                onPick={manager.search.pick}
+                placeholder="Scan or type a Serial/IMEI, product name or SKU"
+                emptyText="No un-received barcode (Generated / Printed) matches. Press Enter to check a serial."
+            />
 
-            {/* Queue Table */}
-            <div className="rounded border border-gray-200 overflow-hidden">
-                <Table>
-                    <TableHeader>
-                        <TableHeadCell className="w-12 bg-gray-50/80 font-semibold text-gray-600">SL</TableHeadCell>
-                        <TableHeadCell className="bg-gray-50/80 font-semibold text-gray-600">Product Name</TableHeadCell>
-                        <TableHeadCell className="bg-gray-50/80 font-semibold text-gray-600">SKU</TableHeadCell>
-                        <TableHeadCell className="bg-gray-50/80 font-semibold text-gray-600">Serial/IMEI no.</TableHeadCell>
-                        <TableHeadCell className="bg-gray-50/80 font-semibold text-gray-600">Unit Price</TableHeadCell>
-                        <TableHeadCell className="text-center w-[120px] bg-gray-50/80 font-semibold text-gray-600">Quantity</TableHeadCell>
-                        <TableHeadCell className="text-right bg-gray-50/80 font-semibold text-gray-600">Total Price</TableHeadCell>
-                        <TableHeadCell className="text-right w-[80px] bg-gray-50/80 font-semibold text-gray-600">Action</TableHeadCell>
-                    </TableHeader>
-                    <TableBody>
-                        {manager.stagedItems.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={8} className="text-center py-8 text-[13px] text-gray-500">No products added</TableCell>
-                            </TableRow>
-                        ) : (
-                            manager.stagedItems.map((item, index) => (
-                                <TableRow key={item.id}>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-col">
-                                            <span className="font-medium text-gray-700">{item.productName}</span>
-                                            <span className="text-[10px] text-emerald-600">{item.variant}</span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell><span className="text-[13px] text-gray-600">{item.sku}</span></TableCell>
-                                    <TableCell><span className="text-[13px] text-gray-600">{item.serial}</span></TableCell>
-                                    <TableCell><span className="text-[13px] text-gray-600">{item.unitPrice}</span></TableCell>
-                                    <TableCell className="text-center">
-                                        <input type="number" min="1" value={item.quantity} onChange={(e) => manager.handleQuantityChange(item.id, parseInt(e.target.value) || 1)} className="w-16 rounded border border-gray-200 text-center text-[13px] py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 mx-auto" />
-                                    </TableCell>
-                                    <TableCell className="text-right"><span className="text-[13px] text-gray-700 font-medium">{(item.unitPrice * item.quantity).toLocaleString()}</span></TableCell>
-                                    <TableCell className="text-right">
-                                        <Button
-                                            type="button"
-                                            variant="destructive-ghost"
-                                            size="icon-sm"
-                                            onClick={() => manager.handleRemoveItem(item.id)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
+            {/* Queue Table: one row per Serial/IMEI, quantity fixed at 1 */}
+            <PurchaseLineItemsTable
+                items={manager.items}
+                onUnitPriceChange={manager.setUnitPrice}
+                onRemove={manager.removeItem}
+            />
         </div>
     );
 }

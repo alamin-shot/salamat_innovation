@@ -1,55 +1,24 @@
 "use client";
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useListControls } from "@/hooks/shared_hooks/useTableManager";
+import { usePeopleStore } from "@/store/usePeopleStore";
+import { PersonRecord } from "@/types/people";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
 
-export interface PersonRecord {
-    id: string;
-    initials: string;
-    name: string;
-    type: "Online Customer" | "Offline Customer" | "Supplier";
-    status: "Active" | "Inactive";
-    businessName: string;
-    phoneNumber: string;
-    secondaryPhone?: string;
-    email: string;
-    address: string;
-    district: string;
-    area: string;
-    rating: string;
-    note: string;
-    priceDocument: string;
-    createdAt: string;
-    dateOfBirth: string;
-    gender: string;
-}
-
-const initialPeopleData: PersonRecord[] = [
-    { id: "1", initials: "Y", name: "Yasin", type: "Online Customer", status: "Active", businessName: "—", phoneNumber: "+8801608797891", email: "yasin8999@gmail.com", address: "-", district: "-", area: "-", rating: "Unrated", note: "", priceDocument: "", createdAt: "1 hour ago", dateOfBirth: "-", gender: "-" },
-    { id: "2", initials: "RM", name: "Roghupoti Mohanto", type: "Offline Customer", status: "Active", businessName: "—", phoneNumber: "01608197533", email: "mohantotirtho@gmail.com", address: "-", district: "-", area: "-", rating: "5 ★", note: "Regular store buyer", priceDocument: "", createdAt: "7 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "3", initials: "MR", name: "Mohammad Fahad Rahman", type: "Offline Customer", status: "Active", businessName: "—", phoneNumber: "01312852463", email: "mohammadfahadrahman@gmail.com", address: "-", district: "-", area: "-", rating: "4 ★", note: "", priceDocument: "", createdAt: "10 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "4", initials: "MA", name: "Md Alamin", type: "Online Customer", status: "Active", businessName: "—", phoneNumber: "+8801518461669", email: "alamin.coder284@gmail.com", address: "-", district: "-", area: "-", rating: "5 ★", note: "", priceDocument: "", createdAt: "10 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "5", initials: "RD", name: "Roman Dey", type: "Online Customer", status: "Active", businessName: "—", phoneNumber: "+8801865603792", email: "romandey87@gmail.com", address: "-", district: "-", area: "-", rating: "Unrated", note: "", priceDocument: "", createdAt: "11 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "6", initials: "AM", name: "Al Mukit", type: "Offline Customer", status: "Active", businessName: "—", phoneNumber: "01815893266", email: "-", address: "-", district: "-", area: "-", rating: "Unrated", note: "", priceDocument: "", createdAt: "20 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "7", initials: "S", name: "Sayem", type: "Offline Customer", status: "Active", businessName: "—", phoneNumber: "01776643395", email: "-", address: "-", district: "-", area: "-", rating: "3 ★", note: "", priceDocument: "", createdAt: "22 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "8", initials: "SM", name: "Salim Miazi", type: "Supplier", status: "Active", businessName: "MR Telecom", phoneNumber: "01966792299", email: "-", address: "JFP Block A, Level 4", district: "Dhaka", area: "Bashundhara", rating: "5 ★", note: "Primary wholesale vendor", priceDocument: "mr-telecom-q4.pdf", createdAt: "22 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "9", initials: "NI", name: "Nahid islam", type: "Online Customer", status: "Active", businessName: "—", phoneNumber: "+8801758351324", email: "ni845347@gmail.com", address: "-", district: "-", area: "-", rating: "Unrated", note: "", priceDocument: "", createdAt: "23 hours ago", dateOfBirth: "-", gender: "-" },
-    { id: "10", initials: "SW", name: "Sha Won", type: "Online Customer", status: "Active", businessName: "—", phoneNumber: "+8801857416574", email: "shawonofficee77@gmail.com", address: "-", district: "-", area: "-", rating: "Unrated", note: "", priceDocument: "", createdAt: "23 hours ago", dateOfBirth: "-", gender: "-" },
-];
+// Types live in types/people.ts and records in usePeopleStore; re-exported for existing imports.
+export type { PersonRecord };
 
 export function usePeopleManager() {
     const { activeDrawer, activeId, openView, closeView } = useCommandParams();
 
-    // Retained Drawer IDs & Active View Tab
-    const [retainedViewId, setRetainedViewId] = useState<string | null>(null);
-    const [retainedEditId, setRetainedEditId] = useState<string | null>(null);
+    // Drawer ids are kept while a drawer slides out (no effect needed).
+    const isViewOpen = activeDrawer === "view-people" && !!activeId;
+    const isEditOpen = activeDrawer === "edit-people" && !!activeId;
+    const retainedViewId = useRetainedValue(isViewOpen ? activeId : null, isViewOpen);
+    const retainedEditId = useRetainedValue(isEditOpen ? activeId : null, isEditOpen);
     const [activeDetailTab, setActiveDetailTab] = useState("overview");
-
-    useEffect(() => {
-        if (activeDrawer === "view-people" && activeId) setRetainedViewId(activeId);
-        if (activeDrawer === "edit-people" && activeId) setRetainedEditId(activeId);
-    }, [activeDrawer, activeId]);
 
     const filterFn = useCallback((item: PersonRecord, query: string) => {
         const lower = query.toLowerCase();
@@ -62,11 +31,18 @@ export function usePeopleManager() {
         );
     }, []);
 
-    const table = useTableManager<PersonRecord>(initialPeopleData, filterFn);
+    const people = usePeopleStore((state) => state.people);
+    const updatePerson = usePeopleStore((state) => state.updatePerson);
+    const deletePeople = usePeopleStore((state) => state.deletePeople);
+    const table = useListControls<PersonRecord>(people, filterFn);
 
     const activePerson = useMemo(
-        () => table.data.find((p) => p.id === retainedViewId) || null,
-        [table.data, retainedViewId]
+        () => people.find((p) => p.id === retainedViewId) || null,
+        [people, retainedViewId]
+    );
+    const activeEditPerson = useMemo(
+        () => people.find((p) => p.id === retainedEditId) || null,
+        [people, retainedEditId]
     );
 
     // Inline Popover States for Table Cells (Zero useState in UI files)
@@ -110,7 +86,7 @@ export function usePeopleManager() {
         rating: true,
         note: true,
         priceDocument: true,
-        history: true,
+        lifecycle: true,
         createdAt: true,
         dateOfBirth: true,
         gender: true,
@@ -138,6 +114,7 @@ export function usePeopleManager() {
         const start = (currentPage - 1) * itemsPerPage;
         return typeFilteredData.slice(start, start + itemsPerPage);
     }, [typeFilteredData, currentPage, itemsPerPage]);
+    const totalPages = Math.max(1, Math.ceil(typeFilteredData.length / itemsPerPage));
 
     // Drawer Navigation Triggers
     const handleView = (id: string) => {
@@ -145,51 +122,50 @@ export function usePeopleManager() {
         openView("drawer", "view-people", id);
     };
 
-    const handleViewHistory = (id: string) => {
-        setActiveDetailTab("orders");
+    /** Table "Lifecycle" button: opens the detail drawer straight on the Lifecycle tab. */
+    const handleViewLifecycle = (id: string) => {
+        setActiveDetailTab("lifecycle");
         openView("drawer", "view-people", id);
     };
 
     const handleEdit = (id: string) => openView("drawer", "edit-people", id);
-    const handleCreate = () => openView("drawer", "create-people", undefined);
+    /** "Add Customer" / "Add Supplier": the button decides the type, the form never asks. */
+    const handleCreate = (kind: "customer" | "supplier") => openView("drawer", kind === "customer" ? "create-customer" : "create-supplier", undefined);
 
     // Inline Cell Updaters
-    const handleTypeChange = (id: string, newType: PersonRecord["type"]) => {
-        table.setData((prev) => prev.map((item) => (item.id === id ? { ...item, type: newType } : item)));
-        toast.success(`Type updated to ${newType}.`);
-    };
+    // Type is locked after creation (set by the creating context), so there is no type-change handler.
 
     const handleStatusChange = (id: string, newStatus: PersonRecord["status"]) => {
-        table.setData((prev) => prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item)));
+        updatePerson(id, { status: newStatus });
         toast.success(`Status updated to ${newStatus}.`);
     };
 
     const handleRatingChange = (id: string, newRating: string) => {
-        table.setData((prev) => prev.map((item) => (item.id === id ? { ...item, rating: newRating } : item)));
+        updatePerson(id, { rating: newRating });
         toast.success(`Customer rating updated to ${newRating}.`);
     };
 
     const handleNoteSave = (id: string) => {
-        table.setData((prev) => prev.map((item) => (item.id === id ? { ...item, note: noteDraft } : item)));
+        updatePerson(id, { note: noteDraft });
         setActiveNoteRowId(null);
         toast.success("Note saved successfully.");
     };
 
     const handlePriceDocChange = (id: string, fileName: string) => {
-        table.setData((prev) => prev.map((item) => (item.id === id ? { ...item, priceDocument: fileName } : item)));
+        updatePerson(id, { priceDocument: fileName });
         toast.success(`Price document "${fileName}" uploaded.`);
     };
 
     // Delete Handlers
     const handleDelete = (id: string) => {
-        table.setData((prev) => prev.filter((item) => item.id !== id));
+        deletePeople([id]);
         table.setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
         toast.success("Person record deleted.");
     };
 
     const handleBulkDelete = () => {
         if (table.selectedIds.length === 0) return;
-        table.setData((prev) => prev.filter((item) => !table.selectedIds.includes(item.id)));
+        deletePeople(table.selectedIds);
         table.clearSelection();
         toast.success("Selected people records deleted.");
     };
@@ -200,6 +176,9 @@ export function usePeopleManager() {
         retainedViewId,
         retainedEditId,
         activePerson,
+        activeEditPerson,
+        isViewOpen,
+        isEditOpen,
         activeDetailTab,
         setActiveDetailTab,
         table: {
@@ -217,6 +196,7 @@ export function usePeopleManager() {
         setShowFilterMenu,
         currentPage,
         setCurrentPage,
+        totalPages,
         itemsPerPage,
         setItemsPerPage,
         activeNoteRowId,
@@ -228,10 +208,9 @@ export function usePeopleManager() {
         toggleAddressPopover,
         closeAddressPopover,
         handleView,
-        handleViewHistory,
+        handleViewLifecycle,
         handleEdit,
         handleCreate,
-        handleTypeChange,
         handleStatusChange,
         handleRatingChange,
         handleNoteSave,
@@ -240,3 +219,4 @@ export function usePeopleManager() {
         handleBulkDelete,
     };
 }
+export type PeopleManager = ReturnType<typeof usePeopleManager>;

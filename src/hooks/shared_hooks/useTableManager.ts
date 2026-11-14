@@ -2,15 +2,18 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 
-export function useTableManager<T>(
-    initialData: T[],
+/**
+ * Search (debounced, URL-synced), pagination and selection over rows the caller owns.
+ * Pass live store rows here; useTableManager wraps it for screens that keep a local copy.
+ */
+export function useListControls<T extends { id: string }>(
+    data: T[],
     filterFn: (item: T, query: string) => boolean,
     defaultItemsPerPage = 10
 ) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const [data, setData] = useState<T[]>(initialData);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     // URL-synced state
@@ -93,7 +96,7 @@ export function useTableManager<T>(
     const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
 
     const handleSelectAll = useCallback((checked: boolean) => {
-        setSelectedIds(checked ? filteredData.map((item: any) => item.id) : []);
+        setSelectedIds(checked ? filteredData.map((item) => item.id) : []);
     }, [filteredData]);
 
     const handleSelectRow = useCallback((id: string, checked: boolean) => {
@@ -103,11 +106,21 @@ export function useTableManager<T>(
     const clearSelection = useCallback(() => setSelectedIds([]), []);
 
     return {
-        data, setData,
         searchQuery, setSearchQuery,
         selectedIds, setSelectedIds, handleSelectAll, handleSelectRow, clearSelection,
         isAllSelected: filteredData.length > 0 && selectedIds.length === filteredData.length,
         filteredData, paginatedData,
         currentPage, setCurrentPage, totalPages, itemsPerPage, setItemsPerPage
     };
+}
+
+/** Keeps its own copy of `initialData` (setData edits it locally). */
+export function useTableManager<T extends { id: string }>(
+    initialData: T[],
+    filterFn: (item: T, query: string) => boolean,
+    defaultItemsPerPage = 10
+) {
+    const [data, setData] = useState<T[]>(initialData);
+    const controls = useListControls(data, filterFn, defaultItemsPerPage);
+    return { data, setData, ...controls };
 }

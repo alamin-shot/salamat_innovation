@@ -1,115 +1,57 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useGlobalPurchasesStore } from "@/store/useGlobalPurchasesStore";
+import { PurchaseUnitOption } from "@/types/purchases";
+import { EMPTY_PURCHASE_COSTING, PURCHASE_FORM_ERRORS } from "@/constants/purchases";
+import { unitToLineItem } from "@/utils/purchaseUnits";
+import { usePartyResolver } from "@/hooks/people_hooks/usePartyResolver";
+import { usePurchaseLinesDraft } from "./usePurchaseLinesDraft";
+import { usePurchaseUnitSearch } from "./usePurchaseUnitSearch";
 
-export interface StagedReturnItem {
-    id: string;
-    productName: string;
-    variant: string;
-    sku: string;
-    serial: string;
-    unitPrice: number;
-    quantity: number;
-}
+const RETURN_LIST_PATH = "/admin/purchases/purchase-return";
 
 export function useAddPurchaseReturnManager() {
-    // Form Meta State
+    const router = useRouter();
+    const addPurchaseReturn = useGlobalPurchasesStore((state) => state.addPurchaseReturn);
+    const resolveSupplier = usePartyResolver("supplier");
+
     const [date, setDate] = useState("2026-10-12");
+    const lines = usePurchaseLinesDraft([], EMPTY_PURCHASE_COSTING);
 
-    // Manual Entry State
-    const [isManualEntryOpen, setIsManualEntryOpen] = useState(false);
-    const [manualProduct, setManualProduct] = useState("");
-    const [manualVariant, setManualVariant] = useState("");
-    const [manualSerial, setManualSerial] = useState("");
+    // "Auto-filled upon searching": the first unit added sets the supplier; an empty list clears it.
+    const [firstSupplier, setFirstSupplier] = useState<string | null>(null);
+    const supplier = lines.items.length > 0 ? firstSupplier : null;
 
-    // Queue State
-    const [stagedItems, setStagedItems] = useState<StagedReturnItem[]>([]);
-
-    // Financial State
-    const [discountType, setDiscountType] = useState("");
-    const [discountAmount, setDiscountAmount] = useState<number>(0);
-    const [orderTaxPct, setOrderTaxPct] = useState<number>(0);
-    const [shippingCost, setShippingCost] = useState<number>(0);
-
-    const toggleManualEntry = () => setIsManualEntryOpen(prev => !prev);
-
-    // Math Engine
-    const totals = useMemo(() => {
-        const subTotal = stagedItems.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
-        const calculatedDiscount = discountType === "Percentage"
-            ? subTotal * (discountAmount / 100)
-            : discountAmount;
-        const calculatedTax = subTotal * (orderTaxPct / 100);
-        const grandTotal = Math.max(0, subTotal - calculatedDiscount + calculatedTax + shippingCost);
-
-        return {
-            subTotal,
-            discount: calculatedDiscount,
-            tax: calculatedTax,
-            shipping: shippingCost,
-            grandTotal
-        };
-    }, [stagedItems, discountType, discountAmount, orderTaxPct, shippingCost]);
-
-    // Queue Actions
-    const handleSuggestSerial = () => {
-        const randomSerial = Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join('');
-        setManualSerial(randomSerial);
-    };
-
-    const handleApplyManualItem = () => {
-        if (!manualProduct || !manualVariant || !manualSerial) {
-            toast.error("Please fill all manual entry fields");
-            return;
+    const handleAdd = (option: PurchaseUnitOption) => {
+        if (lines.items.length === 0) {
+            setFirstSupplier(option.supplier);
         }
-
-        const newItem: StagedReturnItem = {
-            id: crypto.randomUUID(),
-            productName: manualProduct,
-            variant: manualVariant,
-            sku: `SKU-${Math.floor(Math.random() * 10000)}`,
-            serial: manualSerial,
-            unitPrice: 25000,
-            quantity: 1
-        };
-
-        setStagedItems(prev => [...prev, newItem]);
-        setManualProduct("");
-        setManualVariant("");
-        setManualSerial("");
-        toast.success("Item added to return queue");
+        lines.appendItem(unitToLineItem(option));
     };
 
-    const handleRemoveItem = (id: string) => {
-        setStagedItems(prev => prev.filter(item => item.id !== id));
-    };
-
-    const handleQuantityChange = (id: string, qty: number) => {
-        if (qty < 1) return;
-        setStagedItems(prev => prev.map(item => item.id === id ? { ...item, quantity: qty } : item));
-    };
+    // Only in-stock units (Received / Transferred) bought from that supplier.
+    const search = usePurchaseUnitSearch({ mode: "return", items: lines.items, supplier, excludeId: null, onAdd: handleAdd });
 
     const handleSaveReturn = () => {
-        if (stagedItems.length === 0) return toast.error("Return queue is empty");
-        toast.success("Purchase return saved successfully!");
+        if (lines.items.length === 0 || !supplier) return toast.error("Return queue is empty");
+        if (!date) return toast.error(PURCHASE_FORM_ERRORS.date_required);
+
+        // A new return is fully due: Due Amount = Total.
+        const result = addPurchaseReturn({ supplierId: resolveSupplier({ name: supplier, businessName: supplier }), supplier, company: supplier, date, items: lines.items, costing: lines.costing });
+        if (!result.ok) {
+            return toast.error(PURCHASE_FORM_ERRORS[result.error]);
+        }
+        toast.success(`Purchase return ${result.invoiceNumber} saved successfully!`);
+        router.push(RETURN_LIST_PATH);
     };
 
     return {
         date, setDate,
-        isManualEntryOpen, toggleManualEntry,
-        manualProduct, setManualProduct,
-        manualVariant, setManualVariant,
-        manualSerial, setManualSerial,
-        stagedItems,
-        discountType, setDiscountType,
-        discountAmount, setDiscountAmount,
-        orderTaxPct, setOrderTaxPct,
-        shippingCost, setShippingCost,
-        totals,
-        handleSuggestSerial,
-        handleApplyManualItem,
-        handleRemoveItem,
-        handleQuantityChange,
-        handleSaveReturn
+        supplier,
+        ...lines,
+        search,
+        handleSaveReturn,
     };
 }

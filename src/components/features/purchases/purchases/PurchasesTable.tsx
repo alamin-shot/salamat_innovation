@@ -108,7 +108,7 @@ export function PurchasesTable() {
                                     </TableCell>
                                 )}
 
-                                {cols.warehouse && <TableCell><span className="text-sm text-brand-text">{item.warehouse}</span></TableCell>}
+                                {cols.warehouse && <TableCell><span className="text-sm text-brand-text">{item.location}</span></TableCell>}
                                 {cols.date && <TableCell><span className="text-sm text-brand-subtext">{item.date}</span></TableCell>}
                                 {cols.invoiceNumber && <TableCell><span className="text-sm font-mono text-brand-subtext">{item.invoiceNumber}</span></TableCell>}
                                 {cols.totalItem && <TableCell><span className="text-sm text-brand-text">{item.totalItem}</span></TableCell>}
@@ -132,27 +132,16 @@ export function PurchasesTable() {
                         ))}
                     </TableBody>
 
-                    {/* NATIVE TABLE FOOTER TO GUARANTEE PIXEL-PERFECT COLUMN ALIGNMENT */}
+                    {/* Single Total over the listed purchases (no Grand Total). Native tfoot keeps column alignment. */}
                     <tfoot className="border-t-2 border-brand-subtext/20 bg-brand-bg/5 font-bold text-brand-text text-sm">
-                        <tr className="border-b-2 border-brand-subtext/20">
+                        <tr>
                             <td className="p-3"></td>
                             {cols.supplier && <td className="p-3"></td>}
                             {cols.warehouse && <td className="p-3"></td>}
                             {cols.date && <td className="p-3 text-brand-text font-bold">Total</td>}
-                            {cols.invoiceNumber && <td className="p-3">20</td>}
-                            {cols.totalItem && <td className="p-3 text-left font-bold">55</td>}
-                            {cols.totalAmount && <td className="p-3 text-left font-bold">৳ 3,67,250.00</td>}
-                            {cols.createdBy && <td className="p-3"></td>}
-                            <td className="p-3"></td>
-                        </tr>
-                        <tr className="text-emerald-600">
-                            <td className="p-3"></td>
-                            {cols.supplier && <td className="p-3"></td>}
-                            {cols.warehouse && <td className="p-3"></td>}
-                            {cols.date && <td className="p-3 font-bold">Grand Total</td>}
-                            {cols.invoiceNumber && <td className="p-3">20</td>}
-                            {cols.totalItem && <td className="p-3 text-left font-bold">363</td>}
-                            {cols.totalAmount && <td className="p-3 text-left font-bold">৳ 1,82,78,8.80</td>}
+                            {cols.invoiceNumber && <td className="p-3">{table.filteredData.length}</td>}
+                            {cols.totalItem && <td className="p-3 text-left font-bold">{manager.listTotal.totalItem}</td>}
+                            {cols.totalAmount && <td className="p-3 text-left font-bold">৳ {manager.listTotal.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>}
                             {cols.createdBy && <td className="p-3"></td>}
                             <td className="p-3"></td>
                         </tr>

@@ -9,7 +9,7 @@ export default function PaymentListPage() {
                 <Loader />
             </div>
         }>
-            <PaymentListClient />;
+            <PaymentListClient />
         </Suspense>
     )
 }

@@ -34,7 +34,7 @@ export function HRSettingsView() {
     };
 
     return (
-        <div className="flex flex-col h-full w-full bg-gray-50/50">
+        <div className="flex flex-col w-full rounded-xl border border-brand-subtext/15 bg-gray-50/50">
             <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center gap-4 shrink-0">
                 <Link href="/admin/settings" className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-brand-primary hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
@@ -45,10 +45,10 @@ export function HRSettingsView() {
                 </div>
             </div>
 
-            <div className="flex flex-1 overflow-hidden min-h-0">
+            <div className="flex flex-col md:flex-row">
 
                 {/* Vertical Side-Nav */}
-                <div className="w-64 bg-gray-50 border-r border-gray-200 p-4 flex flex-col gap-2 shrink-0 overflow-y-auto">
+                <div className="w-full md:w-64 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200 p-4 flex flex-col gap-2 shrink-0">
                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-3 pb-2 pt-1">Configuration Modules</div>
                     {[
                         { id: "payrun", label: "Payrun Settings", icon: Clock },
@@ -67,7 +67,7 @@ export function HRSettingsView() {
                 </div>
 
                 {/* Main Content Area */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-8 pb-32">
+                <div className="flex-1 min-w-0 p-6 lg:p-8 pb-32">
                     <div className="max-w-3xl flex flex-col gap-6">
 
                         {/* 1. PAYRUN SETTINGS */}

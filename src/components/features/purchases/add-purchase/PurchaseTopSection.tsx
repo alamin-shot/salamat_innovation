@@ -4,6 +4,7 @@ import { Image as ImageIcon } from "lucide-react";
 import { useAddPurchaseManager } from "@/hooks/purchases_hooks/useAddPurchaseManager";
 import { CustomSelect } from "./CustomSelect";
 import { Button } from "@/components/ui/Button";
+import { PurchaseLocationField } from "../shared/PurchaseLocationField";
 
 type Manager = ReturnType<typeof useAddPurchaseManager>;
 
@@ -18,7 +19,7 @@ export function PurchaseTopSection({ manager }: { manager: Manager }) {
                         <CustomSelect
                             value={manager.supplier}
                             onChange={manager.setSupplier}
-                            options={["Rasel Raj", "Bina Ambix", "Gadget Opia", "Cell Tech BD"]}
+                            options={manager.supplierOptions}
                             placeholder="Choose a Supplier"
                         />
                         <Button type="button" variant="success" onClick={manager.openAddSupplierModal} className="shrink-0">
@@ -47,6 +48,8 @@ export function PurchaseTopSection({ manager }: { manager: Manager }) {
                     <label className="text-[13px] text-gray-600">Date <span className="text-red-500">*</span></label>
                     <input type="date" value={manager.date} onChange={(e) => manager.setDate(e.target.value)} className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
                 </div>
+
+                <PurchaseLocationField value={manager.location} onChange={manager.setLocation} />
 
                 <div className="flex flex-col gap-1.5 mt-1">
                     <Button

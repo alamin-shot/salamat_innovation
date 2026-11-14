@@ -1,3 +1,4 @@
+import { PeopleManager } from "@/hooks/people_hooks/usePeopleManager";
 import { FileText, Paperclip, Upload, Eye, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -9,7 +10,7 @@ export function InlineNoteCell({
 }: {
     rowId: string;
     note: string;
-    manager: any;
+    manager: PeopleManager;
 }) {
     const isOpen = manager.activeNoteRowId === rowId;
 
@@ -122,7 +123,7 @@ export function InlineAddressCell({
 }: {
     rowId: string;
     address: string;
-    manager: any;
+    manager: PeopleManager;
 }) {
     if (!address || address === "-") {
         return <span className="text-sm text-brand-subtext">-</span>;

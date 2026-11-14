@@ -1,24 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type SeoPlatform = "salamat" | "tekzo";
-export type SeoTabType = "pages" | "products" | "categories" | "brands";
+import { SeoPlatform, SeoRecord, SeoTabType } from "@/types/seo";
 
-export interface SeoRecord {
-    id: string;
-    platform: SeoPlatform;
-    type: SeoTabType;
-    name: string;
-    slug: string;
-    description: string;
-    metaTitle: string;
-    metaDescription: string;
-    metaTags: string;
-    status: "Active" | "Inactive";
-    productCategory?: string;
-    productBrand?: string;
-    createdAt: string;
-}
+// Types moved to types/seo.ts; re-exported so existing imports keep working.
+export type { SeoPlatform, SeoRecord, SeoTabType };
 
 interface SeoStore {
     records: SeoRecord[];

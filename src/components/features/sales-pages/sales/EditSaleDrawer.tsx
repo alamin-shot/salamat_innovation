@@ -1,28 +1,23 @@
 "use client";
 import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
-import { AddSaleForm } from "../add-sale/AddSaleForm";
+import { SaleRow } from "@/types/sales";
+import { EditSaleForm } from "./EditSaleForm";
 
 interface EditSaleDrawerProps {
-    id: string | null;
+    sale: SaleRow | null;
     isOpen: boolean;
     onClose: () => void;
 }
 
-export function EditSaleDrawer({ id, isOpen, onClose }: EditSaleDrawerProps) {
-    if (!id && !isOpen) return null;
-
+export function EditSaleDrawer({ sale, isOpen, onClose }: EditSaleDrawerProps) {
     return (
-        <Drawer
-            title={`Update Sale #${id}`}
-            isOpen={isOpen}
-            onClose={onClose}
-            width="w-full max-w-none lg:w-[calc(100vw-280px)]"
-        >
-            {/* Natural scrolling wrapper inside the drawer */}
-            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <AddSaleForm />
-            </div>
+        <Drawer title={sale ? `Update Sale ${sale.invoiceNumber}` : "Update Sale"} isOpen={isOpen} onClose={onClose} width="w-full sm:w-[calc(100vw-260px)]">
+            {sale && (
+                <div className="pb-32">
+                    <EditSaleForm key={sale.id} sale={sale} onDone={onClose} />
+                </div>
+            )}
         </Drawer>
     );
 }

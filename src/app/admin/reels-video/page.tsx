@@ -10,7 +10,7 @@ export default function ReelsViPageels() {
                 <Loader />
             </div>
         }>
-            < ReelsClient />;
+            < ReelsClient />
 
         </Suspense>
     )

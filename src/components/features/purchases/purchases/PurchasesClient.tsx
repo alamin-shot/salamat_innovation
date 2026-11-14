@@ -2,41 +2,35 @@
 import * as React from "react";
 import { PurchasesTable } from "./PurchasesTable";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
+import { SectionPageShell } from "@/components/layout/SectionPageShell";
 import { ViewPurchaseDrawer } from "./ViewPurchaseDrawer";
 import { EditPurchaseDrawer } from "./EditPurchaseDrawer";
 
 export function PurchasesClient() {
     const { activeDrawer, activeId, closeView } = useCommandParams();
 
-    const [retainedViewId, setRetainedViewId] = React.useState<string | null>(null);
-    const [retainedEditId, setRetainedEditId] = React.useState<string | null>(null);
-
-    React.useEffect(() => {
-        if (activeDrawer === "view-purchase" && activeId) setRetainedViewId(activeId);
-        if (activeDrawer === "edit-purchase" && activeId) setRetainedEditId(activeId);
-    }, [activeDrawer, activeId]);
+    const isViewOpen = activeDrawer === "view-purchase";
+    const isEditOpen = activeDrawer === "edit-purchase";
+    // Keep the record in the drawer while it slides out.
+    const viewId = useRetainedValue(isViewOpen ? activeId : null, isViewOpen);
+    const editId = useRetainedValue(isEditOpen ? activeId : null, isEditOpen);
 
     return (
-        <div className="flex flex-col w-full h-full p-4 relative overflow-hidden">
-            <div className="mb-6">
-                <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Purchase List</h1>
-            </div>
-
-            <div className="rounded-xl border border-brand-subtext/20 bg-white shadow-sm overflow-hidden flex-1 flex flex-col">
+        <>
+            <SectionPageShell
+                cardClassName="flex flex-col"
+                header={
+                    <div className="mb-6">
+                        <h1 className="text-xl sm:text-2xl font-bold text-brand-text">Purchase List</h1>
+                    </div>
+                }
+            >
                 <PurchasesTable />
-            </div>
+            </SectionPageShell>
 
-            <ViewPurchaseDrawer
-                id={retainedViewId}
-                isOpen={activeDrawer === "view-purchase"}
-                onClose={closeView}
-            />
-
-            <EditPurchaseDrawer
-                id={retainedEditId}
-                isOpen={activeDrawer === "edit-purchase"}
-                onClose={closeView}
-            />
-        </div>
+            <ViewPurchaseDrawer id={viewId} isOpen={isViewOpen} onClose={closeView} />
+            <EditPurchaseDrawer id={editId} isOpen={isEditOpen} onClose={closeView} />
+        </>
     );
 }

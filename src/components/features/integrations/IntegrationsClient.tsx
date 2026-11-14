@@ -1,35 +1,61 @@
 "use client";
 import React from "react";
+import { AlertTriangle, Plug, PlugZap, Webhook } from "lucide-react";
+import { UniversalHubShell } from "@/components/layout/hub/UniversalHubShell";
 import { useIntegrationManager } from "@/hooks/integrations_hooks/useIntegrationManager";
-import { IntegrationHubPortal } from "./components/IntegrationHubPortal";
+import { getIntegrationHubGroups, INTEGRATION_SPOKE_TABS, IntegrationSpokeKey } from "@/hooks/integrations_hooks/integrationHubFactory";
+import { HubKpi, HubTabState } from "@/types/hub";
+import { HUB_HOME } from "@/constants/hub";
 import { IntegrationSpokeView } from "./components/IntegrationSpokeView";
 import { WebhookDrawer } from "./drawers/WebhookDrawer";
 
+/** Integrations hub on the shared shell (natural page scroll). The manager keeps owning `?tab=`. */
 export function IntegrationsClient() {
     const manager = useIntegrationManager();
+    const { connections, webhooks } = manager.store;
+
+    // The manager's own router resets search / selection / page on every tab change.
+    const activeTab = INTEGRATION_SPOKE_TABS.find((tab) => tab === manager.activeTab) ?? HUB_HOME;
+    const hub: HubTabState<IntegrationSpokeKey> = {
+        activeTab,
+        isPending: manager.isPending,
+        openTab: (tab) => manager.handleRouteChange("tab", tab),
+    };
+
+    const { kpis, groups } = React.useMemo(() => {
+        const byCategory = (category: IntegrationSpokeKey) => connections.filter((connection) => connection.category === category).length;
+        const connected = connections.filter((connection) => connection.status === "Connected").length;
+        const warnings = connections.filter((connection) => connection.status === "Sync_Warning").length;
+        const failing = webhooks.filter((webhook) => webhook.status === "Failing").length;
+
+        const kpis: HubKpi[] = [
+            { id: "connected", label: "Connected", value: `${connected} / ${connections.length}`, hint: "Channels, couriers and finance feeds", icon: PlugZap, tone: "emerald" },
+            { id: "warnings", label: "Sync Warnings", value: String(warnings), hint: warnings ? "Check the affected connections" : "All syncing normally", icon: AlertTriangle, tone: warnings ? "amber" : "emerald" },
+            { id: "webhooks", label: "Webhooks", value: String(webhooks.length), hint: `${webhooks.filter((webhook) => webhook.status === "Active").length} active`, icon: Webhook, tone: "violet" },
+            { id: "failing", label: "Failing Webhooks", value: String(failing), hint: failing ? "Deliveries are being rejected" : "No delivery failures", icon: Plug, tone: failing ? "rose" : "emerald" },
+        ];
+        const groups = getIntegrationHubGroups({
+            chat_channels: byCategory("chat_channels"),
+            sales_channels: byCategory("sales_channels"),
+            logistics_couriers: byCategory("logistics_couriers"),
+            accounting_finance: byCategory("accounting_finance"),
+            developer_api: webhooks.length,
+        });
+        return { kpis, groups };
+    }, [connections, webhooks]);
 
     return (
-        <div className="flex flex-col h-full w-full bg-gray-50/50 relative overflow-hidden">
-            {/* Header */}
-            <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0 z-10 shadow-sm">
-                <div>
-                    <h1 className="text-xl font-black text-gray-900 tracking-tight">Integrations & API</h1>
-                    <p className="text-xs text-gray-500 font-medium mt-1">Manage channels, logistics, and developer webhooks.</p>
-                </div>
-            </div>
-
-            {/* FIX: Changed to overflow-y-auto so the ENTIRE right side of the screen scrolls naturally */}
-            <div className={`flex-1 overflow-y-auto custom-scrollbar transition-opacity duration-200 ${manager.isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
-                {manager.activeTab === "hub" ? (
-                    <IntegrationHubPortal manager={manager} />
-                ) : (
-                    <div className="p-4 sm:p-6 min-h-full">
-                        <IntegrationSpokeView manager={manager} />
-                    </div>
-                )}
-            </div>
-
+        <>
+            <UniversalHubShell
+                title="Integrations & API"
+                subtitle="Manage channels, logistics, and developer webhooks."
+                icon={Plug}
+                groups={groups}
+                kpis={kpis}
+                hub={hub}
+                renderSpoke={() => <IntegrationSpokeView manager={manager} />}
+            />
             <WebhookDrawer manager={manager} />
-        </div>
+        </>
     );
 }

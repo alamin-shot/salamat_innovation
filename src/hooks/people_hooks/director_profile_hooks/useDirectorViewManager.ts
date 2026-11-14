@@ -1,45 +1,38 @@
-"use client";
-import { useMemo, useState } from "react";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useMemo } from "react";
+import { useLocalListControls } from "@/hooks/shared_hooks/useLocalListControls";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
-import { useDirectorProfileStore } from "./useDirectorProfileStore";
 import { useDepositStore, Deposit } from "@/hooks/finance_hooks/deposit_hooks/useDepositStore";
 import { useWithdrawalStore, Withdrawal } from "@/hooks/finance_hooks/withdrawal_hooks/useWithdrawalStore";
+import { useDirectorSummaries } from "./useDirectorSummaries";
 
+const matchesTitle = (item: Deposit | Withdrawal, query: string) => {
+    const q = query.toLowerCase();
+    return [item.title, item.shopName, item.note, item.date].some((text) => text.toLowerCase().includes(q));
+};
+
+const VIEW_PAGE_SIZE = 5;
+
+/** Director profile page: summary, that director's deposits and withdrawals, and the edit drawer. */
 export function useDirectorViewManager(directorId: string) {
     const { activeDrawer, openView, closeView } = useCommandParams();
-    const { profiles } = useDirectorProfileStore();
-    const { deposits } = useDepositStore();
-    const { withdrawals } = useWithdrawalStore();
+    const profile = useDirectorSummaries().find((director) => director.id === directorId) ?? null;
+    const deposits = useDepositStore((state) => state.deposits);
+    const withdrawals = useWithdrawalStore((state) => state.withdrawals);
 
-    // Setup Profile Summary Data
-    const profile = useMemo(() => profiles.find(p => p.id === directorId) || null, [profiles, directorId]);
-    const dirDeposits = useMemo(() => deposits.filter(d => d.directorId === directorId), [deposits, directorId]);
-    const dirWithdrawals = useMemo(() => withdrawals.filter(w => w.directorId === directorId), [withdrawals, directorId]);
+    const ownDeposits = useMemo(() => deposits.filter((record) => record.directorId === directorId), [deposits, directorId]);
+    const ownWithdrawals = useMemo(() => withdrawals.filter((record) => record.directorId === directorId), [withdrawals, directorId]);
 
-    const totalDeposit = dirDeposits.reduce((sum, d) => sum + d.amount, 0);
-    const totalWithdraw = dirWithdrawals.reduce((sum, w) => sum + w.amount, 0);
-    const totalBalance = totalDeposit - totalWithdraw;
-
-    // Independent Table Managers
-    const depositTable = useTableManager<Deposit>(dirDeposits, (item, query) => item.title.toLowerCase().includes(query.toLowerCase()));
-    const withdrawalTable = useTableManager<Withdrawal>(dirWithdrawals, (item, query) => item.title.toLowerCase().includes(query.toLowerCase()));
-
-    // Pagination specific logic (Keeping it minimal for View tables)
-    const [depPage, setDepPage] = useState(1);
-    const [wthPage, setWthPage] = useState(1);
-    const itemsPerPage = 5;
-
-    const paginatedDeposits = useMemo(() => depositTable.filteredData.slice((depPage - 1) * itemsPerPage, depPage * itemsPerPage), [depositTable.filteredData, depPage]);
-    const paginatedWithdrawals = useMemo(() => withdrawalTable.filteredData.slice((wthPage - 1) * itemsPerPage, wthPage * itemsPerPage), [withdrawalTable.filteredData, wthPage]);
-
-    const handleEditProfile = () => openView("drawer", "edit-director", directorId);
-    const handleDownloadPDF = () => alert("Downloading PDF...");
+    const depositTable = useLocalListControls<Deposit>(ownDeposits, matchesTitle, VIEW_PAGE_SIZE);
+    const withdrawalTable = useLocalListControls<Withdrawal>(ownWithdrawals, matchesTitle, VIEW_PAGE_SIZE);
 
     return {
-        profile, totalDeposit, totalWithdraw, totalBalance,
-        depositTable: { ...depositTable, paginatedData: paginatedDeposits },
-        withdrawalTable: { ...withdrawalTable, paginatedData: paginatedWithdrawals },
-        activeDrawer, closeView, handleEditProfile, handleDownloadPDF
+        profile,
+        depositTable,
+        withdrawalTable,
+        isEditOpen: activeDrawer === "edit-director",
+        closeView,
+        handleEditProfile: () => openView("drawer", "edit-director", directorId),
     };
 }
+
+export type DirectorViewManager = ReturnType<typeof useDirectorViewManager>;

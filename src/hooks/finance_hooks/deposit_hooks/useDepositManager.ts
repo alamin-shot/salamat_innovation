@@ -1,36 +1,31 @@
-"use client";
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { toast } from "sonner";
-import { useTableManager } from "@/hooks/shared_hooks/useTableManager";
+import { useListControls } from "@/hooks/shared_hooks/useTableManager";
+import { useRetainedValue } from "@/hooks/products_hooks/useRetainedValue";
 import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
-import { useDepositStore, Deposit } from "./useDepositStore";
-import { useDirectorStore } from "../withdrawal_hooks/useDirectorStore";
+import { useDepositStore } from "./useDepositStore";
+import { useGlobalDirectorsStore } from "@/store/useGlobalDirectorsStore";
 
 export function useDepositManager() {
     const { activeDrawer, activeId, openView, closeView } = useCommandParams();
     const { deposits, deleteDeposit, bulkDeleteDeposits } = useDepositStore();
-    const { directors } = useDirectorStore();
+    const directors = useGlobalDirectorsStore((state) => state.directors);
 
-    const [retainedEditId, setRetainedEditId] = useState<string | null>(null);
+    const isEditOpen = activeDrawer === "edit-deposit" && !!activeId;
+    const retainedEditId = useRetainedValue(isEditOpen ? activeId : null, isEditOpen);
 
-    useEffect(() => {
-        if (activeDrawer === "edit-deposit" && activeId) setRetainedEditId(activeId);
-    }, [activeDrawer, activeId]);
+    // Director names come from the Directors store; they are joined before search so a director can be searched by name.
+    const rows = useMemo(() => deposits.map((d) => {
+        const dir = directors.find((director) => director.id === d.directorId);
+        return { ...d, directorName: dir?.fullName || "Unknown", directorAvatar: dir ? dir.fullName.split(/\s+/).map((part) => part[0]).join("").substring(0, 2).toUpperCase() : "-" };
+    }), [deposits, directors]);
 
-    const filterFn = useCallback((item: Deposit, query: string) =>
-        item.title.toLowerCase().includes(query.toLowerCase()) || item.shopName.toLowerCase().includes(query.toLowerCase())
-        , []);
+    const filterFn = useCallback((item: (typeof rows)[number], query: string) => {
+        const q = query.toLowerCase();
+        return [item.title, item.shopName, item.directorName].some((text) => text.toLowerCase().includes(q));
+    }, []);
 
-    const table = useTableManager<Deposit>(deposits, filterFn);
-    useEffect(() => { table.setData(deposits); }, [deposits]);
-
-    // Map director data into deposit records for table display
-    const mappedData = useMemo(() => {
-        return table.filteredData.map(d => {
-            const dir = directors.find(dir => dir.id === d.directorId);
-            return { ...d, directorName: dir?.name || "Unknown", directorAvatar: dir?.avatar || "-" };
-        });
-    }, [table.filteredData, directors]);
+    const table = useListControls(rows, filterFn);
 
     const activeEditRecord = useMemo(() => deposits.find((d) => d.id === retainedEditId) || null, [deposits, retainedEditId]);
 
@@ -44,12 +39,7 @@ export function useDepositManager() {
     const toggleColumn = (key: keyof typeof cols) => setCols((prev) => ({ ...prev, [key]: !prev[key] }));
     const showAllColumns = () => setCols({ director: true, shopName: true, title: true, date: true, contact: true, attachments: true, note: true, amount: true, createdBy: true });
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const paginatedData = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return mappedData.slice(start, start + itemsPerPage);
-    }, [mappedData, currentPage, itemsPerPage]);
+    const { currentPage, setCurrentPage, itemsPerPage, setItemsPerPage } = table;
 
     // Confirm Modal State
     const [confirmModal, setConfirmModal] = useState<{ isOpen: boolean; title: string; message: string; onConfirm: () => void; }>({
@@ -89,11 +79,11 @@ export function useDepositManager() {
     };
 
     const handleViewAttachment = (id: string) => {
-        toast.info("Viewing attachment...");
+        toast.info("Viewing attachment...", { id: `attachment-${id}` });
     };
 
     return {
-        activeDrawer, closeView, activeEditRecord, table: { ...table, paginatedData },
+        activeDrawer, closeView, activeEditRecord, isEditOpen, table,
         cols, showColumnsMenu, setShowColumnsMenu, toggleColumn, showAllColumns,
         activeNoteRowId, toggleNotePopover, closeNotePopover, currentPage, setCurrentPage,
         itemsPerPage, setItemsPerPage, handleEdit, handleDelete, handleBulkDelete, handleViewAttachment,

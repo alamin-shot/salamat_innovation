@@ -1,16 +1,6 @@
-import { StoreFinancialsView } from "@/components/features/settings/views/StoreFinancialsView";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function StoreFinancialsPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <StoreFinancialsView />
-        </Suspense>
-    );
+// Now a tab of the Settings hub; old links land on it.
+export default async function StoreFinancialsSettingsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/settings", searchParams, { tab: "store_financials" });
 }
-

@@ -1,25 +1,14 @@
 "use client";
 import * as React from "react";
+import { useSalesListManager } from "@/hooks/sales_hooks/useSalesListManager";
 import { SaleListTable } from "./SaleListTable";
 import { UpdateSellerModal } from "./UpdateSellerModal";
 import { ViewSaleDrawer } from "./ViewSaleDrawer";
 import { EditSaleDrawer } from "./EditSaleDrawer";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
-const initialData = [
-    { id: "3268", initials: "MT", customer: "Md Shakhiur Rahman Tamal", date: "2026-10-12", invoice: "PS-003268", items: 5, sCost: "120.00", total: "1,750.00", due: "1,750.00", received: "0.00", payment: "—", status: "Due", seller: "AV", courier: "Pending", color: "bg-emerald-600" },
-    { id: "3267", initials: "MM", customer: "Mainul Hasan Mahin", date: "2026-10-12", invoice: "PS-003267", items: 1, sCost: "0.00", total: "75,000.00", due: "0.00", received: "75,000.00", payment: "Cash", status: "Paid", seller: "Md Zihadul Islam Sazzad", courier: "—", color: "bg-emerald-500" },
-    { id: "3260", initials: "SR", customer: "SUFINEWAJ RAYHAN", date: "2026-10-10", invoice: "PS-003260", items: 1, sCost: "120.00", total: "13,600.00", due: "12,600.00", received: "1,000.00", payment: "SSLCommerz", status: "Partially_paid", seller: "AV", courier: "—", color: "bg-teal-600" },
-];
-
+/** Sale List, backed by useGlobalSalesStore (totals and status derived from each sale's ledger). */
 export function SalesClient() {
-    const { activeModal, activeDrawer, activeId, closeView, openView } = useCommandParams();
-    const [sales, setSales] = React.useState(initialData);
-
-    const handleUpdateSeller = (saleId: string, newSeller: string) => {
-        setSales(prev => prev.map(s => s.id === saleId ? { ...s, seller: newSeller } : s));
-        closeView();
-    };
+    const manager = useSalesListManager();
 
     return (
         <div className="flex flex-col w-full p-4">
@@ -28,32 +17,17 @@ export function SalesClient() {
             </div>
 
             <div className="w-full pb-12">
-                <SaleListTable
-                    sales={sales}
-                    setSales={setSales}
-                    onOpenSellerModal={(id) => openView("modal", "update-seller", id)}
-                />
+                <SaleListTable manager={manager} />
             </div>
 
             <UpdateSellerModal
-                saleId={activeId}
-                isOpen={activeModal === "update-seller"}
-                onClose={closeView}
-                onSave={handleUpdateSeller}
+                saleId={manager.sellerModalSaleId}
+                isOpen={manager.isSellerModalOpen}
+                onClose={manager.closeView}
+                onSave={manager.handleSellerSave}
             />
-
-            <ViewSaleDrawer
-                id={activeId}
-                isOpen={activeDrawer === "view-sale"}
-                onClose={closeView}
-            />
-
-
-            <EditSaleDrawer
-                id={activeId}
-                isOpen={activeDrawer === "edit-sale"}
-                onClose={closeView}
-            />
+            <ViewSaleDrawer sale={manager.viewed} isOpen={manager.isViewOpen} onClose={manager.closeView} />
+            <EditSaleDrawer sale={manager.editing} isOpen={manager.isEditOpen} onClose={manager.closeView} />
         </div>
     );
 }

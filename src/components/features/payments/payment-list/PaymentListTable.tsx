@@ -1,117 +1,72 @@
-import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
-import { FileText, Trash2 } from "lucide-react";
+import { Wallet, Trash2 } from "lucide-react";
+import { Table, TableHeader, TableBody, TableHeadCell } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import { Pagination } from "@/components/ui/Pagination";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
+import { PaymentListManagerType } from "@/hooks/finance_hooks/payments/usePaymentListManager";
 import { PaymentListToolbar } from "./PaymentListToolbar";
+import { PaymentListRow } from "./PaymentListRow";
 
-export function PaymentListTable({ manager }: { manager: any }) {
+const money = (amount: number) => `৳ ${amount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+export function PaymentListTable({ manager }: { manager: PaymentListManagerType }) {
     const { table, cols } = manager;
-
-    const formatCurrency = (amount: number) => `৳ ${amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
-
-    const getInitials = (name: string) => name.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase();
-
-    const getAvatarColor = (name: string) => {
-        const colors = ["bg-emerald-800", "bg-sky-800", "bg-indigo-800", "bg-rose-800", "bg-amber-700"];
-        return colors[name.length % colors.length];
-    };
+    const totalDebit = table.filteredData.reduce((sum, row) => sum + row.debit, 0);
+    const totalCredit = table.filteredData.reduce((sum, row) => sum + row.credit, 0);
 
     return (
-        <div className="flex flex-col w-full h-full relative bg-white">
+        <div className="relative flex w-full flex-col bg-white">
             <PaymentListToolbar manager={manager} />
 
-            <div className="overflow-x-auto custom-scrollbar flex-1 flex flex-col justify-between">
-                <Table>
-                    <TableHeader>
-                        <TableHeadCell className="w-12 text-center">
-                            <input
-                                type="checkbox"
-                                checked={table.isAllSelected}
-                                onChange={(e) => table.handleSelectAll(e.target.checked)}
-                                className="h-4 w-4 rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
-                            />
-                        </TableHeadCell>
-                        {cols.contact && <TableHeadCell className="min-w-[180px]">Contact</TableHeadCell>}
-                        {cols.businessName && <TableHeadCell>Business Name</TableHeadCell>}
-                        {cols.businessLogo && <TableHeadCell>Business Logo</TableHeadCell>}
-                        {cols.date && <TableHeadCell>Date</TableHeadCell>}
-                        {cols.invoiceNumber && <TableHeadCell>Invoice Number</TableHeadCell>}
-                        {cols.type && <TableHeadCell>Type</TableHeadCell>}
-                        {cols.debit && <TableHeadCell>Debit</TableHeadCell>}
-                        {cols.credit && <TableHeadCell>Credit</TableHeadCell>}
-                        <TableHeadCell className="text-right pr-4 min-w-[100px]">Action</TableHeadCell>
-                    </TableHeader>
+            {table.filteredData.length === 0 ? (
+                <div className="m-4 flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 p-12 text-center">
+                    <Wallet className="h-8 w-8 text-brand-subtext/60" />
+                    <h3 className="text-sm font-bold text-brand-text">No payments match</h3>
+                    <p className="text-xs text-brand-subtext">Change or clear the filters to see more records.</p>
+                </div>
+            ) : (
+                <div className="overflow-x-auto custom-scrollbar">
+                    <Table>
+                        <TableHeader>
+                            <TableHeadCell className="w-12 text-center">
+                                <input type="checkbox" checked={table.isAllSelected} onChange={(e) => table.handleSelectAll(e.target.checked)} className="h-4 w-4 cursor-pointer rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500" />
+                            </TableHeadCell>
+                            {cols.contact && <TableHeadCell className="min-w-[200px]">Contact</TableHeadCell>}
+                            {cols.businessName && <TableHeadCell>Business Name</TableHeadCell>}
+                            {cols.businessLogo && <TableHeadCell>Business Logo</TableHeadCell>}
+                            {cols.date && <TableHeadCell>Date</TableHeadCell>}
+                            {cols.invoiceNumber && <TableHeadCell>Payment / Invoice</TableHeadCell>}
+                            {cols.type && <TableHeadCell>Type</TableHeadCell>}
+                            {cols.debit && <TableHeadCell className="text-right">Debit</TableHeadCell>}
+                            {cols.credit && <TableHeadCell className="text-right">Credit</TableHeadCell>}
+                            <TableHeadCell className="min-w-[100px] pr-4 text-right">Action</TableHeadCell>
+                        </TableHeader>
+                        <TableBody>
+                            {table.paginatedData.map((row) => (
+                                <PaymentListRow
+                                    key={row.id}
+                                    row={row}
+                                    cols={cols}
+                                    isSelected={table.selectedIds.includes(row.id)}
+                                    onToggle={table.handleSelectRow}
+                                    onVoucher={manager.handleViewVoucher}
+                                    onDelete={manager.handleDelete}
+                                />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            )}
 
-                    <TableBody>
-                        {table.paginatedData.map((row: any) => (
-                            <TableRow key={row.id} className={table.selectedIds.includes(row.id) ? "bg-emerald-50/50" : ""}>
-                                <TableCell className="text-center">
-                                    <input
-                                        type="checkbox"
-                                        checked={table.selectedIds.includes(row.id)}
-                                        onChange={(e) => table.handleSelectRow(row.id, e.target.checked)}
-                                        className="h-4 w-4 rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
-                                    />
-                                </TableCell>
+            {/* Totals of everything the filters and search currently match. */}
+            {table.filteredData.length > 0 && (
+                <div className="flex flex-wrap items-center justify-end gap-6 border-t border-gray-100 bg-gray-50/60 px-4 py-3">
+                    <span className="text-sm text-gray-500">Total Debit <b className="ml-2 text-lg tabular-nums text-gray-900">{money(totalDebit)}</b></span>
+                    <span className="text-sm text-gray-500">Total Credit <b className="ml-2 text-lg tabular-nums text-gray-900">{money(totalCredit)}</b></span>
+                </div>
+            )}
 
-                                {cols.contact && (
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white ${getAvatarColor(row.contact)}`}>
-                                                {getInitials(row.contact)}
-                                            </div>
-                                            <span className="text-[13px] font-medium text-gray-800">{row.contact}</span>
-                                        </div>
-                                    </TableCell>
-                                )}
-
-                                {cols.businessName && <TableCell className="text-[13px] text-gray-600">{row.businessName}</TableCell>}
-
-                                {cols.businessLogo && (
-                                    <TableCell>
-                                        {row.businessLogo !== "-" ? (
-                                            <div className="flex h-6 w-6 items-center justify-center rounded bg-gray-900 text-[10px] font-bold text-amber-500">
-                                                {row.businessLogo}
-                                            </div>
-                                        ) : (
-                                            <span className="text-gray-400">—</span>
-                                        )}
-                                    </TableCell>
-                                )}
-
-                                {cols.date && <TableCell className="text-[13px] text-gray-600">{row.date}</TableCell>}
-                                {cols.invoiceNumber && <TableCell className="text-[13px] text-gray-600">{row.invoiceNumber}</TableCell>}
-
-                                {cols.type && (
-                                    <TableCell>
-                                        <span className={`inline-flex rounded px-2.5 py-0.5 text-[11px] font-medium ${row.type === "payment received" ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-700"
-                                            }`}>
-                                            {row.type}
-                                        </span>
-                                    </TableCell>
-                                )}
-
-                                {cols.debit && <TableCell className="text-[13px] text-gray-700">{formatCurrency(row.debit)}</TableCell>}
-                                {cols.credit && <TableCell className="text-[13px] text-gray-700">{formatCurrency(row.credit)}</TableCell>}
-
-                                {/* Action Column: Strictly Voucher & Delete */}
-                                <TableCell className="text-right pr-4">
-                                    <div className="flex items-center justify-end gap-1">
-                                        <Button type="button" variant="ghost" size="icon-sm" onClick={() => manager.handleViewVoucher(row.id)} className="text-blue-600 hover:bg-blue-50 rounded-md" title="Debit Voucher">
-                                            <FileText className="h-4 w-4" />
-                                        </Button>
-                                        <Button type="button" variant="destructive-ghost" size="icon-sm" onClick={() => manager.handleDelete(row.id)} className="text-brand-subtext rounded-md" title="Delete">
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <Pagination />
-            </div>
+            <Pagination currentPage={table.currentPage} totalPages={table.totalPages} onPageChange={table.setCurrentPage} itemsPerPage={table.itemsPerPage} onItemsPerPageChange={table.setItemsPerPage} />
 
             <BulkActionBar selectedCount={table.selectedIds.length} onClearSelection={table.clearSelection}>
                 <Button type="button" variant="destructive-ghost" size="sm" onClick={manager.handleBulkDelete} className="gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-red-400 hover:bg-white/10 hover:text-red-300">

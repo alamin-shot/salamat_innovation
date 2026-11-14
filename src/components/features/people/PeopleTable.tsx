@@ -1,3 +1,4 @@
+import { PeopleManager } from "@/hooks/people_hooks/usePeopleManager";
 import { Table, TableHeader, TableBody, TableRow, TableHeadCell, TableCell } from "@/components/ui/Table";
 import { Eye, Edit, Trash2, History } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -6,8 +7,9 @@ import { Pagination } from "@/components/ui/Pagination";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
 import { PeopleToolbar } from "./PeopleToolbar";
 import { InlineNoteCell, InlinePriceDocCell, InlineAddressCell } from "./PeopleInlineCells";
+import { formatAbsolute, formatRelative } from "@/utils/dateDisplay";
 
-export function PeopleTable({ manager }: { manager: any }) {
+export function PeopleTable({ manager }: { manager: PeopleManager }) {
     const { table, cols } = manager;
 
     const getTypeSelectStyle = (type: string) => {
@@ -53,7 +55,7 @@ export function PeopleTable({ manager }: { manager: any }) {
                         {cols.rating && <TableHeadCell>Rating</TableHeadCell>}
                         {cols.note && <TableHeadCell>Note</TableHeadCell>}
                         {cols.priceDocument && <TableHeadCell className="min-w-[140px]">Price Document</TableHeadCell>}
-                        {cols.history && <TableHeadCell>History</TableHeadCell>}
+                        {cols.lifecycle && <TableHeadCell>Lifecycle</TableHeadCell>}
                         {cols.createdAt && <TableHeadCell className="min-w-[110px]">Created at</TableHeadCell>}
                         {cols.dateOfBirth && <TableHeadCell className="min-w-[110px]">Date of Birth</TableHeadCell>}
                         {cols.gender && <TableHeadCell>Gender</TableHeadCell>}
@@ -61,7 +63,7 @@ export function PeopleTable({ manager }: { manager: any }) {
                     </TableHeader>
 
                     <TableBody>
-                        {table.paginatedData.map((row: any) => (
+                        {table.paginatedData.map((row) => (
                             <TableRow
                                 key={row.id}
                                 className={table.selectedIds.includes(row.id) ? "bg-emerald-50/50" : ""}
@@ -89,16 +91,15 @@ export function PeopleTable({ manager }: { manager: any }) {
                                     </TableCell>
                                 )}
 
-                                {/* Type Dropdown via CustomSelect */}
+                                {/* Type: set once by the creating context, shown read-only */}
                                 {cols.type && (
                                     <TableCell>
-                                        <CustomSelect
-                                            size="sm"
-                                            value={row.type}
-                                            onChange={(val) => manager.handleTypeChange(row.id, val)}
-                                            options={["Online Customer", "Offline Customer", "Supplier"]}
-                                            triggerClassName={getTypeSelectStyle(row.type)}
-                                        />
+                                        <span
+                                            title="Type is set when the person is created and cannot be changed"
+                                            className={`inline-flex h-7 items-center rounded-full border px-2.5 text-[11px] font-medium ${getTypeSelectStyle(row.type)}`}
+                                        >
+                                            {row.type}
+                                        </span>
                                     </TableCell>
                                 )}
 
@@ -108,7 +109,7 @@ export function PeopleTable({ manager }: { manager: any }) {
                                         <CustomSelect
                                             size="sm"
                                             value={row.status}
-                                            onChange={(val) => manager.handleStatusChange(row.id, val)}
+                                            onChange={(val) => manager.handleStatusChange(row.id, val === "Inactive" ? "Inactive" : "Active")}
                                             options={["Active", "Inactive"]}
                                             triggerClassName={`min-w-[95px] ${getStatusSelectStyle(row.status)}`}
                                         />
@@ -195,25 +196,25 @@ export function PeopleTable({ manager }: { manager: any }) {
                                     </TableCell>
                                 )}
 
-                                {/* History Quick Button */}
-                                {cols.history && (
+                                {/* Lifecycle Quick Button: opens the detail drawer on the Lifecycle tab */}
+                                {cols.lifecycle && (
                                     <TableCell>
                                         <Button
                                             type="button"
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => manager.handleViewHistory(row.id)}
+                                            onClick={() => manager.handleViewLifecycle(row.id)}
                                             className="h-7 gap-1 rounded-md border-gray-200 bg-gray-50 px-2 py-1 text-[11px] font-medium text-gray-600 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
                                         >
                                             <History className="h-3 w-3" />
-                                            <span>History</span>
+                                            <span>Lifecycle</span>
                                         </Button>
                                     </TableCell>
                                 )}
 
                                 {cols.createdAt && (
                                     <TableCell className="text-[13px] text-gray-500 whitespace-nowrap">
-                                        {row.createdAt}
+                                        <span title={formatAbsolute(row.createdAt)} suppressHydrationWarning>{formatRelative(row.createdAt)}</span>
                                     </TableCell>
                                 )}
 
@@ -265,7 +266,13 @@ export function PeopleTable({ manager }: { manager: any }) {
                     </TableBody>
                 </Table>
 
-                <Pagination />
+                <Pagination
+                    currentPage={manager.currentPage}
+                    totalPages={manager.totalPages}
+                    onPageChange={manager.setCurrentPage}
+                    itemsPerPage={manager.itemsPerPage}
+                    onItemsPerPageChange={manager.setItemsPerPage}
+                />
             </div>
 
             <BulkActionBar

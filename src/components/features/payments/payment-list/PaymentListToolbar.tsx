@@ -1,64 +1,62 @@
-import { Search, Filter, Columns } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { SectionFilterBar } from "@/components/ui/SectionFilterBar";
+import { ColumnsVisibilityDropdown } from "@/components/ui/ColumnsVisibilityDropdown";
+import { PaymentListManagerType } from "@/hooks/finance_hooks/payments/usePaymentListManager";
+import { PaymentDirection } from "@/types/payments";
+import { PAYMENT_TYPE_OPTIONS } from "@/constants/payments";
 
-export function PaymentListToolbar({ manager }: { manager: any }) {
-    const { table, cols } = manager;
+const COLUMN_LABELS = [
+    { key: "contact", label: "Contact" },
+    { key: "businessName", label: "Business Name" },
+    { key: "businessLogo", label: "Business Logo" },
+    { key: "date", label: "Date" },
+    { key: "invoiceNumber", label: "Payment / Invoice" },
+    { key: "type", label: "Type" },
+    { key: "debit", label: "Debit" },
+    { key: "credit", label: "Credit" },
+];
+
+const toDirection = (value: string): PaymentDirection | "" => (value === "payment sent" || value === "payment received" ? value : "");
+
+/** Search plus Type, Contact, Date and Amount filters; every filter lives in the manager hook. */
+export function PaymentListToolbar({ manager }: { manager: PaymentListManagerType }) {
+    const { table, filters } = manager;
 
     return (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-brand-subtext/20 bg-white px-4 py-3">
-            <div className="relative w-full sm:w-64">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Search className="h-4 w-4 text-brand-subtext" />
-                </div>
-                <input
-                    type="text"
-                    placeholder="Search"
-                    value={table.searchQuery}
-                    onChange={(e) => table.setSearchQuery(e.target.value)}
-                    className="w-full rounded-md border border-brand-subtext/30 bg-white py-2 pl-10 pr-4 text-sm text-brand-text focus:border-emerald-500 focus:outline-none"
-                />
-            </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <Button type="button" variant="outline" className="gap-2 rounded-md border-brand-subtext/30 bg-white text-brand-text hover:bg-brand-bg">
-                    <Filter className="h-4 w-4 text-brand-subtext" /> Filter
-                </Button>
-
-                <div className="relative">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => manager.setShowColumnsMenu(!manager.showColumnsMenu)}
-                        className="gap-2 rounded-md border-brand-subtext/30 bg-white text-brand-text hover:bg-brand-bg"
-                    >
-                        <Columns className="h-4 w-4 text-brand-subtext" /> Columns
-                    </Button>
-
-                    {manager.showColumnsMenu && (
-                        <>
-                            <div className="fixed inset-0 z-10" onClick={() => manager.setShowColumnsMenu(false)} />
-                            <div className="absolute right-0 mt-2 w-48 z-20 rounded-lg border border-brand-subtext/20 bg-white p-2 shadow-xl animate-in fade-in zoom-in-95">
-                                <div className="flex flex-col gap-1.5 mb-2">
-                                    {Object.entries(cols).map(([key, isVisible]) => (
-                                        <label key={key} className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-brand-bg rounded-md">
-                                            <input
-                                                type="checkbox"
-                                                checked={Boolean(isVisible)}
-                                                onChange={() => manager.toggleColumn(key)}
-                                                className="rounded border-brand-subtext/30 text-emerald-600 focus:ring-emerald-500"
-                                            />
-                                            <span className="text-xs text-brand-text capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                                <Button type="button" variant="success" size="sm" onClick={manager.showAllColumns} className="w-full rounded-md font-bold">
-                                    Show All
-                                </Button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </div>
+        <div className="border-b border-brand-subtext/20 bg-white">
+            <SectionFilterBar
+                searchQuery={table.searchQuery}
+                onSearchChange={table.setSearchQuery}
+                searchPlaceholder="Search contact, payment no., invoice or method"
+                filters={[
+                    {
+                        key: "type",
+                        label: "Type",
+                        options: PAYMENT_TYPE_OPTIONS,
+                        value: filters.type,
+                        onChange: (value) => manager.setFilter("type", toDirection(value)),
+                    },
+                    {
+                        key: "party",
+                        label: "Contact",
+                        options: manager.partyOptions,
+                        value: filters.party,
+                        onChange: (value) => manager.setFilter("party", value),
+                    },
+                ]}
+                dateFilter={{ label: "Date", value: filters.date, onChange: (value) => manager.setFilter("date", value) }}
+                amountFilter={{ label: "Amount", value: filters.amount, onChange: (value) => manager.setFilter("amount", value) }}
+                activeFilterCount={manager.activeFilterCount}
+                onClearAll={manager.clearFilters}
+                resultCount={table.filteredData.length}
+                actions={
+                    <ColumnsVisibilityDropdown
+                        columns={COLUMN_LABELS}
+                        visibleColumns={manager.cols}
+                        onToggleColumn={manager.toggleColumn}
+                        onReset={manager.showAllColumns}
+                    />
+                }
+            />
         </div>
     );
 }

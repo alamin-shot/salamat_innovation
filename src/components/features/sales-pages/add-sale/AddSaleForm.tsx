@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/Button";
 import { useAddSaleManager } from "@/hooks/sales_hooks/useAddSaleManager";
+import { QuickAddPersonDrawer } from "@/components/features/people/quick-add/QuickAddPersonDrawer";
 import { SaleTopSection } from "./SaleTopSection";
 import { SaleQueueSection } from "./SaleQueueSection";
 import { SaleSummarySection } from "./SaleSummarySection";
@@ -18,6 +19,15 @@ export function AddSaleForm() {
             <SaleTopSection manager={manager} />
             <SaleQueueSection manager={manager} />
             <SaleSummarySection manager={manager} />
+
+            {/* POS "Add Customer": always an Offline Customer; selected as soon as it is saved. */}
+            <QuickAddPersonDrawer
+                origin="pos_add_customer"
+                title="Add Customer"
+                isOpen={manager.isAddCustomerOpen}
+                onClose={manager.closeAddCustomer}
+                onCreated={manager.handleCustomerCreated}
+            />
 
             <div className="flex justify-end pt-4 mt-2 border-t border-gray-100">
                 <Button variant="success" onClick={manager.handleSaveSale} className="px-10">

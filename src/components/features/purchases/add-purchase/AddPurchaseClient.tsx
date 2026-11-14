@@ -1,12 +1,6 @@
-"use client";
-import * as React from "react";
 import { AddPurchaseForm } from "./AddPurchaseForm";
-import { AddSupplierModal } from "./AddSupplierModal";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
 
 export function AddPurchaseClient() {
-    const { activeModal, closeView } = useCommandParams();
-
     return (
         <div className="flex flex-col w-full p-4">
             <div className="mb-6">
@@ -16,11 +10,6 @@ export function AddPurchaseClient() {
             <div className="w-full pb-12">
                 <AddPurchaseForm />
             </div>
-
-            <AddSupplierModal
-                isOpen={activeModal === "add-supplier"}
-                onClose={closeView}
-            />
         </div>
     );
 }

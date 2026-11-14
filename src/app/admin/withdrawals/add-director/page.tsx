@@ -1,15 +1,6 @@
-import { AddDirectorClient } from "@/components/features/withdrawals/add-director/AddDirectorClient";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
-export default function AddDirectorPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <AddDirectorClient />
-        </Suspense>
-    );
+// The Withdrawals director list was merged into Directors (one director store).
+export default function Page() {
+  redirect("/admin/directors/create-directors");
 }

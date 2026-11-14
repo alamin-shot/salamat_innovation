@@ -1,10 +1,8 @@
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { PeopleFormManager } from "@/hooks/people_hooks/usePeopleFormManager";
+import { PEOPLE_AREAS, PEOPLE_COUNTRIES, PEOPLE_DISTRICTS } from "@/constants/people";
 
-export function PeopleAddressFields({ manager }: { manager: any }) {
-    const countries = ["Bangladesh"];
-    const districts = ["Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna"];
-    const areas = ["Bashundhara", "Dhanmondi", "Gulshan", "Mirpur", "Uttara", "Banani"];
-
+export function PeopleAddressFields({ manager }: { manager: PeopleFormManager }) {
     return (
         <div className="flex flex-col gap-5 pt-2">
             <h3 className="text-sm font-bold text-gray-800">Address</h3>
@@ -16,7 +14,7 @@ export function PeopleAddressFields({ manager }: { manager: any }) {
                     <CustomSelect
                         value={manager.country}
                         onChange={manager.setCountry}
-                        options={countries}
+                        options={PEOPLE_COUNTRIES}
                         placeholder="Choose a Country"
                     />
                 </div>
@@ -25,7 +23,7 @@ export function PeopleAddressFields({ manager }: { manager: any }) {
                     <CustomSelect
                         value={manager.district}
                         onChange={manager.setDistrict}
-                        options={districts}
+                        options={PEOPLE_DISTRICTS}
                         placeholder="Select District"
                     />
                 </div>
@@ -34,7 +32,7 @@ export function PeopleAddressFields({ manager }: { manager: any }) {
                     <CustomSelect
                         value={manager.area}
                         onChange={manager.setArea}
-                        options={areas}
+                        options={PEOPLE_AREAS}
                         placeholder="Select Area"
                     />
                 </div>

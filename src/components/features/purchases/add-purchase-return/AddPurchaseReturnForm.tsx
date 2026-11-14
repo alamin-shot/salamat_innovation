@@ -3,7 +3,7 @@ import * as React from "react";
 import { useAddPurchaseReturnManager } from "@/hooks/purchases_hooks/useAddPurchaseReturnManager";
 import { ReturnTopSection } from "./ReturnTopSection";
 import { ReturnQueueSection } from "./ReturnQueueSection";
-import { ReturnSummarySection } from "./ReturnSummarySection";
+import { PurchaseCostingSummary } from "../shared/PurchaseCostingSummary";
 
 export function AddPurchaseReturnForm() {
 
@@ -14,7 +14,7 @@ export function AddPurchaseReturnForm() {
 
             <ReturnTopSection manager={manager} />
             <ReturnQueueSection manager={manager} />
-            <ReturnSummarySection manager={manager} />
+            <PurchaseCostingSummary costing={manager.costing} totals={manager.totals} onChange={manager.updateCosting} discountLabel="Deduction" totalLabel="Total Refund" />
 
             <div className="flex justify-end pt-4 mt-2">
                 <button

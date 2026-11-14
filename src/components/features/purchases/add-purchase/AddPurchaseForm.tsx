@@ -3,7 +3,8 @@ import * as React from "react";
 import { useAddPurchaseManager } from "@/hooks/purchases_hooks/useAddPurchaseManager";
 import { PurchaseTopSection } from "./PurchaseTopSection";
 import { PurchaseQueueSection } from "./PurchaseQueueSection";
-import { PurchaseSummarySection } from "./PurchaseSummarySection";
+import { PurchaseCostingSummary } from "../shared/PurchaseCostingSummary";
+import { AddSupplierModal } from "./AddSupplierModal";
 
 import { Button } from "@/components/ui/Button";
 
@@ -15,7 +16,8 @@ export function AddPurchaseForm() {
 
             <PurchaseTopSection manager={manager} />
             <PurchaseQueueSection manager={manager} />
-            <PurchaseSummarySection manager={manager} />
+            <PurchaseCostingSummary costing={manager.costing} totals={manager.totals} onChange={manager.updateCosting} />
+            <AddSupplierModal isOpen={manager.isAddSupplierOpen} onClose={manager.closeAddSupplier} onCreated={manager.handleSupplierCreated} />
 
             <div className="flex justify-end pt-4 mt-2">
                 <Button

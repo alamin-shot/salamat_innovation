@@ -9,7 +9,7 @@ export default function AddPurchaseReturnPage() {
                 <Loader />
             </div>
         }>
-            <AddPurchaseReturnForm />;
+            <AddPurchaseReturnForm />
 
         </Suspense>
     )

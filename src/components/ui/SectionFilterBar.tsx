@@ -3,7 +3,8 @@ import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { FilterDropdown } from "@/components/ui/FilterDropdown";
 import { DateRangeFilter, formatDateRangeLabel } from "@/components/ui/DateRangeFilter";
-import { SectionDateFilter, SectionFilterChip } from "@/types/ui";
+import { AmountRangeFilter, formatAmountRangeLabel } from "@/components/ui/AmountRangeFilter";
+import { SectionAmountFilter, SectionDateFilter, SectionFilterChip } from "@/types/ui";
 
 // Filter bar for tables with many filters (Products and Barcodes sections).
 // Never scrolls sideways: chips wrap onto new lines, active choices show as
@@ -16,6 +17,8 @@ interface SectionFilterBarProps {
     searchPlaceholder?: string;
     filters: SectionFilterChip[];
     dateFilter?: SectionDateFilter;
+    /** Optional min / max amount chip. */
+    amountFilter?: SectionAmountFilter;
     /** Active dropdowns + date range (search is shown separately). */
     activeFilterCount: number;
     onClearAll: () => void;
@@ -50,6 +53,7 @@ export function SectionFilterBar({
     searchPlaceholder = "Search...",
     filters,
     dateFilter,
+    amountFilter,
     activeFilterCount,
     onClearAll,
     resultCount,
@@ -57,10 +61,11 @@ export function SectionFilterBar({
 }: SectionFilterBarProps) {
     const [isMobileOpen, setIsMobileOpen] = React.useState(false);
 
-    const chipCount = filters.length + (dateFilter ? 1 : 0);
+    const chipCount = filters.length + (dateFilter ? 1 : 0) + (amountFilter ? 1 : 0);
     const isInline = chipCount <= INLINE_CHIP_LIMIT;
     const trimmedSearch = searchQuery.trim();
     const hasDate = Boolean(dateFilter && (dateFilter.value.from || dateFilter.value.to));
+    const hasAmount = Boolean(amountFilter && (amountFilter.value.min !== null || amountFilter.value.max !== null));
     const hasActive = activeFilterCount > 0 || trimmedSearch !== "";
 
     const chips = chipCount === 0 ? null : (
@@ -78,6 +83,11 @@ export function SectionFilterBar({
             {dateFilter && (
                 <div className="shrink-0 whitespace-nowrap">
                     <DateRangeFilter label={dateFilter.label} value={dateFilter.value} onChange={dateFilter.onChange} />
+                </div>
+            )}
+            {amountFilter && (
+                <div className="shrink-0 whitespace-nowrap">
+                    <AmountRangeFilter label={amountFilter.label} value={amountFilter.value} onChange={amountFilter.onChange} />
                 </div>
             )}
         </div>
@@ -150,6 +160,13 @@ export function SectionFilterBar({
                             label={dateFilter.label}
                             value={formatDateRangeLabel(dateFilter.value)}
                             onRemove={() => dateFilter.onChange({ from: null, to: null })}
+                        />
+                    )}
+                    {amountFilter && hasAmount && (
+                        <ActivePill
+                            label={amountFilter.label}
+                            value={formatAmountRangeLabel(amountFilter.value)}
+                            onRemove={() => amountFilter.onChange({ min: null, max: null })}
                         />
                     )}
                     <div className="ml-auto flex items-center gap-3">

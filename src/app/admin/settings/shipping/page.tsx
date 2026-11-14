@@ -1,16 +1,6 @@
-import { ShippingGlobalView } from "@/components/features/settings/views/ShippingGlobalView";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function ShippingSettingsPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <ShippingGlobalView />
-        </Suspense>
-    );
+// Now a tab of the Settings hub; old links land on it.
+export default async function ShippingSettingsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/settings", searchParams, { tab: "shipping" });
 }
-

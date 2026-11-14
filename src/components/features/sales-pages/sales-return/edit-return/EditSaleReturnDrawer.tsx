@@ -1,37 +1,24 @@
 "use client";
 import * as React from "react";
 import { Drawer } from "@/components/ui/Drawer";
-import { Button } from "@/components/ui/Button";
-import { useSaleReturnManager } from "@/hooks/sales_hooks/useSaleReturnManager";
-import { ReturnTopSection } from "./ReturnTopSection";
-import { ReturnQueueSection } from "./ReturnQueueSection";
-import { ReturnSummarySection } from "./ReturnSummarySection";
+import { useSaleReturnForm } from "@/hooks/sales_hooks/useSaleReturnForm";
+import { SaleReturn } from "@/types/sales";
+import { SaleReturnEditor } from "../../return-editor/SaleReturnEditor";
 
-export function EditSaleReturnDrawer({ id, isOpen, onClose }: { id: string | null, isOpen: boolean, onClose: () => void }) {
-    const manager = useSaleReturnManager();
+function EditSaleReturnBody({ record, onDone }: { record: SaleReturn; onDone: () => void }) {
+    const form = useSaleReturnForm(record, onDone);
+    return <SaleReturnEditor form={form} />;
+}
 
-    if (!id && !isOpen) return null;
-
+/** Edit Sale Return: same editor and rules as Add; the customer stays the return's own customer. */
+export function EditSaleReturnDrawer({ record, isOpen, onClose }: { record: SaleReturn | null; isOpen: boolean; onClose: () => void }) {
     return (
-        <Drawer
-            title={`Update Sale Return`}
-            isOpen={isOpen}
-            onClose={onClose}
-            width="w-full max-w-none lg:w-[calc(100vw-280px)]"
-        >
-            <div className="p-4 bg-gray-50/50 min-h-full pb-12">
-                <div className="flex flex-col gap-8 bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100">
-                    <ReturnTopSection manager={manager} />
-                    <ReturnQueueSection manager={manager} />
-                    <ReturnSummarySection manager={manager} />
-
-                    <div className="flex justify-end pt-4 mt-2">
-                        <Button variant="success" onClick={manager.handleSave} className="px-8">
-                            Save
-                        </Button>
-                    </div>
+        <Drawer title={record ? `Update Sale Return ${record.returnNumber}` : "Update Sale Return"} isOpen={isOpen} onClose={onClose} width="w-full sm:w-[calc(100vw-260px)]">
+            {record && (
+                <div className="pb-32">
+                    <EditSaleReturnBody key={record.id} record={record} onDone={onClose} />
                 </div>
-            </div>
+            )}
         </Drawer>
     );
 }

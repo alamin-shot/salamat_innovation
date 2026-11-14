@@ -20,15 +20,15 @@ export function NewsClient() {
     };
 
     return (
-        <div className="flex flex-col w-full h-full gap-2 p-4">
-            <div className="flex justify-between items-center">
-                <h1 className="text-xl font-bold text-gray-900">News</h1>
+        // News spoke of the News & Vlog hub: the hub supplies the title and the page scrolls.
+        <div className="flex flex-col w-full gap-2">
+            <div className="flex justify-end items-center">
                 <Button variant="success" onClick={manager.openAddDrawer} className="h-9 px-4 gap-2">
                     <Plus className="h-4 w-4" /> Add News
                 </Button>
             </div>
 
-            <div className="flex-1 erp-card flex flex-col bg-white overflow-hidden">
+            <div className="erp-card flex flex-col bg-white overflow-hidden">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                     <input
                         type="text"

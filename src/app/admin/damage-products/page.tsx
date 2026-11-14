@@ -1,15 +1,6 @@
-import { DamageProductClient } from "@/components/features/damage-product/DamageProductClient";
-import { Loader } from "@/components/shared/loader/Loader";
-import { Suspense } from "react";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function DamageProductsPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <DamageProductClient />
-        </Suspense>
-    )
+// Moved into the Operations hub; old links land on the matching tab.
+export default async function DamageProductsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/operations", searchParams, { tab: "damage_products" });
 }

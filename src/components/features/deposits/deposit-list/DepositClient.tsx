@@ -15,6 +15,7 @@ export function DepositClient() {
                 <DepositTable manager={manager} />
             </div>
             <DepositFormDrawer
+                key={manager.activeEditRecord?.id ?? "none"}
                 initialRecord={manager.activeEditRecord}
                 isOpen={manager.activeDrawer === "edit-deposit"}
                 onClose={manager.closeView}

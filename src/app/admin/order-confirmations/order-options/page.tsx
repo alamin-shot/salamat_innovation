@@ -1,15 +1,6 @@
-import { OrderOptionsClient } from "@/components/features/order-confirmations/order-options/OrderOptionsClient";
-import { Suspense } from "react";
-import { Loader } from "@/components/shared/loader/Loader";
+import { redirectToHub, PageSearchParams } from "@/utils/hubRedirect";
 
-export default function OrderOptionsPage() {
-    return (
-        <Suspense fallback={
-            <div className="flex h-screen items-center justify-center">
-                <Loader />
-            </div>
-        }>
-            <OrderOptionsClient />
-        </Suspense>
-    );
+// Moved into the Orders hub; old links land on the matching tab.
+export default async function OrderOptionsRedirect({ searchParams }: { searchParams: PageSearchParams }) {
+    return redirectToHub("/admin/orders", searchParams, { tab: "order_options" });
 }

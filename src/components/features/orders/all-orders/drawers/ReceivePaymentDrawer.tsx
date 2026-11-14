@@ -1,23 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { OrderManagerType } from "@/hooks/order_hooks/useOrderManager";
 import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui/Button";
+import { usePostOrderPayment } from "@/hooks/finance_hooks/payments/usePostOrderPayment";
 
 export function ReceivePaymentDrawer({ manager }: { manager: OrderManagerType }) {
     const order = manager.getActiveOrder();
-    const [amount, setAmount] = useState<string>("");
-
-    // Reset amount when a new order is opened
-    useEffect(() => {
-        if (order) setAmount(order.dueAmount.toString());
-    }, [order]);
+    // Starts at the order's due; the parent remounts this drawer for each order it opens.
+    const [amount, setAmount] = useState<string>(() => (order ? order.dueAmount.toString() : ""));
+    const postOrderPayment = usePostOrderPayment();
 
     if (!order) return null;
 
     const handleSave = () => {
         const val = parseFloat(amount);
         if (!isNaN(val) && val > 0) {
+            // The ledger reads Payment records; the order keeps its own due for the Orders screens.
+            if (postOrderPayment(order, val)) return;
             manager.store.receivePayment(order.id, val);
             manager.closeDrawer();
         }

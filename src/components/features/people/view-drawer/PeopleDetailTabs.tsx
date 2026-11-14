@@ -10,11 +10,17 @@ import {
     Phone,
     Mail,
     Calendar,
+    History,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { PersonRecord } from "@/types/people";
+import { PersonLifecycle } from "@/types/personLifecycle";
+import { formatAbsolute, formatRelative } from "@/utils/dateDisplay";
+import { PersonLifecycleTimeline } from "./PersonLifecycleTimeline";
 
 const TABS = [
     { id: "overview", label: "Overview", icon: User },
+    { id: "lifecycle", label: "Lifecycle", icon: History },
     { id: "address", label: "Address Book", icon: MapPin },
     { id: "elite", label: "Elite Histories", icon: Star },
     { id: "bag", label: "Shopping Bag", icon: ShoppingBag },
@@ -26,10 +32,12 @@ const TABS = [
 
 export function PeopleDetailTabs({
     person,
+    lifecycle,
     activeTab,
     onTabChange,
 }: {
-    person: any;
+    person: PersonRecord;
+    lifecycle: PersonLifecycle | null;
     activeTab: string;
     onTabChange: (tabId: string) => void;
 }) {
@@ -127,12 +135,14 @@ export function PeopleDetailTabs({
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-bold uppercase text-gray-400">Joined</span>
-                                    <span className="text-xs font-semibold text-gray-800">{person.createdAt}</span>
+                                    <span className="text-xs font-semibold text-gray-800" title={formatAbsolute(person.createdAt)} suppressHydrationWarning>{formatRelative(person.createdAt)}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            ) : activeTab === "lifecycle" ? (
+                <PersonLifecycleTimeline lifecycle={lifecycle} />
             ) : (
                 <div className="rounded-xl border border-gray-100 bg-white p-10 text-center text-sm text-gray-400 shadow-sm">
                     No records found in {TABS.find((t) => t.id === activeTab)?.label}.

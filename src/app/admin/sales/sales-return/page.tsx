@@ -9,7 +9,7 @@ export default function SalesReturnPage() {
                 <Loader />
             </div>
         }>
-            <SaleReturnClient />;
+            <SaleReturnClient />
 
         </Suspense>
     )

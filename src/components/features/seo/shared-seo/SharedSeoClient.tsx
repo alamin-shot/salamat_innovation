@@ -6,16 +6,14 @@ import { SharedSeoToolbar } from "./SharedSeoToolbar";
 import { SharedSeoFormDrawer } from "./SharedSeoFormDrawer";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { BulkActionBar } from "@/components/ui/BulkActionBar";
-import { SeoPlatform } from "@/store/useSeoStore";
-import { useCommandParams } from "@/hooks/shared_hooks/useCommandParams";
+import { SeoPlatform, SeoTabType } from "@/store/useSeoStore";
 import { FileText, Package, FolderTree, Tag, Trash2 } from "lucide-react";
 
 export function SharedSeoClient({ platform }: { platform: SeoPlatform }) {
     const manager = useSharedSeoManager(platform);
     const form = useSharedSeoForm(platform, manager.currentTab, manager.activeEditRecord, manager.closeView);
-    const { setTab } = useCommandParams();
 
-    const tabs = [
+    const tabs: { id: SeoTabType; label: string; icon: typeof FileText }[] = [
         { id: "pages", label: "Pages", icon: FileText },
         { id: "products", label: "Products", icon: Package },
         { id: "categories", label: "Categories", icon: FolderTree },
@@ -23,10 +21,9 @@ export function SharedSeoClient({ platform }: { platform: SeoPlatform }) {
     ];
 
     return (
-        <div className="flex flex-col w-full h-full gap-2">
-            <h1 className="text-xl font-bold text-gray-900 capitalize">{platform} Pages</h1>
-
-            <div className="flex flex-col md:flex-row gap-2 h-full">
+        // Page Metadata spoke of the SEO hub (the hub header shows the platform switch).
+        <div className="flex flex-col w-full gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
                 <div className="w-full md:w-64 shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 p-4 h-fit">
                     <nav className="flex flex-col gap-1">
                         {tabs.map((tab) => {
@@ -35,7 +32,7 @@ export function SharedSeoClient({ platform }: { platform: SeoPlatform }) {
                             return (
                                 <button
                                     key={tab.id}
-                                    onClick={() => setTab(tab.id)}
+                                    onClick={() => manager.setSection(tab.id)}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-emerald-50 text-emerald-700" : "text-gray-600 hover:bg-gray-50"
                                         }`}
                                 >

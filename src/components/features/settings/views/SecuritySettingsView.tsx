@@ -16,7 +16,7 @@ export function SecuritySettingsView() {
     if (!isMounted) return null;
 
     return (
-        <div className="flex flex-col h-full w-full bg-gray-50/50">
+        <div className="flex flex-col w-full rounded-xl border border-brand-subtext/15 bg-gray-50/50">
             <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center gap-4 shrink-0">
                 <Link href="/admin/settings" className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-500 hover:bg-brand-primary hover:text-white transition-colors"><ArrowLeft className="w-4 h-4" /></Link>
                 <div>
@@ -25,7 +25,7 @@ export function SecuritySettingsView() {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-8 pb-32">
+            <div className="p-6 lg:p-8 pb-32">
                 <div className="max-w-3xl mx-auto flex flex-col gap-6">
 
                     <div className="erp-card bg-white p-6 border border-rose-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">

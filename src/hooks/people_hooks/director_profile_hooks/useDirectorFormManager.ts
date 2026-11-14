@@ -1,49 +1,59 @@
-"use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { useDirectorProfileStore, DirectorProfile } from "./useDirectorProfileStore";
+import { useGlobalDirectorsStore } from "@/store/useGlobalDirectorsStore";
+import { DirectorProfile } from "@/types/directors";
+import { DIRECTOR_ERRORS } from "@/constants/directors";
+import { PEOPLE_IMAGE_MAX_BYTES, PEOPLE_IMAGE_MAX_EDGE } from "@/constants/people";
+import { ImageReadError, readImageAsDataUrl } from "@/utils/imageFiles";
 
-export function useDirectorFormManager(initialRecord?: DirectorProfile | null, onClose?: () => void) {
-    const { updateProfile } = useDirectorProfileStore();
+const IMAGE_ERRORS: Record<ImageReadError, string> = {
+    not_image: "Please choose an image file.",
+    too_large: "Image is larger than 2MB.",
+    unreadable: "This image could not be read.",
+};
 
-    const [fullName, setFullName] = useState("");
-    const [title, setTitle] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
+/**
+ * Create Directors page and Edit Profile drawer. On edit the password field starts empty and is only
+ * changed when something is typed. Mount with a key per director so each opening starts fresh.
+ */
+export function useDirectorFormManager(existing: DirectorProfile | null, onSaved: (director: DirectorProfile) => void) {
+    const addDirector = useGlobalDirectorsStore((state) => state.addDirector);
+    const updateDirector = useGlobalDirectorsStore((state) => state.updateDirector);
+
+    const [fullName, setFullName] = useState(existing?.fullName ?? "");
+    const [title, setTitle] = useState(existing?.title ?? "");
+    const [email, setEmail] = useState(existing?.email ?? "");
+    const [phone, setPhone] = useState(existing?.phone ?? "");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [avatar, setAvatar] = useState<string | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(existing?.avatarUrl ?? null);
 
-    useEffect(() => {
-        if (initialRecord) {
-            setFullName(initialRecord.fullName);
-            setTitle(initialRecord.title);
-            setEmail(initialRecord.email);
-            setPhone(initialRecord.phone);
-            setPassword(initialRecord.password);
-            setAvatar(initialRecord.avatar);
-        }
-    }, [initialRecord]);
-
-    const togglePasswordVisibility = () => setShowPassword(!showPassword);
-    const handlePhotoUpload = () => {
-        toast.info("Simulating photo upload...");
-        setAvatar(fullName ? fullName.substring(0, 2).toUpperCase() : "Pic");
+    const handlePhotoUpload = (file: File | undefined) => {
+        if (!file) return;
+        readImageAsDataUrl(file, PEOPLE_IMAGE_MAX_EDGE, PEOPLE_IMAGE_MAX_BYTES)
+            .then(setAvatarUrl)
+            .catch((code: ImageReadError) => toast.error(IMAGE_ERRORS[code] ?? IMAGE_ERRORS.unreadable));
     };
 
     const handleSave = () => {
-        if (!fullName.trim() || !title.trim() || !email.trim() || !phone.trim() || !password.trim()) {
-            return toast.error("All required fields must be filled.");
-        }
-
-        if (initialRecord) {
-            updateProfile(initialRecord.id, {
-                fullName: fullName.trim(), title: title.trim(), email: email.trim(), phone: phone.trim(), password, avatar
-            });
-            toast.success("Profile updated successfully!");
-        }
-        if (onClose) onClose();
+        const input = { fullName, title, email, phone, password, avatarUrl: avatarUrl ?? undefined };
+        const result = existing ? updateDirector(existing.id, input) : addDirector(input);
+        if (!result.ok) return toast.error(DIRECTOR_ERRORS[result.error]);
+        toast.success(existing ? "Director profile updated." : `${result.director.fullName} added as a director.`);
+        onSaved(result.director);
     };
 
-    return { fullName, setFullName, title, setTitle, email, setEmail, phone, setPhone, password, setPassword, showPassword, togglePasswordVisibility, avatar, handlePhotoUpload, handleSave };
+    return {
+        isEdit: !!existing,
+        fullName, setFullName,
+        title, setTitle,
+        email, setEmail,
+        phone, setPhone,
+        password, setPassword,
+        showPassword, togglePasswordVisibility: () => setShowPassword((prev) => !prev),
+        avatarUrl, handlePhotoUpload,
+        handleSave,
+    };
 }
+
+export type DirectorFormManager = ReturnType<typeof useDirectorFormManager>;

@@ -15,6 +15,7 @@ export function WithdrawalClient() {
                 <WithdrawalTable manager={manager} />
             </div>
             <WithdrawalFormDrawer
+                key={manager.activeEditRecord?.id ?? "none"}
                 initialRecord={manager.activeEditRecord}
                 isOpen={manager.activeDrawer === "edit-withdrawal"}
                 onClose={manager.closeView}
